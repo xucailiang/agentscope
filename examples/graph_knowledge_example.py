@@ -24,13 +24,13 @@ from agentscope.embedding import DashScopeTextEmbedding
 from agentscope.model import DashScopeChatModel
 
 # 设置 DashScope API Key
-DASHSCOPE_API_KEY = "sk-3ee953aac5fc4deeb57a0170112f0a00"
+DASHSCOPE_API_KEY = "your api key"
 os.environ["DASHSCOPE_API_KEY"] = DASHSCOPE_API_KEY
 
 # Neo4j 连接配置（请根据实际情况修改）
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "password"  # ⚠️ 请修改为你的实际密码
+NEO4J_PASSWORD = "password" 
 
 
 async def example_basic_vector_only():
