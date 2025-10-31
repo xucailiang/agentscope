@@ -715,7 +715,7 @@ class Neo4jGraphStore(GraphStoreBase):
             **kwargs: Additional search arguments
         
         Returns:
-            List of community dictionaries
+            List of community dictionaries with entity_ids
         
         Raises:
             GraphQueryError: If community search fails
@@ -730,14 +730,21 @@ class Neo4jGraphStore(GraphStoreBase):
                     $limit,
                     $query_embedding
                 )
-                YIELD node, score
-                WHERE node.level >= $min_level
-                RETURN node.id AS id,
-                       node.level AS level,
-                       node.title AS title,
-                       node.summary AS summary,
-                       node.rating AS rating,
-                       node.entity_count AS entity_count,
+                YIELD node AS community, score
+                WHERE community.level >= $min_level
+                
+                // Get entities belonging to this community
+                OPTIONAL MATCH (entity:Entity_{self.collection_name})-[:BELONGS_TO]->(community)
+                
+                WITH community, score, collect(entity.name) AS entity_names
+                
+                RETURN community.id AS id,
+                       community.level AS level,
+                       community.title AS title,
+                       community.summary AS summary,
+                       community.rating AS rating,
+                       community.entity_count AS entity_count,
+                       entity_names AS entity_ids,
                        score
                 ORDER BY score DESC
                 """
@@ -753,6 +760,7 @@ class Neo4jGraphStore(GraphStoreBase):
                 
                 communities = []
                 async for record in result:
+                    entity_ids = record["entity_ids"] or []
                     communities.append({
                         "id": record["id"],
                         "level": record["level"],
@@ -760,10 +768,14 @@ class Neo4jGraphStore(GraphStoreBase):
                         "summary": record["summary"],
                         "rating": record["rating"],
                         "entity_count": record["entity_count"],
+                        "entity_ids": entity_ids,  # Now includes entity IDs!
                         "score": record["score"],
                     })
                 
-                logger.info(f"Community search returned {len(communities)} communities")
+                logger.info(
+                    f"Community search returned {len(communities)} communities "
+                    f"with {sum(len(c['entity_ids']) for c in communities)} total entities"
+                )
                 return communities
                 
         except Exception as e:

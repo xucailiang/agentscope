@@ -225,9 +225,9 @@ async def example_with_graph_features():
 
 
 async def example_with_community_detection():
-    """Example 3: Full features including community detection."""
+    """Example 3: Full features including community detection and global search."""
     print("\n" + "="*80)
-    print("Example 3: Full Features (Entities + Relationships + Communities)")
+    print("Example 3: Full Features (Entities + Relationships + Communities + Global Search)")
     print("="*80)
     
     # Initialize Neo4j graph store
@@ -254,21 +254,23 @@ async def example_with_community_detection():
         ),
         enable_entity_extraction=True,
         entity_extraction_config={
-            "max_entities_per_chunk": 10,
-            "enable_gleanings": True,  # Enable for higher recall
-            "gleanings_rounds": 2,
+            "max_entities_per_chunk": 15,
+            "enable_gleanings": False,  # Disable for faster processing
+            "gleanings_rounds": 1,
         },
         enable_relationship_extraction=True,
         enable_community_detection=True,  # Enable community detection
         community_algorithm="leiden",
     )
     
-    # Create sample documents
+    # Create diverse sample documents with different relevance levels
+    # This helps test the scoring algorithm's ability to distinguish quality
     documents = [
+        # === HIGH RELEVANCE: Core AI research organizations and topics ===
         Document(
             id="doc7",
             metadata=DocMetadata(
-                content={"type": "text", "text": "Alice works at OpenAI as a researcher specializing in language models."},
+                content={"type": "text", "text": "OpenAI conducts cutting-edge research in artificial intelligence, focusing on large language models, reinforcement learning, and neural network architectures like GPT-4 and transformer models."},
                 doc_id="doc7",
                 chunk_id=0,
                 total_chunks=1,
@@ -277,7 +279,7 @@ async def example_with_community_detection():
         Document(
             id="doc8",
             metadata=DocMetadata(
-                content={"type": "text", "text": "OpenAI is located in San Francisco and develops advanced AI systems."},
+                content={"type": "text", "text": "Google DeepMind in London is a leading AI research laboratory that pioneered breakthroughs in deep reinforcement learning, including AlphaGo, AlphaFold, and various machine learning techniques."},
                 doc_id="doc8",
                 chunk_id=0,
                 total_chunks=1,
@@ -286,17 +288,57 @@ async def example_with_community_detection():
         Document(
             id="doc9",
             metadata=DocMetadata(
-                content={"type": "text", "text": "Bob collaborates with Alice on transformer architecture research."},
+                content={"type": "text", "text": "Microsoft Research AI division collaborates with OpenAI to advance artificial intelligence research, integrating AI capabilities into Azure cloud platform and developing neural language models."},
                 doc_id="doc9",
                 chunk_id=0,
                 total_chunks=1,
             ),
         ),
+        
+        # === MEDIUM RELEVANCE: Related but not core focus ===
         Document(
             id="doc10",
             metadata=DocMetadata(
-                content={"type": "text", "text": "Google DeepMind in London also researches AI and machine learning."},
+                content={"type": "text", "text": "Alice works as a software engineer at a tech startup in San Francisco, where she occasionally uses machine learning libraries for data analysis tasks."},
                 doc_id="doc10",
+                chunk_id=0,
+                total_chunks=1,
+            ),
+        ),
+        Document(
+            id="doc11",
+            metadata=DocMetadata(
+                content={"type": "text", "text": "Bob is studying computer science at Stanford University and taking courses in algorithms, data structures, and an introductory class on artificial intelligence."},
+                doc_id="doc11",
+                chunk_id=0,
+                total_chunks=1,
+            ),
+        ),
+        
+        # === LOW RELEVANCE: Tangentially related or different topics ===
+        Document(
+            id="doc12",
+            metadata=DocMetadata(
+                content={"type": "text", "text": "The Python programming language is widely used in software development for web applications, data analysis, and automation scripts across various industries."},
+                doc_id="doc12",
+                chunk_id=0,
+                total_chunks=1,
+            ),
+        ),
+        Document(
+            id="doc13",
+            metadata=DocMetadata(
+                content={"type": "text", "text": "San Francisco is a major city in California known for its Golden Gate Bridge, diverse culture, tech industry presence, and foggy weather patterns."},
+                doc_id="doc13",
+                chunk_id=0,
+                total_chunks=1,
+            ),
+        ),
+        Document(
+            id="doc14",
+            metadata=DocMetadata(
+                content={"type": "text", "text": "Cloud computing services like Azure, AWS, and Google Cloud provide scalable infrastructure for businesses to host applications, store data, and manage workloads efficiently."},
+                doc_id="doc14",
                 chunk_id=0,
                 total_chunks=1,
             ),
@@ -305,38 +347,119 @@ async def example_with_community_detection():
     
     # Add documents (will trigger community detection in background on first call)
     print("\n📥 Adding documents (with all features)...")
+    print(f"   Total documents: {len(documents)}")
     await knowledge.add_documents(documents)
-    print(f"✅ Added {len(documents)} documents")
-    print("   Community detection triggered in background...")
+    print(f"✅ Added {len(documents)} documents with:")
+    print("   - Entity extraction")
+    print("   - Relationship extraction")
+    print("   - Community detection (triggered in background)")
     
     # Wait a bit for community detection to complete
-    await asyncio.sleep(5)
+    print("\n⏳ Waiting for background community detection...")
+    await asyncio.sleep(8)
     
-    # Manually trigger community detection (for demonstration)
-    print("\n🔬 Manually triggering community detection...")
-    result = await knowledge.detect_communities()
-    print(f"✅ Community detection completed:")
-    print(f"   - Communities: {result['community_count']}")
-    print(f"   - Levels: {result['levels']}")
-    print(f"   - Algorithm: {result['algorithm']}")
+    # Manually trigger community detection again to ensure it's complete
+    print("\n🔬 Running community detection...")
+    try:
+        result = await knowledge.detect_communities()
+        print(f"✅ Community detection completed:")
+        print(f"   - Communities detected: {result['community_count']}")
+        print(f"   - Hierarchical levels: {result['levels']}")
+        print(f"   - Algorithm used: {result['algorithm']}")
+        print(f"   - Status: {result.get('status', 'unknown')}")
+    except Exception as e:
+        print(f"   ⚠️  Community detection error: {e}")
+        print("   Continuing with other search modes...")
     
-    # Test global search (community-level)
-    print(f"\n🔍 [Global Search] Query: 'What are the main research topics?'")
+    # Compare different search modes
+    print("\n" + "="*80)
+    print("Comparing Search Modes")
+    print("="*80)
+    
+    query = "What are the main AI research topics and organizations?"
+    print(f"\n🔍 Query: '{query}'")
+    print("\n" + "-"*80)
+    
+    # 1. Vector Search
+    print("\n1️⃣  Vector Search (baseline - pure semantic similarity)")
+    try:
+        vector_results = await knowledge.retrieve(
+            query=query,
+            limit=3,
+            search_mode="vector",
+        )
+        print(f"   ✅ Found {len(vector_results)} results")
+        for i, doc in enumerate(vector_results, 1):
+            print(f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...")
+    except Exception as e:
+        print(f"   ❌ Error: {e}")
+    
+    # 2. Graph Search
+    print("\n2️⃣  Graph Search (uses entity relationships)")
+    try:
+        graph_results = await knowledge.retrieve(
+            query=query,
+            limit=3,
+            search_mode="graph",
+            max_hops=2,
+        )
+        print(f"   ✅ Found {len(graph_results)} results")
+        for i, doc in enumerate(graph_results, 1):
+            print(f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...")
+    except Exception as e:
+        print(f"   ❌ Error: {e}")
+    
+    # 3. Hybrid Search
+    print("\n3️⃣  Hybrid Search (vector + graph combined)")
+    try:
+        hybrid_results = await knowledge.retrieve(
+            query=query,
+            limit=3,
+            search_mode="hybrid",
+            vector_weight=0.5,
+            graph_weight=0.5,
+        )
+        print(f"   ✅ Found {len(hybrid_results)} results")
+        for i, doc in enumerate(hybrid_results, 1):
+            print(f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...")
+    except Exception as e:
+        print(f"   ❌ Error: {e}")
+    
+    # 4. Global Search (NEW - fully implemented!)
+    print("\n4️⃣  Global Search (community-level understanding) ⭐ NEW")
     try:
         global_results = await knowledge.retrieve(
-            query="What are the main research topics?",
+            query=query,
             limit=3,
             search_mode="global",
             min_community_level=0,
+            max_entities_per_community=10,
+            community_limit=5,
         )
-        print(f"   Found {len(global_results)} results")
-        
-        print(f"\n📄 Global search results:")
+        print(f"   ✅ Found {len(global_results)} results")
         for i, doc in enumerate(global_results, 1):
-            print(f"\n  {i}. [Score: {doc.score:.3f}]")
-            print(f"     {doc.metadata.content['text']}")
+            print(f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...")
+        
+        # Show detailed results for global search
+        if global_results:
+            print("\n📄 Global Search - Detailed Results:")
+            for i, doc in enumerate(global_results, 1):
+                print(f"\n  {i}. Score: {doc.score:.4f}")
+                print(f"     Content: {doc.metadata.content['text']}")
+    except ValueError as e:
+        print(f"   ⚠️  {e}")
     except Exception as e:
-        print(f"   ⚠️  Global search not fully implemented yet: {e}")
+        print(f"   ❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    print("\n" + "="*80)
+    print("💡 Search Mode Recommendations:")
+    print("   - Use 'vector' for simple semantic search (fastest)")
+    print("   - Use 'graph' when relationships matter (entity-centric)")
+    print("   - Use 'hybrid' for best overall quality (recommended)")
+    print("   - Use 'global' for thematic/overview questions (slowest, most comprehensive)")
+    print("="*80)
 
 
 async def main():

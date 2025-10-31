@@ -9,6 +9,7 @@ with entity and relationship awareness.
 import asyncio
 import json
 import logging
+import math
 from typing import Any, Literal
 
 from ._knowledge_base import KnowledgeBase
@@ -21,6 +22,7 @@ from ._graph_types import (
     CommunityAlgorithm,
 )
 from ._reader import Document
+from ._document import DocMetadata
 from ..embedding import EmbeddingModelBase
 from ..model import ChatModelBase
 from ..message import TextBlock
@@ -545,17 +547,26 @@ class GraphKnowledgeBase(KnowledgeBase):
         This mode searches at the community level for global understanding
         and thematic queries. Requires community detection to be enabled.
         
+        Process:
+        1. Search for relevant communities using vector similarity
+        2. Extract representative entities from top communities
+        3. Find documents mentioning these entities
+        4. Rank documents by community relevance and return top results
+        
         Args:
             query_embedding: Query embedding vector
             limit: Maximum number of documents
             **kwargs: Additional arguments:
-                - min_community_level: Minimum community level (default: 1)
+                - min_community_level: Minimum community level (default: 0)
+                - max_entities_per_community: Max entities to extract per community (default: 10)
+                - community_limit: Max communities to consider (default: 5)
         
         Returns:
             List of relevant documents from top communities
         
         Raises:
             ValueError: If community detection is not enabled
+            GraphQueryError: If retrieval fails
         """
         if not self.enable_community_detection:
             raise ValueError(
@@ -564,13 +575,15 @@ class GraphKnowledgeBase(KnowledgeBase):
             )
         
         logger.debug("Executing global search")
-        min_level = kwargs.get("min_community_level", 0)  # 修复：level从0开始
+        min_level = kwargs.get("min_community_level", 0)
+        max_entities_per_comm = kwargs.get("max_entities_per_community", 10)
+        community_limit = kwargs.get("community_limit", 5)
         
-        # Search for relevant communities
+        # Step 1: Search for relevant communities
         communities = await self.graph_store.search_communities(
             query_embedding=query_embedding,
             min_level=min_level,
-            limit=5,  # Get top 5 communities
+            limit=community_limit,
         )
         
         if not communities:
@@ -579,14 +592,123 @@ class GraphKnowledgeBase(KnowledgeBase):
         
         logger.debug(f"Found {len(communities)} relevant communities")
         
-        # For now, return an empty list as this requires more complex implementation
-        # In production, you would:
-        # 1. Get representative entities from each community
-        # 2. Find documents mentioning these entities
-        # 3. Rank and return top documents
+        # Step 2: Extract entity names from communities
+        # Weight entities by community score
+        entity_weights: dict[str, float] = {}
+        for comm in communities:
+            comm_score = comm.get("score", 1.0)
+            entity_ids = comm.get("entity_ids", [])[:max_entities_per_comm]
+            
+            for entity_name in entity_ids:
+                # Higher score = higher weight
+                if entity_name not in entity_weights:
+                    entity_weights[entity_name] = comm_score
+                else:
+                    # If entity appears in multiple communities, use max score
+                    entity_weights[entity_name] = max(
+                        entity_weights[entity_name], 
+                        comm_score
+                    )
         
-        # Fallback to hybrid search for now
-        return await self._hybrid_search(query_embedding, limit, None, **kwargs)
+        if not entity_weights:
+            logger.warning("No entities found in communities")
+            return await self._vector_search(query_embedding, limit, None)
+        
+        entity_names = list(entity_weights.keys())
+        logger.debug(f"Extracted {len(entity_names)} entities from communities")
+        
+        # Step 3: Find documents mentioning these entities
+        try:
+            driver = self.graph_store.get_client()
+            async with driver.session(database=self.graph_store.database) as session:
+                query = f"""
+                MATCH (e:Entity_{self.graph_store.collection_name})
+                WHERE e.name IN $entity_names
+                MATCH (e)<-[m:MENTIONS]-(doc:Document_{self.graph_store.collection_name})
+                
+                WITH doc, 
+                     count(DISTINCT e) AS entity_count,
+                     sum(m.count) AS total_mentions,
+                     collect(e.name) AS mentioned_entities,
+                     gds.similarity.cosine(doc.embedding, $query_embedding) AS vector_similarity
+                
+                RETURN DISTINCT doc,
+                       entity_count,
+                       total_mentions,
+                       mentioned_entities,
+                       vector_similarity
+                ORDER BY vector_similarity DESC, entity_count DESC, total_mentions DESC
+                LIMIT $limit
+                """
+                
+                result = await session.run(
+                    query,
+                    {
+                        "entity_names": entity_names,
+                        "query_embedding": query_embedding,
+                        "limit": limit * 2,  # Get more to allow for scoring
+                    },
+                )
+                
+                # Step 4: Calculate scores and convert to Document objects
+                documents = []
+                async for record in result:
+                    node = record["doc"]
+                    entity_count = record["entity_count"]
+                    total_mentions = record["total_mentions"]
+                    mentioned_entities = record["mentioned_entities"]
+                    vector_similarity = record["vector_similarity"]
+                    
+                    # Calculate entity weight contribution
+                    entity_score_sum = sum(
+                        entity_weights.get(name, 0.0) 
+                        for name in mentioned_entities
+                    )
+                    
+                    max_possible_score = len(entity_names) * max(entity_weights.values())
+                    if max_possible_score > 0:
+                        base_score = entity_score_sum / max_possible_score
+                        entity_ratio = entity_count / len(entity_names) if len(entity_names) > 0 else 0
+                        mention_factor = math.log1p(total_mentions) / math.log1p(10)
+                        mention_factor = min(mention_factor, 1.0)
+                        
+                        # Weighted combination: vector similarity (60%) + community signals (40%)
+                        doc_score = (
+                            0.6 * vector_similarity +
+                            0.2 * base_score +
+                            0.1 * entity_ratio +
+                            0.1 * mention_factor
+                        )
+                    else:
+                        doc_score = 0.0
+                    
+                    doc = Document(
+                        id=node["id"],
+                        embedding=node["embedding"],
+                        metadata=DocMetadata(
+                            content={"type": "text", "text": node["content"]},
+                            doc_id=node["doc_id"],
+                            chunk_id=node["chunk_id"],
+                            total_chunks=node["total_chunks"],
+                        ),
+                        score=doc_score,
+                    )
+                    documents.append(doc)
+                
+                # Sort by score and limit
+                documents.sort(key=lambda d: d.score or 0.0, reverse=True)
+                documents = documents[:limit]
+                
+                logger.debug(
+                    f"Global search found {len(documents)} documents "
+                    f"from {len(entity_names)} entities across {len(communities)} communities"
+                )
+                
+                return documents
+                
+        except Exception as e:
+            logger.error(f"Global search failed: {e}")
+            raise GraphQueryError(f"Global search failed: {e}") from e
     
     # === Entity and relationship processing ===
     
