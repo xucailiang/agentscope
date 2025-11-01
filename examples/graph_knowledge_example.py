@@ -10,7 +10,6 @@ import os
 import sys
 from pathlib import Path
 
-# 强制使用源码而不是安装的包
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
@@ -23,11 +22,11 @@ from agentscope.rag import (
 from agentscope.embedding import DashScopeTextEmbedding
 from agentscope.model import DashScopeChatModel
 
-# 设置 DashScope API Key
+# DashScope API Key
 DASHSCOPE_API_KEY = "your api key"
 os.environ["DASHSCOPE_API_KEY"] = DASHSCOPE_API_KEY
 
-# Neo4j 连接配置（请根据实际情况修改）
+# Neo4j
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
 NEO4J_PASSWORD = "password" 
