@@ -295,11 +295,6 @@ class GraphKnowledgeBase(KnowledgeBase):
                 return await self._global_search(
                     query_embedding, limit, **kwargs
                 )
-            else:
-                raise ValueError(
-                    f"Invalid search_mode: {search_mode}. "
-                    f"Must be one of: vector, graph, hybrid, global"
-                )
                 
         except Exception as e:
             logger.error(f"Retrieval failed: {e}")
