@@ -17,7 +17,7 @@ class KnowledgeBase:
     The ``retrieve`` and ``add_documents`` methods need to be implemented
     in the subclasses. We also provide a quick method ``retrieve_knowledge``
     that enables the agent to retrieve knowledge easily.
-    
+
     This class now supports both vector database stores (VDBStoreBase)
     and graph database stores (GraphStoreBase) through the unified
     StoreBase interface.
@@ -25,7 +25,7 @@ class KnowledgeBase:
 
     embedding_store: StoreBase
     """The embedding store for the knowledge base.
-    
+
     Can be either a VDBStoreBase (vector database) or GraphStoreBase
     (graph database) implementation.
     """
@@ -39,7 +39,7 @@ class KnowledgeBase:
         embedding_model: EmbeddingModelBase,
     ) -> None:
         """Initialize the knowledge base.
-        
+
         Args:
             embedding_store: The storage backend (VDBStoreBase or GraphStoreBase)
             embedding_model: The embedding model for generating vector embeddings

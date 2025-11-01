@@ -1,33 +1,156 @@
 # -*- coding: utf-8 -*-
 """Test the GraphKnowledgeBase implementation with real Neo4j."""
 import json
-import sys
 import os
+import sys
+from pathlib import Path
 from typing import Any
 from unittest.async_case import IsolatedAsyncioTestCase
 
-# Add src to path for testing
-from pathlib import Path
-src_path = Path(__file__).parent.parent / "src"
-sys.path.insert(0, str(src_path))
+import pytest
 
+from agentscope.embedding import EmbeddingModelBase, EmbeddingResponse
+from agentscope.message import TextBlock
+from agentscope.model import ChatModelBase, ChatResponse
 from agentscope.rag import (
-    GraphKnowledgeBase,
-    Neo4jGraphStore,
     Document,
     DocMetadata,
+    GraphKnowledgeBase,
+    Neo4jGraphStore,
 )
-from agentscope.embedding import DashScopeTextEmbedding
-from agentscope.model import DashScopeChatModel
 
-# Configuration for Neo4j and DashScope
+# Add src to path if needed for development
+src_path = Path(__file__).parent.parent.parent / "src"
+if src_path.exists() and str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
+
+# Configuration for Neo4j
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
 NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "neo4j")
-DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
+
+# Check if Neo4j is available (for skipping tests if not)
+NEO4J_AVAILABLE = os.getenv("NEO4J_AVAILABLE", "false").lower() == "true"
 
 
+class MockTextEmbedding(EmbeddingModelBase):
+    """Mock embedding model for testing (no API required)."""
+
+    supported_modalities: list[str] = ["text"]
+    """This class only supports text input."""
+
+    def __init__(self) -> None:
+        """Initialize the mock embedding model."""
+        super().__init__(model_name="mock-embedding-model", dimensions=1536)
+
+    async def __call__(
+        self,
+        text: list[TextBlock | str],
+        **kwargs: Any,
+    ) -> EmbeddingResponse:
+        """Return fixed embeddings for testing."""
+        import hashlib
+
+        embeddings = []
+        for t in text:
+            # Extract text content
+            if isinstance(t, dict):
+                content = t.get("text", "")
+            elif isinstance(t, TextBlock):
+                content = t.text
+            else:
+                content = str(t)
+
+            # Generate deterministic embedding based on text hash
+            hash_val = int(hashlib.md5(content.encode()).hexdigest(), 16)
+            # Create a 1536-dimensional embedding
+            embedding = [(hash_val % 1000 + i) / 1000.0 for i in range(1536)]
+            embeddings.append(embedding)
+
+        return EmbeddingResponse(embeddings=embeddings)
+
+
+class MockChatModel(ChatModelBase):
+    """Mock chat model for testing (no API required)."""
+
+    def __init__(self) -> None:
+        """Initialize the mock chat model."""
+        super().__init__(model_name="mock-chat-model", stream=False)
+
+    async def __call__(
+        self,
+        messages: list[dict],
+        **kwargs: Any,
+    ) -> ChatResponse:
+        """Return mock responses for entity/relationship extraction."""
+        # Check if this is an entity extraction request
+        last_message = messages[-1].get("content", "") if messages else ""
+
+        # Mock entity extraction response
+        if "entity" in last_message.lower() or "Entity Extraction" in last_message:
+            mock_entities = {
+                "entities": [
+                    {
+                        "name": "Alice",
+                        "type": "PERSON",
+                        "description": "A person",
+                    },
+                    {
+                        "name": "OpenAI",
+                        "type": "ORGANIZATION",
+                        "description": "An AI company",
+                    },
+                    {
+                        "name": "Bob",
+                        "type": "PERSON",
+                        "description": "A person",
+                    },
+                ],
+            }
+            return ChatResponse(
+                content=[
+                    TextBlock(type="text", text=json.dumps(mock_entities)),
+                ],
+            )
+
+        # Mock relationship extraction response
+        if "relationship" in last_message.lower():
+            mock_relationships = {
+                "relationships": [
+                    {
+                        "source": "Alice",
+                        "target": "OpenAI",
+                        "type": "WORKS_AT",
+                        "description": "Alice works at OpenAI",
+                    },
+                    {
+                        "source": "Alice",
+                        "target": "Bob",
+                        "type": "COLLABORATES_WITH",
+                        "description": "Alice collaborates with Bob",
+                    },
+                ],
+            }
+            return ChatResponse(
+                content=[
+                    TextBlock(
+                        type="text",
+                        text=json.dumps(mock_relationships),
+                    ),
+                ],
+            )
+
+        # Default response
+        return ChatResponse(
+            content=[TextBlock(type="text", text="Mock response")],
+        )
+
+
+@pytest.mark.skipif(
+    not NEO4J_AVAILABLE,
+    reason="Neo4j is not available. Set NEO4J_AVAILABLE=true to run these tests.",
+)
 class GraphKnowledgeTest(IsolatedAsyncioTestCase):
     """Test cases for GraphKnowledgeBase with real Neo4j."""
 
@@ -35,8 +158,9 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
         """Set up test fixtures with real Neo4j."""
         # Use a unique collection name for each test run to avoid conflicts
         import time
+
         self.collection_name = f"test_{int(time.time() * 1000)}"
-        
+
         # Initialize real Neo4j graph store
         self.graph_store = Neo4jGraphStore(
             uri=NEO4J_URI,
@@ -44,22 +168,13 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             password=NEO4J_PASSWORD,
             database=NEO4J_DATABASE,
             collection_name=self.collection_name,
-            dimensions=1536,  # DashScope text-embedding-v2 dimensions
+            dimensions=1536,  # Mock embedding dimensions
         )
-        
-        # Initialize real embedding model
-        self.embedding_model = DashScopeTextEmbedding(
-            model_name="text-embedding-v2",
-            api_key=DASHSCOPE_API_KEY,
-        )
-        
-        # Initialize real LLM model
-        self.llm_model = DashScopeChatModel(
-            model_name="qwen-max",
-            api_key=DASHSCOPE_API_KEY,
-            stream=False,
-        )
-    
+
+        # Use Mock models instead of real API calls
+        self.embedding_model = MockTextEmbedding()
+        self.llm_model = MockChatModel()
+
     async def asyncTearDown(self) -> None:
         """Clean up test data after each test."""
         try:
@@ -68,12 +183,12 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             async with driver.session(database=NEO4J_DATABASE) as session:
                 # Delete all nodes with this collection name
                 await session.run(
-                    f"""
+                    """
                     MATCH (n)
                     WHERE any(label IN labels(n) WHERE label ENDS WITH $suffix)
                     DETACH DELETE n
                     """,
-                    {"suffix": f"_{self.collection_name}"}
+                    {"suffix": f"_{self.collection_name}"},
                 )
             await self.graph_store.close()
         except Exception as e:
@@ -95,7 +210,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc1",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Alice works at OpenAI as a researcher"},
+                    content={
+                        "type": "text",
+                        "text": "Alice works at OpenAI as a researcher",
+                    },
                     doc_id="doc1",
                     chunk_id=0,
                     total_chunks=1,
@@ -104,7 +222,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc2",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Bob collaborates with Alice on AI research"},
+                    content={
+                        "type": "text",
+                        "text": "Bob collaborates with Alice on AI research",
+                    },
                     doc_id="doc2",
                     chunk_id=0,
                     total_chunks=1,
@@ -149,7 +270,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc1",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Alice works at OpenAI as a research scientist specializing in large language models"},
+                    content={
+                        "type": "text",
+                        "text": "Alice works at OpenAI as a research scientist specializing in large language models",
+                    },
                     doc_id="doc1",
                     chunk_id=0,
                     total_chunks=1,
@@ -182,7 +306,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc1",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Alice works at OpenAI as a research scientist. She collaborates with Bob on transformer models."},
+                    content={
+                        "type": "text",
+                        "text": "Alice works at OpenAI as a research scientist. She collaborates with Bob on transformer models.",
+                    },
                     doc_id="doc1",
                     chunk_id=0,
                     total_chunks=1,
@@ -215,7 +342,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc1",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Alice works at OpenAI as a research scientist"},
+                    content={
+                        "type": "text",
+                        "text": "Alice works at OpenAI as a research scientist",
+                    },
                     doc_id="doc1",
                     chunk_id=0,
                     total_chunks=1,
@@ -224,7 +354,10 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
             Document(
                 id="doc2",
                 metadata=DocMetadata(
-                    content={"type": "text", "text": "Bob collaborates with Alice on AI research projects"},
+                    content={
+                        "type": "text",
+                        "text": "Bob collaborates with Alice on AI research projects",
+                    },
                     doc_id="doc2",
                     chunk_id=0,
                     total_chunks=1,
@@ -265,4 +398,3 @@ class GraphKnowledgeTest(IsolatedAsyncioTestCase):
                 enable_community_detection=False,
             )
         print(f"  ✓ Correctly raised ValueError: {context.exception}")
-

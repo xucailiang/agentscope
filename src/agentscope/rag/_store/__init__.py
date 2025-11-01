@@ -16,6 +16,7 @@ from ._milvuslite_store import MilvusLiteStore
 # Neo4jGraphStore requires neo4j package (optional dependency)
 try:
     from ._neo4j_graph_store import Neo4jGraphStore
+
     _HAS_NEO4J = True
 except ImportError:
     _HAS_NEO4J = False

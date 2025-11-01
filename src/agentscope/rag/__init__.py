@@ -35,6 +35,7 @@ try:
         SearchMode,
         CommunityAlgorithm,
     )
+
     _HAS_GRAPH_FEATURES = True
 except ImportError:
     _HAS_GRAPH_FEATURES = False
@@ -72,15 +73,17 @@ __all__ = [
 
 # Add graph features to __all__ if available
 if _HAS_GRAPH_FEATURES:
-    __all__.extend([
-        "Neo4jGraphStore",
-        "GraphKnowledgeBase",
-        "Entity",
-        "Relationship",
-        "Community",
-        "EntityDict",
-        "RelationshipDict",
-        "CommunityDict",
-        "SearchMode",
-        "CommunityAlgorithm",
-    ])
+    __all__.extend(
+        [
+            "Neo4jGraphStore",
+            "GraphKnowledgeBase",
+            "Entity",
+            "Relationship",
+            "Community",
+            "EntityDict",
+            "RelationshipDict",
+            "CommunityDict",
+            "SearchMode",
+            "CommunityAlgorithm",
+        ],
+    )

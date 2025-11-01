@@ -6,7 +6,9 @@ from agentscope.rag import GraphKnowledgeBase, Document
 
 @pytest.mark.fast
 @pytest.mark.asyncio
-async def test_initialization_vector_only(vector_only_kb: GraphKnowledgeBase):
+async def test_initialization_vector_only(
+    vector_only_kb: GraphKnowledgeBase,
+) -> None:
     """Test initialization in vector-only mode."""
     assert vector_only_kb is not None
     assert not vector_only_kb.enable_entity_extraction
@@ -16,7 +18,9 @@ async def test_initialization_vector_only(vector_only_kb: GraphKnowledgeBase):
 
 @pytest.mark.fast
 @pytest.mark.asyncio
-async def test_initialization_with_entities(entity_kb: GraphKnowledgeBase):
+async def test_initialization_with_entities(
+    entity_kb: GraphKnowledgeBase,
+) -> None:
     """Test initialization with entity extraction."""
     assert entity_kb is not None
     assert entity_kb.enable_entity_extraction
@@ -26,7 +30,9 @@ async def test_initialization_with_entities(entity_kb: GraphKnowledgeBase):
 
 @pytest.mark.fast
 @pytest.mark.asyncio
-async def test_initialization_full_graph(full_graph_kb: GraphKnowledgeBase):
+async def test_initialization_full_graph(
+    full_graph_kb: GraphKnowledgeBase,
+) -> None:
     """Test initialization with all graph features."""
     assert full_graph_kb is not None
     assert full_graph_kb.enable_entity_extraction
@@ -43,14 +49,14 @@ async def test_add_single_document(
     """Test adding a single document."""
     # Add one document
     await vector_only_kb.add_documents([simple_documents[0]])
-    
+
     # Verify by retrieving
     results = await vector_only_kb.retrieve(
         query="Who works at OpenAI?",
         limit=5,
         search_mode="vector",
     )
-    
+
     assert len(results) > 0
     assert results[0].score is not None
     assert 0 <= results[0].score <= 1
@@ -64,24 +70,24 @@ async def test_add_multiple_documents(
 ):
     """Test adding multiple documents."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     # Verify all documents can be retrieved
     results = await vector_only_kb.retrieve(
         query="Tell me about Alice and Bob",
         limit=5,
         search_mode="vector",
     )
-    
+
     assert len(results) > 0
 
 
 @pytest.mark.fast
 @pytest.mark.asyncio
-async def test_add_empty_documents(vector_only_kb: GraphKnowledgeBase):
+async def test_add_empty_documents(vector_only_kb: GraphKnowledgeBase) -> None:
     """Test adding empty document list."""
     # Should handle gracefully without error
     await vector_only_kb.add_documents([])
-    
+
     # Verify no results (or handle index not created error)
     try:
         results = await vector_only_kb.retrieve(
@@ -105,16 +111,16 @@ async def test_document_embedding_dimensions(
 ):
     """Test that document embeddings have correct dimensions."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     # Retrieve and check embedding dimensions
     results = await vector_only_kb.retrieve(
         query="Alice",
         limit=1,
         search_mode="vector",
     )
-    
+
     assert len(results) > 0
-    # Note: embedding might not be returned in Document, 
+    # Note: embedding might not be returned in Document,
     # but we verify it was stored by checking retrieval works
     assert results[0].score is not None
 
@@ -127,14 +133,14 @@ async def test_batch_add_documents(
 ):
     """Test adding a batch of diverse documents."""
     await vector_only_kb.add_documents(diverse_documents)
-    
+
     # Verify different queries return relevant results
     queries = [
         "artificial intelligence research",
         "software engineer",
         "programming language",
     ]
-    
+
     for query in queries:
         results = await vector_only_kb.retrieve(
             query=query,
@@ -145,13 +151,12 @@ async def test_batch_add_documents(
 
 
 @pytest.mark.fast
-def test_entity_config_defaults(entity_kb: GraphKnowledgeBase):
+def test_entity_config_defaults(entity_kb: GraphKnowledgeBase) -> None:
     """Test that entity extraction config has proper defaults."""
     config = entity_kb.entity_extraction_config
-    
+
     assert "max_entities_per_chunk" in config
     assert config["max_entities_per_chunk"] == 10
     assert "enable_gleanings" in config
     assert "entity_types" in config
     assert isinstance(config["entity_types"], list)
-

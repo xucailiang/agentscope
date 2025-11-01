@@ -46,7 +46,7 @@ async def test_invalid_search_mode(
 ):
     """Test that invalid search mode raises ValueError."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     with pytest.raises(ValueError, match="Invalid search_mode"):
         await vector_only_kb.retrieve(
             query="test",
@@ -63,8 +63,11 @@ async def test_global_search_without_community_detection(
 ):
     """Test that global search without community detection raises ValueError."""
     await entity_kb.add_documents(simple_documents)
-    
-    with pytest.raises(ValueError, match="Global search requires community detection"):
+
+    with pytest.raises(
+        ValueError,
+        match="Global search requires community detection",
+    ):
         await entity_kb.retrieve(
             query="test",
             limit=5,
@@ -81,13 +84,16 @@ async def test_invalid_document_content_type(
     doc = Document(
         id="invalid_content",
         metadata=DocMetadata(
-            content={"type": "image", "url": "http://example.com/image.jpg"},  # Not text
+            content={
+                "type": "image",
+                "url": "http://example.com/image.jpg",
+            },  # Not text
             doc_id="invalid_content",
             chunk_id=0,
             total_chunks=1,
         ),
     )
-    
+
     # Should raise ValueError for non-text content
     with pytest.raises(ValueError, match="does not contain text content"):
         await vector_only_kb.add_documents([doc])
@@ -95,14 +101,14 @@ async def test_invalid_document_content_type(
 
 @pytest.mark.fast
 @pytest.mark.asyncio
-async def test_retrieve_before_add(vector_only_kb: GraphKnowledgeBase):
+async def test_retrieve_before_add(vector_only_kb: GraphKnowledgeBase) -> None:
     """Test retrieving from empty knowledge base."""
     results = await vector_only_kb.retrieve(
         query="anything",
         limit=5,
         search_mode="vector",
     )
-    
+
     # Should return empty list
     assert len(results) == 0
 
@@ -115,7 +121,7 @@ async def test_negative_limit(
 ):
     """Test handling of negative limit value."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     # Negative limit should raise an error or be converted to positive
     # Neo4j doesn't accept negative limits, so we expect an error
     try:
@@ -139,7 +145,7 @@ async def test_zero_limit(
 ):
     """Test handling of zero limit value."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     # Zero limit should raise an error or return empty list
     # Neo4j doesn't accept zero limit
     try:
@@ -164,17 +170,17 @@ async def test_very_long_query(
 ):
     """Test handling of very long query text."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     # Create a very long query
     long_query = "test " * 1000  # 1000 words
-    
+
     # Should handle gracefully
     results = await vector_only_kb.retrieve(
         query=long_query,
         limit=5,
         search_mode="vector",
     )
-    
+
     assert isinstance(results, list)
 
 
@@ -186,14 +192,14 @@ async def test_special_characters_in_query(
 ):
     """Test handling of special characters in query."""
     await vector_only_kb.add_documents(simple_documents)
-    
+
     special_queries = [
         "test@#$%^&*()",
         "query with 中文字符",
         "query with émojis 😀🎉",
         "query\nwith\nnewlines",
     ]
-    
+
     for query in special_queries:
         results = await vector_only_kb.retrieve(
             query=query,
@@ -222,23 +228,26 @@ async def test_duplicate_document_ids(
         Document(
             id="dup_id",  # Same ID
             metadata=DocMetadata(
-                content={"type": "text", "text": "Second document with same ID."},
+                content={
+                    "type": "text",
+                    "text": "Second document with same ID.",
+                },
                 doc_id="dup_id",
                 chunk_id=0,
                 total_chunks=1,
             ),
         ),
     ]
-    
+
     # Should handle gracefully (might update or skip)
     await vector_only_kb.add_documents(docs)
-    
+
     results = await vector_only_kb.retrieve(
         query="document",
         limit=5,
         search_mode="vector",
     )
-    
+
     assert len(results) > 0
 
 
@@ -259,7 +268,7 @@ async def test_community_detection_without_entities(
         enable_relationship_extraction=True,
         enable_community_detection=True,
     )
-    
+
     # Add documents with minimal entity content
     minimal_docs = [
         Document(
@@ -272,9 +281,9 @@ async def test_community_detection_without_entities(
             ),
         ),
     ]
-    
+
     await kb.add_documents(minimal_docs)
-    
+
     # Community detection should handle gracefully
     try:
         result = await kb.detect_communities()
@@ -300,7 +309,7 @@ def test_invalid_vector_weight(
         enable_relationship_extraction=True,
         enable_community_detection=False,
     )
-    
+
     assert kb is not None
 
 
@@ -320,15 +329,14 @@ async def test_malformed_document_structure(
             total_chunks=1,
         ),
     )
-    
+
     # Should handle gracefully
     await vector_only_kb.add_documents([doc])
-    
+
     results = await vector_only_kb.retrieve(
         query="test",
         limit=5,
         search_mode="vector",
     )
-    
-    assert isinstance(results, list)
 
+    assert isinstance(results, list)

@@ -37,23 +37,23 @@ pytest tests/graph_rag/ -v -m "not requires_gds"
 
 ### Features Tested
 
-✅ **Vector Search** - Pure semantic similarity  
-✅ **Graph Search** - Relationship-based traversal  
-✅ **Hybrid Search** - Combined vector + graph  
-✅ **Global Search** - Community-level understanding  
-✅ **Entity Extraction** - LLM-powered entity identification  
-✅ **Relationship Extraction** - Entity relationship mapping  
-✅ **Community Detection** - Leiden & Louvain algorithms  
-✅ **Multi-hop Traversal** - 2-hop graph navigation  
-✅ **Auto Cleanup** - Isolated test collections  
+✅ **Vector Search** - Pure semantic similarity
+✅ **Graph Search** - Relationship-based traversal
+✅ **Hybrid Search** - Combined vector + graph
+✅ **Global Search** - Community-level understanding
+✅ **Entity Extraction** - LLM-powered entity identification
+✅ **Relationship Extraction** - Entity relationship mapping
+✅ **Community Detection** - Leiden & Louvain algorithms
+✅ **Multi-hop Traversal** - 2-hop graph navigation
+✅ **Auto Cleanup** - Isolated test collections
 
 ## Test Results
 
-**Status**: ✅ All Passed  
-**Total**: 51 tests  
-**Pass Rate**: 100%  
-**Duration**: ~6.5 minutes  
-**Environment**: Real Neo4j + DashScope API  
+**Status**: ✅ All Passed
+**Total**: 51 tests
+**Pass Rate**: 100%
+**Duration**: ~6.5 minutes
+**Environment**: Real Neo4j + DashScope API
 
 ### Integration Verified
 
