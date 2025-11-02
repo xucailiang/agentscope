@@ -45,7 +45,7 @@ async def test_initialization_full_graph(
 async def test_add_single_document(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test adding a single document."""
     # Add one document
     await vector_only_kb.add_documents([simple_documents[0]])
@@ -67,7 +67,7 @@ async def test_add_single_document(
 async def test_add_multiple_documents(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test adding multiple documents."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -108,7 +108,7 @@ async def test_add_empty_documents(vector_only_kb: GraphKnowledgeBase) -> None:
 async def test_document_embedding_dimensions(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test that document embeddings have correct dimensions."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -130,7 +130,7 @@ async def test_document_embedding_dimensions(
 async def test_batch_add_documents(
     vector_only_kb: GraphKnowledgeBase,
     diverse_documents: list[Document],
-):
+) -> None:
     """Test adding a batch of diverse documents."""
     await vector_only_kb.add_documents(diverse_documents)
 

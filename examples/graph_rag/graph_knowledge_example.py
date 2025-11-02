@@ -237,7 +237,7 @@ async def example_with_graph_features() -> None:
     )
     print(f"   Found {len(hybrid_results)} results")
 
-    print(f"\n📄 Hybrid search results:")
+    print("\n📄 Hybrid search results:")
     for i, doc in enumerate(hybrid_results, 1):
         print(f"\n  {i}. [Score: {doc.score:.3f}]")
         print(f"     {doc.metadata.content['text']}")
@@ -405,7 +405,7 @@ async def example_with_community_detection() -> None:
     print("\n🔬 Running community detection...")
     try:
         result = await knowledge.detect_communities()
-        print(f"✅ Community detection completed:")
+        print("✅ Community detection completed:")
         print(f"   - Communities detected: {result['community_count']}")
         print(f"   - Hierarchical levels: {result['levels']}")
         print(f"   - Algorithm used: {result['algorithm']}")
@@ -541,7 +541,9 @@ async def main() -> None:
 
         # 询问是否运行社区检测
         print("\n" + "=" * 80)
-        user_input = input("\n继续运行示例3（社区检测）吗? (需要GDS插件) (y/n): ")
+        user_input = input(
+            "\n继续运行示例3（社区检测）吗? (需要GDS插件) (y/n): ",
+        )
         if user_input.lower() == "y":
             await example_with_community_detection()
 

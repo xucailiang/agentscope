@@ -10,7 +10,7 @@ from agentscope.rag import GraphKnowledgeBase, Document, DocMetadata
 async def test_community_detection_leiden(
     community_kb: GraphKnowledgeBase,
     diverse_documents: list[Document],
-):
+) -> None:
     """Test community detection with Leiden algorithm."""
     from .conftest import wait_for_communities
 
@@ -41,7 +41,9 @@ async def test_community_detection_leiden(
                 min_count=1,
                 timeout=10,
             )
-            assert comm_count >= 1, f"Expected communities in DB, got {comm_count}"
+            assert (
+                comm_count >= 1
+            ), f"Expected communities in DB, got {comm_count}"
     except Exception as e:
         # If GDS is not available, test should not fail completely
         pytest.skip(f"Community detection requires Neo4j GDS plugin: {e}")
@@ -51,11 +53,11 @@ async def test_community_detection_leiden(
 @pytest.mark.requires_gds
 @pytest.mark.asyncio
 async def test_community_detection_louvain(
-    graph_store,
-    embedding_model,
-    llm_model,
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
     entity_rich_documents: list[Document],
-):
+) -> None:
     """Test community detection with Louvain algorithm."""
     kb = GraphKnowledgeBase(
         graph_store=graph_store,
@@ -93,7 +95,7 @@ async def test_community_detection_louvain(
 @pytest.mark.asyncio
 async def test_global_search_with_communities(
     community_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test global search mode using community summaries."""
     # Create diverse documents for community formation
     docs = [
@@ -187,9 +189,9 @@ async def test_global_search_with_communities(
 @pytest.mark.asyncio
 async def test_community_summary_generation(
     community_kb: GraphKnowledgeBase,
-    graph_store,
+    graph_store: "Neo4jGraphStore",  # type: ignore
     entity_rich_documents: list[Document],
-):
+) -> None:
     """Test that community summaries are generated."""
     from .conftest import wait_for_communities
 
@@ -205,7 +207,9 @@ async def test_community_summary_generation(
                 min_count=1,
                 timeout=15,
             )
-            assert comm_count > 0, f"Expected communities in DB, got {comm_count}"
+            assert (
+                comm_count > 0
+            ), f"Expected communities in DB, got {comm_count}"
 
             # Check that communities have summaries in Neo4j
             driver = graph_store.get_client()
@@ -222,7 +226,9 @@ async def test_community_summary_generation(
                 record = await query_result.single()
                 count = record["count_with_summary"]
 
-                assert count > 0, f"Expected communities to have summaries, got {count}"
+                assert (
+                    count > 0
+                ), f"Expected communities to have summaries, got {count}"
     except Exception as e:
         pytest.skip(f"Community detection requires Neo4j GDS plugin: {e}")
 
@@ -232,9 +238,9 @@ async def test_community_summary_generation(
 @pytest.mark.asyncio
 async def test_community_embedding_generation(
     community_kb: GraphKnowledgeBase,
-    graph_store,
+    graph_store: "Neo4jGraphStore",  # type: ignore
     entity_rich_documents: list[Document],
-):
+) -> None:
     """Test that community embeddings are generated."""
     from .conftest import wait_for_communities
 
@@ -250,7 +256,9 @@ async def test_community_embedding_generation(
                 min_count=1,
                 timeout=15,
             )
-            assert comm_count > 0, f"Expected communities in DB, got {comm_count}"
+            assert (
+                comm_count > 0
+            ), f"Expected communities in DB, got {comm_count}"
 
             # Check that communities have embeddings
             driver = graph_store.get_client()
@@ -279,7 +287,7 @@ async def test_community_embedding_generation(
 @pytest.mark.asyncio
 async def test_community_detection_with_many_entities(
     community_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test community detection with a larger dataset."""
     from .conftest import wait_for_communities
 
@@ -324,7 +332,9 @@ async def test_community_detection_with_many_entities(
                 min_count=1,
                 timeout=15,
             )
-            assert comm_count >= 1, f"Expected communities in DB, got {comm_count}"
+            assert (
+                comm_count >= 1
+            ), f"Expected communities in DB, got {comm_count}"
 
             print(
                 f"✓ Detected {result['community_count']} communities with {result['levels']} levels",

@@ -10,7 +10,7 @@ from agentscope.rag import GraphKnowledgeBase, Document, DocMetadata
 async def test_relationship_extraction_basic(
     full_graph_kb: GraphKnowledgeBase,
     entity_rich_documents: list[Document],
-):
+) -> None:
     """Test basic relationship extraction."""
     await full_graph_kb.add_documents(entity_rich_documents)
 
@@ -29,8 +29,8 @@ async def test_relationship_extraction_basic(
 @pytest.mark.asyncio
 async def test_relationship_storage_verification(
     full_graph_kb: GraphKnowledgeBase,
-    graph_store,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+) -> None:
     """Test that relationship extraction workflow completes without errors."""
     doc = Document(
         id="rel_verify",
@@ -76,7 +76,7 @@ async def test_relationship_storage_verification(
 @pytest.mark.asyncio
 async def test_relationship_types(
     full_graph_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test extraction of different relationship types."""
     docs = [
         Document(
@@ -121,7 +121,7 @@ async def test_relationship_types(
 @pytest.mark.asyncio
 async def test_multi_hop_graph_traversal(
     full_graph_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test that multi-hop graph traversal works."""
     # Create documents with transitive relationships
     # A -> B, B -> C, should be able to find C from A
@@ -181,8 +181,8 @@ async def test_multi_hop_graph_traversal(
 @pytest.mark.asyncio
 async def test_relationship_with_entity_mentions(
     full_graph_kb: GraphKnowledgeBase,
-    graph_store,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+) -> None:
     """Test that MENTIONS relationships are created between documents and entities."""
     from .conftest import wait_for_entities
 
@@ -231,7 +231,7 @@ async def test_relationship_with_entity_mentions(
 @pytest.mark.asyncio
 async def test_complex_relationship_extraction(
     full_graph_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test extraction of complex relationships from detailed text."""
     doc = Document(
         id="complex_rel",

@@ -88,7 +88,10 @@ class MockChatModel(ChatModelBase):
         last_message = messages[-1].get("content", "") if messages else ""
 
         # Mock entity extraction response
-        if "entity" in last_message.lower() or "Entity Extraction" in last_message:
+        if (
+            "entity" in last_message.lower()
+            or "Entity Extraction" in last_message
+        ):
             mock_entities = {
                 "entities": [
                     {

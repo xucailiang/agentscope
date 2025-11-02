@@ -170,7 +170,9 @@ class GraphKnowledgeBase(KnowledgeBase):
         # Community detection config
         self.enable_community_detection = enable_community_detection
         self.community_algorithm = community_algorithm
-        self._first_add_documents_called = False  # Track first call for auto-detection
+        self._first_add_documents_called = (
+            False  # Track first call for auto-detection
+        )
 
         logger.info(
             f"Initialized GraphKnowledgeBase: "
@@ -241,7 +243,10 @@ class GraphKnowledgeBase(KnowledgeBase):
                 )
 
             # Step 5: Trigger community detection (first call only)
-            if self.enable_community_detection and not self._first_add_documents_called:
+            if (
+                self.enable_community_detection
+                and not self._first_add_documents_called
+            ):
                 self._first_add_documents_called = True
                 logger.info(
                     "First add_documents call - triggering community detection in background",
@@ -578,7 +583,9 @@ class GraphKnowledgeBase(KnowledgeBase):
         results = []
         for doc_id in sorted_doc_ids:
             doc = doc_map[doc_id]
-            doc.metadata.score = doc_scores[doc_id]  # Update with combined score
+            doc.metadata.score = doc_scores[
+                doc_id
+            ]  # Update with combined score
             results.append(doc)
 
         logger.debug(
@@ -719,7 +726,8 @@ class GraphKnowledgeBase(KnowledgeBase):
 
                     # Calculate entity weight contribution
                     entity_score_sum = sum(
-                        entity_weights.get(name, 0.0) for name in mentioned_entities
+                        entity_weights.get(name, 0.0)
+                        for name in mentioned_entities
                     )
 
                     max_possible_score = len(entity_names) * max(
@@ -1379,7 +1387,9 @@ JSON array:"""
             await self.graph_store.add_communities(communities_data)
 
             # Calculate levels
-            levels = max(comm.level for comm in communities_with_embeddings) + 1
+            levels = (
+                max(comm.level for comm in communities_with_embeddings) + 1
+            )
 
             logger.info(
                 f"Community detection completed: {len(communities_with_embeddings)} "
@@ -1425,7 +1435,9 @@ JSON array:"""
                 database=self.graph_store.database,
             ) as session:
                 # Step 1: Create graph projection
-                projection_name = f"entity_graph_{self.graph_store.collection_name}"
+                projection_name = (
+                    f"entity_graph_{self.graph_store.collection_name}"
+                )
 
                 # Drop existing projection if any
                 try:
@@ -1500,7 +1512,9 @@ JSON array:"""
                     comm_id = record["community_id"]
                     # Handle both single value and list (from includeIntermediateCommunities)
                     if isinstance(comm_id, list):
-                        comm_id = comm_id[-1]  # Use the highest level community
+                        comm_id = comm_id[
+                            -1
+                        ]  # Use the highest level community
                     if comm_id not in community_map:
                         community_map[comm_id] = {
                             "id": f"comm_{comm_id}",
@@ -1660,9 +1674,7 @@ JSON object:"""
 
             # Ensure summary is not empty (Pydantic validation requirement)
             if not summary:
-                summary = (
-                    f"A community containing: {', '.join(community.entity_ids[:5])}"
-                )
+                summary = f"A community containing: {', '.join(community.entity_ids[:5])}"
 
             community.summary = summary
 
@@ -1675,9 +1687,7 @@ JSON object:"""
             logger.error(f"Failed to generate summary: {e}")
             # Fallback to simple summary
             community.title = f"Group of {community.entity_count} entities"
-            community.summary = (
-                f"A community containing: {', '.join(community.entity_ids[:5])}"
-            )
+            community.summary = f"A community containing: {', '.join(community.entity_ids[:5])}"
             community.rating = 0.5
             return community
 
@@ -1695,7 +1705,9 @@ JSON object:"""
         """
         for comm in communities:
             comm.title = f"Group of {comm.entity_count} entities"
-            comm.summary = f"A community containing: {', '.join(comm.entity_ids[:5])}"
+            comm.summary = (
+                f"A community containing: {', '.join(comm.entity_ids[:5])}"
+            )
             comm.rating = 0.5
         return communities
 

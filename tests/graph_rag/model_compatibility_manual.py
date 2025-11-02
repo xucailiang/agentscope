@@ -153,7 +153,7 @@ class TestResult:
         self.duration = 0.0
         self.details = {}
 
-    def __str__(self) -> None:
+    def __str__(self) -> str:
         status = "✅ PASS" if self.success else "❌ FAIL"
         result = f"{status} {self.name} ({self.duration:.2f}s)"
         if self.error:
@@ -198,9 +198,9 @@ async def cleanup_collection(graph_store: Neo4jGraphStore) -> None:
 
 async def test_vector_only_mode(
     name: str,
-    embedding_model,
+    embedding_model: "EmbeddingModel",  # type: ignore
     embedding_dimensions: int,
-):
+) -> None:
     """Test vector-only mode (no graph features).
 
     Args:
@@ -275,10 +275,10 @@ async def test_vector_only_mode(
 
 async def test_with_graph_features(
     name: str,
-    embedding_model,
-    llm_model,
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
     embedding_dimensions: int,
-):
+) -> None:
     """Test with graph features (entity/relationship extraction).
 
     Args:
@@ -601,7 +601,7 @@ async def test_dashscope_models() -> None:
 # ============================================================================
 
 
-async def main() -> None:
+async def main() -> int:
     """Run all compatibility tests."""
     print_section("GraphKnowledgeBase Model Compatibility Test", "=")
 

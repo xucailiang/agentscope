@@ -90,7 +90,10 @@ class MockChatModel(ChatModelBase):
         last_message = messages[-1].get("content", "") if messages else ""
 
         # Mock entity extraction response
-        if "entity" in last_message.lower() or "Entity Extraction" in last_message:
+        if (
+            "entity" in last_message.lower()
+            or "Entity Extraction" in last_message
+        ):
             mock_entities = {
                 "entities": [
                     {
@@ -167,7 +170,7 @@ def pytest_configure(config: Any) -> None:
 
 # Event loop fixture for async tests
 @pytest.fixture(scope="session")
-def event_loop() -> AsyncGenerator[asyncio.AbstractEventLoop, None]:
+def event_loop() -> "Generator[asyncio.AbstractEventLoop, None, None]":  # type: ignore
     """Create an event loop for the test session."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop

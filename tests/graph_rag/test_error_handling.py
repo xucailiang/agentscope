@@ -6,9 +6,9 @@ from agentscope.rag import GraphKnowledgeBase, Document, DocMetadata
 
 @pytest.mark.fast
 def test_missing_llm_error_entity_extraction(
-    graph_store,
-    embedding_model,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+) -> None:
     """Test that ValueError is raised when LLM is required but not provided."""
     with pytest.raises(ValueError, match="llm_model is required"):
         GraphKnowledgeBase(
@@ -23,9 +23,9 @@ def test_missing_llm_error_entity_extraction(
 
 @pytest.mark.fast
 def test_missing_llm_error_relationship_extraction(
-    graph_store,
-    embedding_model,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+) -> None:
     """Test that ValueError is raised for relationship extraction without LLM."""
     with pytest.raises(ValueError, match="llm_model is required"):
         GraphKnowledgeBase(
@@ -43,7 +43,7 @@ def test_missing_llm_error_relationship_extraction(
 async def test_invalid_search_mode(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test that invalid search mode raises ValueError."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -60,7 +60,7 @@ async def test_invalid_search_mode(
 async def test_global_search_without_community_detection(
     entity_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test that global search without community detection raises ValueError."""
     await entity_kb.add_documents(simple_documents)
 
@@ -79,7 +79,7 @@ async def test_global_search_without_community_detection(
 @pytest.mark.asyncio
 async def test_invalid_document_content_type(
     vector_only_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test handling of invalid document content type."""
     doc = Document(
         id="invalid_content",
@@ -118,7 +118,7 @@ async def test_retrieve_before_add(vector_only_kb: GraphKnowledgeBase) -> None:
 async def test_negative_limit(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test handling of negative limit value."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -142,7 +142,7 @@ async def test_negative_limit(
 async def test_zero_limit(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test handling of zero limit value."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -167,7 +167,7 @@ async def test_zero_limit(
 async def test_very_long_query(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test handling of very long query text."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -189,7 +189,7 @@ async def test_very_long_query(
 async def test_special_characters_in_query(
     vector_only_kb: GraphKnowledgeBase,
     simple_documents: list[Document],
-):
+) -> None:
     """Test handling of special characters in query."""
     await vector_only_kb.add_documents(simple_documents)
 
@@ -213,7 +213,7 @@ async def test_special_characters_in_query(
 @pytest.mark.asyncio
 async def test_duplicate_document_ids(
     vector_only_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test handling of documents with duplicate IDs."""
     docs = [
         Document(
@@ -254,11 +254,11 @@ async def test_duplicate_document_ids(
 @pytest.mark.slow
 @pytest.mark.asyncio
 async def test_community_detection_without_entities(
-    graph_store,
-    embedding_model,
-    llm_model,
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
     simple_documents: list[Document],
-):
+) -> None:
     """Test community detection when no entities exist."""
     kb = GraphKnowledgeBase(
         graph_store=graph_store,
@@ -295,10 +295,10 @@ async def test_community_detection_without_entities(
 
 @pytest.mark.fast
 def test_invalid_vector_weight(
-    graph_store,
-    embedding_model,
-    llm_model,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
+) -> None:
     """Test that knowledge base can be created (weight validation happens at search time)."""
     # Knowledge base creation should succeed
     kb = GraphKnowledgeBase(
@@ -317,7 +317,7 @@ def test_invalid_vector_weight(
 @pytest.mark.asyncio
 async def test_malformed_document_structure(
     vector_only_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test handling of document with unusual structure."""
     # Document with empty text
     doc = Document(

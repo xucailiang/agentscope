@@ -9,7 +9,7 @@ from agentscope.rag import GraphKnowledgeBase, Document, DocMetadata
 async def test_entity_extraction_basic(
     entity_kb: GraphKnowledgeBase,
     entity_rich_documents: list[Document],
-):
+) -> None:
     """Test basic entity extraction from documents."""
     # Add documents with entity extraction
     await entity_kb.add_documents(entity_rich_documents)
@@ -22,16 +22,20 @@ async def test_entity_extraction_basic(
     )
 
     assert len(results) > 0, "Expected to retrieve documents"
-    assert all(r.score is not None for r in results), "All results should have scores"
-    assert all(0 <= r.score <= 1 for r in results), "Scores should be between 0 and 1"
+    assert all(
+        r.score is not None for r in results
+    ), "All results should have scores"
+    assert all(
+        0 <= r.score <= 1 for r in results
+    ), "Scores should be between 0 and 1"
 
 
 @pytest.mark.medium
 @pytest.mark.asyncio
 async def test_entity_extraction_verification(
     entity_kb: GraphKnowledgeBase,
-    graph_store,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+) -> None:
     """Test that extracted entities are stored in the graph."""
     from .conftest import wait_for_entities
 
@@ -58,16 +62,18 @@ async def test_entity_extraction_verification(
     )
 
     # Should have extracted at least 2 entities (Einstein, Princeton University)
-    assert entity_count >= 2, f"Expected at least 2 entities, got {entity_count}"
+    assert (
+        entity_count >= 2
+    ), f"Expected at least 2 entities, got {entity_count}"
 
 
 @pytest.mark.slow
 @pytest.mark.asyncio
 async def test_entity_extraction_with_gleanings(
-    graph_store,
-    embedding_model,
-    llm_model,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
+) -> None:
     """Test multi-round entity extraction (gleanings)."""
     from .conftest import wait_for_entities
 
@@ -126,7 +132,7 @@ async def test_entity_extraction_with_gleanings(
 @pytest.mark.asyncio
 async def test_max_entities_limit(
     entity_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test that max_entities_per_chunk is respected."""
     # Document with many potential entities
     doc = Document(
@@ -157,10 +163,10 @@ async def test_max_entities_limit(
 @pytest.mark.medium
 @pytest.mark.asyncio
 async def test_entity_types_configuration(
-    graph_store,
-    embedding_model,
-    llm_model,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+    embedding_model: "EmbeddingModel",  # type: ignore
+    llm_model: "ChatModel",  # type: ignore
+) -> None:
     """Test configuring specific entity types to extract."""
     kb = GraphKnowledgeBase(
         graph_store=graph_store,
@@ -205,8 +211,8 @@ async def test_entity_types_configuration(
 @pytest.mark.asyncio
 async def test_entity_embedding_generation(
     entity_kb: GraphKnowledgeBase,
-    graph_store,
-):
+    graph_store: "Neo4jGraphStore",  # type: ignore
+) -> None:
     """Test that entity embeddings are generated."""
     from .conftest import wait_for_entity_embeddings
 
@@ -233,14 +239,16 @@ async def test_entity_embedding_generation(
     )
 
     # Should have at least 1 entity with embeddings
-    assert count >= 1, f"Expected at least 1 entity with embeddings, got {count}"
+    assert (
+        count >= 1
+    ), f"Expected at least 1 entity with embeddings, got {count}"
 
 
 @pytest.mark.medium
 @pytest.mark.asyncio
 async def test_entity_extraction_empty_document(
     entity_kb: GraphKnowledgeBase,
-):
+) -> None:
     """Test entity extraction with minimal content."""
     doc = Document(
         id="minimal",

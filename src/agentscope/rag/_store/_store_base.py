@@ -81,7 +81,8 @@ class StoreBase(ABC):
                                  support direct client access
         """
         raise NotImplementedError(
-            f"``get_client`` is not implemented for " f"{self.__class__.__name__}.",
+            f"``get_client`` is not implemented for "
+            f"{self.__class__.__name__}.",
         )
 
 
@@ -211,7 +212,8 @@ class GraphStoreBase(StoreBase):
             NotImplementedError: If community detection is not supported
         """
         raise NotImplementedError(
-            f"Community detection is not supported in " f"{self.__class__.__name__}.",
+            f"Community detection is not supported in "
+            f"{self.__class__.__name__}.",
         )
 
     async def search_communities(
@@ -238,5 +240,6 @@ class GraphStoreBase(StoreBase):
             NotImplementedError: If community search is not supported
         """
         raise NotImplementedError(
-            f"Community search is not supported in " f"{self.__class__.__name__}.",
+            f"Community search is not supported in "
+            f"{self.__class__.__name__}.",
         )
