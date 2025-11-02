@@ -126,6 +126,7 @@ The currently built-in readers include:
     - TextReader
     - PDFReader
     - ImageReader
+    - WordReader
 
 
 
@@ -340,7 +341,7 @@ They can be used as follows:
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "6d2e0ccb-3c92-46b2-82fc-5b781d051fe2", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "30bd50f3-6063-418f-9263-7dec4bf39511", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -609,7 +610,7 @@ image.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.590 seconds)
+   **Total running time of the script:** (0 minutes 0.676 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_rag.py:

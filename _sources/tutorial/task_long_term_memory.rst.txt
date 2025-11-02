@@ -142,7 +142,7 @@ As an example, we first store a user preference and then retrieve related inform
         result = self.fn(*self.args, **self.kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py", line 138, in generate_response
         raise RuntimeError(
-    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "5c01bed6-963f-4de9-b884-e0c8393fe8c9", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "0fe112cb-03a0-486d-bcc4-fbcc13aad7ad", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -223,18 +223,15 @@ Then we clear the short-term memory and ask the agent about the user's preferenc
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-150
+.. GENERATED FROM PYTHON SOURCE LINES 145-436
 
 Using ReMe Long-Term Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: We provide an example of using ReMe long-term memory in the GitHub repository under the ``examples/long_term_memory/reme`` directory.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 150-169
-
-.. code-block:: Python
-
+.. code-block:: python
+    :caption: Example of ReMe long-term memory setup
 
     from agentscope.memory import ReMePersonalLongTermMemory
 
@@ -255,20 +252,14 @@ Using ReMe Long-Term Memory
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-176
-
 The ``ReMePersonalLongTermMemory`` class provides four main methods for long-term memory operations.
 They include ``record_to_memory`` and ``retrieve_from_memory`` for tool calls,
 as well as ``record`` and ``retrieve`` for direct calls.
 
 As an example, we use ``record_to_memory`` to record user preferences.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 176-198
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of recording to ReMe long-term memory
 
     async def test_record_to_memory():
         """Test record_to_memory tool function interface"""
@@ -291,25 +282,10 @@ As an example, we use ``record_to_memory`` to record user preferences.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 199-205
-
-output
-
-.. code-block:: console
-
-    Recording result: Successfully recorded 3 memory/memories to personal memory.
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 208-210
-
 Then we use ``retrieve_from_memory`` to retrieve related memories.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 210-235
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of retrieving from ReMe long-term memory
 
     async def test_retrieve_from_memory():
         """Test retrieve_from_memory tool function interface"""
@@ -334,29 +310,10 @@ Then we use ``retrieve_from_memory`` to retrieve related memories.
             print(f"Retrieved memories: {retrieved_text}")
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 236-246
-
-output
-
-.. code-block:: console
-
-    Retrieved memories: Keyword 'Hangzhou travel':
-    user prefers to stay in homestays when traveling to Hangzhou
-
-    Keyword 'tea preference':
-    user prefers to stay in homestays when traveling to Hangzhou
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 248-249
-
 Besides the tool function interface, we can also use the ``record`` method to directly record message conversations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 249-276
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of direct recording to ReMe long-term memory
 
     async def test_record_direct():
         """Test record direct recording method"""
@@ -383,26 +340,10 @@ Besides the tool function interface, we can also use the ``record`` method to di
             print("Successfully recorded conversation messages")
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 277-283
-
-output
-
-.. code-block:: console
-
-    Successfully recorded conversation messages
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 285-287
-
 Similarly, we use the ``retrieve`` method to retrieve related memories.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 287-316
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of direct retrieval from ReMe long-term memory
 
     async def test_retrieve_direct():
         """Test retrieve direct retrieval method"""
@@ -431,17 +372,6 @@ Similarly, we use the ``retrieve`` method to retrieve related memories.
             )
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 317-322
-
-output
-
-.. code-block:: console
-
-   Retrieved memories: user works as a software engineer and prefers remote work
-
-.. GENERATED FROM PYTHON SOURCE LINES 324-336
-
 Integration with ReAct Agent
 ----------------------------------------
 In AgentScope, the ``ReActAgent`` class receives a ``long_term_memory``
@@ -454,12 +384,8 @@ registered, allowing the agent to autonomously manage long-term memory through t
 .. note:: To achieve the best results, the ``"agent_control"`` mode may require
  additional instructions in the system prompt.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 336-396
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of ReAct agent with ReMe long-term memory
 
     # Create ReAct agent with long-term memory (agent_control mode)
     async def test_react_agent_with_reme():
@@ -519,38 +445,10 @@ registered, allowing the agent to autonomously manage long-term memory through t
             print(f"Agent response: {response2.get_text_content()}")
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 397-415
-
-output
-
-.. code-block:: console
-
-    system: {
-        "type": "tool_result",
-        "id": "call_7de95a3382e241309b16cb9e",
-        "name": "retrieve_from_memory",
-        "output": [
-            {
-                "type": "text",
-                "text": "Keyword 'preference':\nuser prefers to stay in a homestay when traveling to Hangzhou"
-            }
-        ]
-    }
-    Friday: Based on what I know, you prefer to stay in a homestay when traveling to Hangzhou. Let me know if there's anything else you'd like me to remember or clarify!
-    Agent response: Based on what I know, you prefer to stay in a homestay when traveling to Hangzhou. Let me know if there's anything else you'd like me to remember or clarify!
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 417-419
-
 Then we clear the short-term memory and ask the agent about the user's preferences.
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 419-447
-
-.. code-block:: Python
-
-
+.. code-block:: python
+    :caption: Example of retrieving preferences with ReAct agent and ReMe long-term memory
 
     async def retrieve_reme_preferences():
         """Retrieve user preferences from long-term memory"""
@@ -576,30 +474,6 @@ Then we clear the short-term memory and ask the agent about the user's preferenc
             # The agent will remember previous conversations
             msg2 = Msg("user", "What are my preferences? Answer briefly.", "user")
             await agent_with_reme(msg2)
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 448-465
-
-output
-
-.. code-block:: console
-
-    system: {
-        "type": "tool_result",
-        "id": "call_e7d354e450684ceca331a8d9",
-        "name": "retrieve_from_memory",
-        "output": [
-            {
-                "type": "text",
-                "text": "No memories found for the given keywords."
-            }
-        ]
-    }
-    Friday: I don't have any recorded information about your preferences yet. Let me know what you like or need, and I can remember it for future reference!
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 467-508
 
 Customizing Long-Term Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -646,7 +520,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.988 seconds)
+   **Total running time of the script:** (0 minutes 1.561 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_long_term_memory.py:

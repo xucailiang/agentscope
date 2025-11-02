@@ -435,7 +435,7 @@ They take a list of messages as input and record/retrieve information from long-
 <span class="w">    </span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py&quot;</span>, line <span class="m">138</span>, in <span class="n">generate_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;5c01bed6-963f-4de9-b884-e0c8393fe8c9&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;0fe112cb-03a0-486d-bcc4-fbcc13aad7ad&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <section id="integration-with-react-agent">
@@ -503,7 +503,9 @@ additional instructions in the system prompt.</p>
 <p class="admonition-title">Note</p>
 <p>We provide an example of using ReMe long-term memory in the GitHub repository under the <code class="docutils literal notranslate"><span class="pre">examples/long_term_memory/reme</span></code> directory.</p>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">agentscope.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReMePersonalLongTermMemory</span>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example of ReMe long-term memory setup</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">agentscope.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReMePersonalLongTermMemory</span>
 
 <span class="c1"># Create ReMe personal long-term memory instance</span>
 <span class="n">reme_long_term_memory</span> <span class="o">=</span> <span class="n">ReMePersonalLongTermMemory</span><span class="p">(</span>
@@ -522,11 +524,14 @@ additional instructions in the system prompt.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+</div>
 <p>The <code class="docutils literal notranslate"><span class="pre">ReMePersonalLongTermMemory</span></code> class provides four main methods for long-term memory operations.
 They include <code class="docutils literal notranslate"><span class="pre">record_to_memory</span></code> and <code class="docutils literal notranslate"><span class="pre">retrieve_from_memory</span></code> for tool calls,
 as well as <code class="docutils literal notranslate"><span class="pre">record</span></code> and <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> for direct calls.</p>
 <p>As an example, we use <code class="docutils literal notranslate"><span class="pre">record_to_memory</span></code> to record user preferences.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_record_to_memory</span><span class="p">():</span>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example of recording to ReMe long-term memory</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_record_to_memory</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test record_to_memory tool function interface&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">reme_long_term_memory</span><span class="o">.</span><span class="n">record_to_memory</span><span class="p">(</span>
@@ -546,12 +551,11 @@ as well as <code class="docutils literal notranslate"><span class="pre">record</
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recording result: </span><span class="si">{</span><span class="n">result_text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Recording result: Successfully recorded 3 memory/memories to personal memory.</span>
-</pre></div>
 </div>
 <p>Then we use <code class="docutils literal notranslate"><span class="pre">retrieve_from_memory</span></code> to retrieve related memories.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_retrieve_from_memory</span><span class="p">():</span>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example of retrieving from ReMe long-term memory</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_retrieve_from_memory</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test retrieve_from_memory tool function interface&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
         <span class="c1"># First record some content</span>
@@ -574,16 +578,11 @@ as well as <code class="docutils literal notranslate"><span class="pre">record</
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieved memories: </span><span class="si">{</span><span class="n">retrieved_text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Retrieved memories: Keyword &#39;Hangzhou travel&#39;:</span>
-<span class="go">user prefers to stay in homestays when traveling to Hangzhou</span>
-
-<span class="go">Keyword &#39;tea preference&#39;:</span>
-<span class="go">user prefers to stay in homestays when traveling to Hangzhou</span>
-</pre></div>
 </div>
 <p>Besides the tool function interface, we can also use the <code class="docutils literal notranslate"><span class="pre">record</span></code> method to directly record message conversations.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_record_direct</span><span class="p">():</span>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example of direct recording to ReMe long-term memory</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_record_direct</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test record direct recording method&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
         <span class="k">await</span> <span class="n">reme_long_term_memory</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
@@ -608,12 +607,11 @@ as well as <code class="docutils literal notranslate"><span class="pre">record</
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully recorded conversation messages&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Successfully recorded conversation messages</span>
-</pre></div>
 </div>
 <p>Similarly, we use the <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> method to retrieve related memories.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_retrieve_direct</span><span class="p">():</span>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example of direct retrieval from ReMe long-term memory</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_retrieve_direct</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test retrieve direct retrieval method&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
         <span class="c1"># First record some content</span>
@@ -640,9 +638,6 @@ as well as <code class="docutils literal notranslate"><span class="pre">record</
         <span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Retrieved memories: user works as a software engineer and prefers remote work</span>
-</pre></div>
 </div>
 <section id="id2">
 <h3>Integration with ReAct Agent<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
@@ -656,7 +651,9 @@ registered, allowing the agent to autonomously manage long-term memory through t
 <p>To achieve the best results, the <code class="docutils literal notranslate"><span class="pre">&quot;agent_control&quot;</span></code> mode may require
 additional instructions in the system prompt.</p>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create ReAct agent with long-term memory (agent_control mode)</span>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example of ReAct agent with ReMe long-term memory</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create ReAct agent with long-term memory (agent_control mode)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_react_agent_with_reme</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test ReActAgent integration with ReMe personal memory&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
@@ -714,24 +711,11 @@ additional instructions in the system prompt.</p>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agent response: </span><span class="si">{</span><span class="n">response2</span><span class="o">.</span><span class="n">get_text_content</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">system: {</span>
-<span class="go">    &quot;type&quot;: &quot;tool_result&quot;,</span>
-<span class="go">    &quot;id&quot;: &quot;call_7de95a3382e241309b16cb9e&quot;,</span>
-<span class="go">    &quot;name&quot;: &quot;retrieve_from_memory&quot;,</span>
-<span class="go">    &quot;output&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;type&quot;: &quot;text&quot;,</span>
-<span class="go">            &quot;text&quot;: &quot;Keyword &#39;preference&#39;:\nuser prefers to stay in a homestay when traveling to Hangzhou&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ]</span>
-<span class="go">}</span>
-<span class="go">Friday: Based on what I know, you prefer to stay in a homestay when traveling to Hangzhou. Let me know if there&#39;s anything else you&#39;d like me to remember or clarify!</span>
-<span class="go">Agent response: Based on what I know, you prefer to stay in a homestay when traveling to Hangzhou. Let me know if there&#39;s anything else you&#39;d like me to remember or clarify!</span>
-</pre></div>
 </div>
 <p>Then we clear the short-term memory and ask the agent about the user’s preferences.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_reme_preferences</span><span class="p">():</span>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example of retrieving preferences with ReAct agent and ReMe long-term memory</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_reme_preferences</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve user preferences from long-term memory&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">reme_long_term_memory</span><span class="p">:</span>
         <span class="c1"># Create agent (reusing for demonstration completeness)</span>
@@ -757,20 +741,6 @@ additional instructions in the system prompt.</p>
         <span class="k">await</span> <span class="n">agent_with_reme</span><span class="p">(</span><span class="n">msg2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>output</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">system: {</span>
-<span class="go">    &quot;type&quot;: &quot;tool_result&quot;,</span>
-<span class="go">    &quot;id&quot;: &quot;call_e7d354e450684ceca331a8d9&quot;,</span>
-<span class="go">    &quot;name&quot;: &quot;retrieve_from_memory&quot;,</span>
-<span class="go">    &quot;output&quot;: [</span>
-<span class="go">        {</span>
-<span class="go">            &quot;type&quot;: &quot;text&quot;,</span>
-<span class="go">            &quot;text&quot;: &quot;No memories found for the given keywords.&quot;</span>
-<span class="go">        }</span>
-<span class="go">    ]</span>
-<span class="go">}</span>
-<span class="go">Friday: I don&#39;t have any recorded information about your preferences yet. Let me know what you like or need, and I can remember it for future reference!</span>
-</pre></div>
 </div>
 </section>
 </section>
@@ -779,9 +749,9 @@ additional instructions in the system prompt.</p>
 <p>AgentScope provides the <code class="docutils literal notranslate"><span class="pre">LongTermMemoryBase</span></code> base class, which defines the basic</p>
 <p>Developers can inherit from <code class="docutils literal notranslate"><span class="pre">LongTermMemoryBase</span></code> to implement custom long-term
 memory systems according to their needs：</p>
-<div class="table-wrapper docutils container" id="id3">
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Long-term memory classes in AgentScope</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<div class="table-wrapper docutils container" id="id10">
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">Long-term memory classes in AgentScope</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Class</p></th>
 <th class="head"><p>Abstract Methods</p></th>
@@ -834,7 +804,7 @@ memory systems according to their needs：</p>
 <li><p><a class="reference internal" href="task_agent.html#agent"><span class="std std-ref">Agent</span></a> - ReAct agent</p></li>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">Tool</span></a> - Tool system</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.988 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.561 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-long-term-memory-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/cf2bfcc46b2b3d58d3df8c98a6a13f87/task_long_term_memory.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_long_term_memory.ipynb</span></code></a></p>

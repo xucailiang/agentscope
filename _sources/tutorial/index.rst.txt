@@ -198,6 +198,23 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="In AgentScope, we provide a basic class for long-term memory (``LongTermMemoryBase``) and an implementation based on the mem0 library (``Mem0LongTermMemory``). Together with the design of ReActAgent class in agent section, we provide two long-term memory modes:">
+
+.. only:: html
+
+  .. image:: /tutorial/images/thumb/sphx_glr_task_long_term_memory_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_tutorial_task_long_term_memory.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Long-Term Memory</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Message is the core concept in AgentScope, used to support multimodal data, tools API, information storage/exchange and prompt construction.">
 
 .. only:: html
@@ -451,23 +468,6 @@
     </div>
 
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In AgentScope, we provide a basic class for long-term memory (``LongTermMemoryBase``) and an implementation based on the mem0 library (``Mem0LongTermMemory``). Together with the design of ReActAgent class in agent section, we provide two long-term memory modes:">
-
-.. only:: html
-
-  .. image:: /tutorial/images/thumb/sphx_glr_task_long_term_memory_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_tutorial_task_long_term_memory.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Long-Term Memory</div>
-    </div>
-
-
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -489,6 +489,7 @@
    /tutorial/task_hook
    /tutorial/workflow_handoffs
    /tutorial/task_pipeline
+   /tutorial/task_long_term_memory
    /tutorial/quickstart_message
    /tutorial/task_mcp
    /tutorial/task_embedding
@@ -504,7 +505,6 @@
    /tutorial/task_eval
    /tutorial/task_rag
    /tutorial/task_tool
-   /tutorial/task_long_term_memory
 
 
 
