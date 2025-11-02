@@ -504,7 +504,9 @@
         <span class="c1"># Community detection config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enable_community_detection</span> <span class="o">=</span> <span class="n">enable_community_detection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">community_algorithm</span> <span class="o">=</span> <span class="n">community_algorithm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_first_add_documents_called</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Track first call for auto-detection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_add_documents_called</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="kc">False</span>  <span class="c1"># Track first call for auto-detection</span>
+        <span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Initialized GraphKnowledgeBase: &quot;</span>
@@ -578,7 +580,10 @@
                 <span class="p">)</span>
 
             <span class="c1"># Step 5: Trigger community detection (first call only)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_community_detection</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_add_documents_called</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enable_community_detection</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_add_documents_called</span>
+            <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_first_add_documents_called</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="s2">&quot;First add_documents call - triggering community detection in background&quot;</span><span class="p">,</span>
@@ -919,7 +924,9 @@
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doc_id</span> <span class="ow">in</span> <span class="n">sorted_doc_ids</span><span class="p">:</span>
             <span class="n">doc</span> <span class="o">=</span> <span class="n">doc_map</span><span class="p">[</span><span class="n">doc_id</span><span class="p">]</span>
-            <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">doc_scores</span><span class="p">[</span><span class="n">doc_id</span><span class="p">]</span>  <span class="c1"># Update with combined score</span>
+            <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">doc_scores</span><span class="p">[</span>
+                <span class="n">doc_id</span>
+            <span class="p">]</span>  <span class="c1"># Update with combined score</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
@@ -1060,7 +1067,8 @@
 
                     <span class="c1"># Calculate entity weight contribution</span>
                     <span class="n">entity_score_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
-                        <span class="n">entity_weights</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mentioned_entities</span>
+                        <span class="n">entity_weights</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">mentioned_entities</span>
                     <span class="p">)</span>
 
                     <span class="n">max_possible_score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entity_names</span><span class="p">)</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span>
@@ -1722,7 +1730,9 @@
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_store</span><span class="o">.</span><span class="n">add_communities</span><span class="p">(</span><span class="n">communities_data</span><span class="p">)</span>
 
             <span class="c1"># Calculate levels</span>
-            <span class="n">levels</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">level</span> <span class="k">for</span> <span class="n">comm</span> <span class="ow">in</span> <span class="n">communities_with_embeddings</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">levels</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">max</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">level</span> <span class="k">for</span> <span class="n">comm</span> <span class="ow">in</span> <span class="n">communities_with_embeddings</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
 
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Community detection completed: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">communities_with_embeddings</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
@@ -1769,7 +1779,9 @@
                 <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_store</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
                 <span class="c1"># Step 1: Create graph projection</span>
-                <span class="n">projection_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;entity_graph_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_store</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">projection_name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;entity_graph_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_store</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
 
                 <span class="c1"># Drop existing projection if any</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -1844,7 +1856,9 @@
                     <span class="n">comm_id</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="s2">&quot;community_id&quot;</span><span class="p">]</span>
                     <span class="c1"># Handle both single value and list (from includeIntermediateCommunities)</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comm_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                        <span class="n">comm_id</span> <span class="o">=</span> <span class="n">comm_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Use the highest level community</span>
+                        <span class="n">comm_id</span> <span class="o">=</span> <span class="n">comm_id</span><span class="p">[</span>
+                            <span class="o">-</span><span class="mi">1</span>
+                        <span class="p">]</span>  <span class="c1"># Use the highest level community</span>
                     <span class="k">if</span> <span class="n">comm_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">community_map</span><span class="p">:</span>
                         <span class="n">community_map</span><span class="p">[</span><span class="n">comm_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                             <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;comm_</span><span class="si">{</span><span class="n">comm_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -2004,9 +2018,7 @@
 
             <span class="c1"># Ensure summary is not empty (Pydantic validation requirement)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">summary</span><span class="p">:</span>
-                <span class="n">summary</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">community</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+                <span class="n">summary</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">community</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
 
             <span class="n">community</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">summary</span>
 
@@ -2019,9 +2031,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate summary: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># Fallback to simple summary</span>
             <span class="n">community</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Group of </span><span class="si">{</span><span class="n">community</span><span class="o">.</span><span class="n">entity_count</span><span class="si">}</span><span class="s2"> entities&quot;</span>
-            <span class="n">community</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">community</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="n">community</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">community</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">community</span><span class="o">.</span><span class="n">rating</span> <span class="o">=</span> <span class="mf">0.5</span>
             <span class="k">return</span> <span class="n">community</span>
 
@@ -2039,7 +2049,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">comm</span> <span class="ow">in</span> <span class="n">communities</span><span class="p">:</span>
             <span class="n">comm</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Group of </span><span class="si">{</span><span class="n">comm</span><span class="o">.</span><span class="n">entity_count</span><span class="si">}</span><span class="s2"> entities&quot;</span>
-            <span class="n">comm</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">comm</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;A community containing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">entity_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
             <span class="n">comm</span><span class="o">.</span><span class="n">rating</span> <span class="o">=</span> <span class="mf">0.5</span>
         <span class="k">return</span> <span class="n">communities</span>
 
