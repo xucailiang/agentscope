@@ -10,6 +10,7 @@ from ._reader import (
     TextReader,
     PDFReader,
     ImageReader,
+    WordReader,
 )
 from ._store import (
     StoreBase,
@@ -58,6 +59,7 @@ __all__ = [
     "PDFReader",
     "ImageReader",
     # Documents
+    "WordReader",
     "DocMetadata",
     "Document",
     # Stores
