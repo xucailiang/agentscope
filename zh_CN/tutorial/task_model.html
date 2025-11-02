@@ -453,7 +453,7 @@ AgentScope 目前支持的模型 API 和模型提供商包括：</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ChatResponse(content=[{&#39;type&#39;: &#39;thinking&#39;, &#39;thinking&#39;: &#39;我应该在 Google 上搜索 AgentScope。&#39;}, {&#39;type&#39;: &#39;text&#39;, &#39;text&#39;: &#39;我将在 Google 上搜索 AgentScope。&#39;}, {&#39;type&#39;: &#39;tool_use&#39;, &#39;id&#39;: &#39;642n298gjna&#39;, &#39;name&#39;: &#39;google_search&#39;, &#39;input&#39;: {&#39;query&#39;: &#39;AgentScope&#39;}}], id=&#39;2025-11-02 04:42:27.612_3667a1&#39;, created_at=&#39;2025-11-02 04:42:27.612&#39;, type=&#39;chat&#39;, usage=None, metadata=None)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ChatResponse(content=[{&#39;type&#39;: &#39;thinking&#39;, &#39;thinking&#39;: &#39;我应该在 Google 上搜索 AgentScope。&#39;}, {&#39;type&#39;: &#39;text&#39;, &#39;text&#39;: &#39;我将在 Google 上搜索 AgentScope。&#39;}, {&#39;type&#39;: &#39;tool_use&#39;, &#39;id&#39;: &#39;642n298gjna&#39;, &#39;name&#39;: &#39;google_search&#39;, &#39;input&#39;: {&#39;query&#39;: &#39;AgentScope&#39;}}], id=&#39;2025-11-02 04:43:04.093_de1f83&#39;, created_at=&#39;2025-11-02 04:43:04.093&#39;, type=&#39;chat&#39;, usage=None, metadata=None)
 </pre></div>
 </div>
 <p>以 <code class="docutils literal notranslate"><span class="pre">DashScopeChatModel</span></code> 为例，调用和返回结果如下：</p>
@@ -496,7 +496,7 @@ AgentScope 目前支持的模型 API 和模型提供商包括：</p>
 <span class="w">    </span><span class="n">parsed_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dashscope_generation_response</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">401</span>, in <span class="n">_parse_dashscope_generation_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;b59c4404-fead-4a41-ad11-7482d0bf71fd&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;cbd84a74-dd4d-4514-ae51-b70891f62960&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <section id="id2">
@@ -601,7 +601,7 @@ AgentScope 目前支持的模型 API 和模型提供商包括：</p>
 <li><p><a class="reference internal" href="quickstart_message.html#message"><span class="std std-ref">创建消息</span></a></p></li>
 <li><p><a class="reference internal" href="task_prompt.html#prompt"><span class="std std-ref">提示词格式化</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.821 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.644 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-model-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6d26becb6abae50c483b7d863e1725fb/task_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_model.ipynb</span></code></a></p>

@@ -198,6 +198,23 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="AgentScope 为长期记忆提供了一个基类 LongTermMemoryBase 和一个基于 mem0 的具体实现 Mem0LongTermMemory。 结合 agent 章节中 ReActAgent 类的设计，我们提供了两种长期记忆模式：">
+
+.. only:: html
+
+  .. image:: /tutorial/images/thumb/sphx_glr_task_long_term_memory_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_tutorial_task_long_term_memory.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">长期记忆</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="AgentScope 中，嵌入模块提供了用于向量生成的统一接口，具有以下特性：">
 
 .. only:: html
@@ -451,23 +468,6 @@
     </div>
 
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="AgentScope 为长期记忆提供了一个基类 LongTermMemoryBase 和一个基于 mem0 的具体实现 Mem0LongTermMemory。 结合 agent 章节中 ReActAgent 类的设计，我们提供了两种长期记忆模式：">
-
-.. only:: html
-
-  .. image:: /tutorial/images/thumb/sphx_glr_task_long_term_memory_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_tutorial_task_long_term_memory.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">长期记忆</div>
-    </div>
-
-
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -489,6 +489,7 @@
    /tutorial/task_hook
    /tutorial/workflow_handoffs
    /tutorial/task_pipeline
+   /tutorial/task_long_term_memory
    /tutorial/task_embedding
    /tutorial/task_mcp
    /tutorial/quickstart_message
@@ -504,7 +505,6 @@
    /tutorial/task_eval
    /tutorial/task_rag
    /tutorial/task_tool
-   /tutorial/task_long_term_memory
 
 
 

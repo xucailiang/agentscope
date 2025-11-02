@@ -389,6 +389,8 @@
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.UserInputBase.__call__">__call__() （UserInputBase 方法）</a>
 </li>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.WordReader.__call__">__call__() （WordReader 方法）</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.ACEAccuracy.__init__">__init__() （ACEAccuracy 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.ACEBenchmark.__init__">__init__() （ACEBenchmark 方法）</a>
@@ -457,10 +459,10 @@
 </li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.HttpStatelessClient.__init__">__init__() （HttpStatelessClient 方法）</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.token.html#agentscope.token.HuggingFaceTokenCounter.__init__">__init__() （HuggingFaceTokenCounter 方法）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.memory.html#agentscope.memory.InMemoryMemory.__init__">__init__() （InMemoryMemory 方法）</a>
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.InMemoryPlanStorage.__init__">__init__() （InMemoryPlanStorage 方法）</a>
@@ -533,11 +535,15 @@
 </li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.ToolResponse.__init__">__init__() （ToolResponse 方法）</a>
 </li>
+        <li><a href="api/agentscope.model.html#agentscope.model.TrinityChatModel.__init__">__init__() （TrinityChatModel 方法）</a>
+</li>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.TruncatedFormatterBase.__init__">__init__() （TruncatedFormatterBase 方法）</a>
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.UserAgent.__init__">__init__() （UserAgent 方法）</a>
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.UserInputData.__init__">__init__() （UserInputData 方法）</a>
+</li>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.WordReader.__init__">__init__() （WordReader 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricType.__new__">__new__() （MetricType 方法）</a>
 </li>
@@ -769,6 +775,13 @@
 </li>
         </ul></li>
         <li>
+    agentscope.tune
+
+        <ul>
+          <li><a href="api/agentscope.tune.html#module-agentscope.tune">module</a>
+</li>
+        </ul></li>
+        <li>
     agentscope.types
 
         <ul>
@@ -953,7 +966,7 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.BenchmarkBase.description">description（BenchmarkBase 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.description">description（Entity 属性）</a>, <a href="api/agentscope.rag.html#id4">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.description">description（Entity 属性）</a>, <a href="api/agentscope.rag.html#id6">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.description">description（EntityDict 属性）</a>
 </li>
@@ -963,7 +976,7 @@
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.PlanNotebook.description">description（PlanNotebook 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.description">description（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id9">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.description">description（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id11">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.description">description（RelationshipDict 属性）</a>
 </li>
@@ -1005,13 +1018,13 @@
 </li>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.EmbeddingUsage">EmbeddingUsage（agentscope.embedding 中的类）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.embedding">embedding（Community 属性）</a>, <a href="api/agentscope.rag.html#id18">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.embedding">embedding（Community 属性）</a>, <a href="api/agentscope.rag.html#id20">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.embedding">embedding（CommunityDict 属性）</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Document.embedding">embedding（Document 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.embedding">embedding（Entity 属性）</a>, <a href="api/agentscope.rag.html#id5">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.embedding">embedding（Entity 属性）</a>, <a href="api/agentscope.rag.html#id7">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.embedding">embedding（EntityDict 属性）</a>
 </li>
@@ -1021,13 +1034,13 @@
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.GraphKnowledgeBase.enable_relationship_extraction">enable_relationship_extraction（GraphKnowledgeBase 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.entity_count">entity_count（Community 属性）</a>, <a href="api/agentscope.rag.html#id16">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.entity_count">entity_count（Community 属性）</a>, <a href="api/agentscope.rag.html#id18">[1]</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.entity_count">entity_count（CommunityDict 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.entity_ids">entity_ids（Community 属性）</a>, <a href="api/agentscope.rag.html#id17">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.entity_ids">entity_ids（Community 属性）</a>, <a href="api/agentscope.rag.html#id19">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.entity_ids">entity_ids（CommunityDict 属性）</a>
 </li>
@@ -1151,13 +1164,15 @@
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.ImageReader.get_doc_id">get_doc_id() （ImageReader 方法）</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.PDFReader.get_doc_id">get_doc_id() （PDFReader 方法）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.ReaderBase.get_doc_id">get_doc_id() （ReaderBase 方法）</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.TextReader.get_doc_id">get_doc_id() （TextReader 方法）</a>
+</li>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.WordReader.get_doc_id">get_doc_id() （WordReader 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.get_evaluation_result">get_evaluation_result() （EvaluatorStorageBase 方法）</a>
 </li>
@@ -1237,7 +1252,7 @@
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.ChatResponse.id">id（ChatResponse 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.id">id（Community 属性）</a>, <a href="api/agentscope.rag.html#id11">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.id">id（Community 属性）</a>, <a href="api/agentscope.rag.html#id13">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.id">id（CommunityDict 属性）</a>
 </li>
@@ -1315,7 +1330,7 @@
   <h2>L</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.level">level（Community 属性）</a>, <a href="api/agentscope.rag.html#id12">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.level">level（Community 属性）</a>, <a href="api/agentscope.rag.html#id14">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.level">level（CommunityDict 属性）</a>
 </li>
@@ -1401,10 +1416,10 @@
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.ChatModelBase.model_name">model_name（ChatModelBase 属性）</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.EmbeddingModelBase.model_name">model_name（EmbeddingModelBase 属性）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     module
 
@@ -1446,6 +1461,8 @@
           <li><a href="api/agentscope.tool.html#module-agentscope.tool">agentscope.tool</a>
 </li>
           <li><a href="api/agentscope.tracing.html#module-agentscope.tracing">agentscope.tracing</a>
+</li>
+          <li><a href="api/agentscope.tune.html#module-agentscope.tune">agentscope.tune</a>
 </li>
           <li><a href="api/agentscope.types.html#module-agentscope.types">agentscope.types</a>
 </li>
@@ -1584,7 +1601,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.exception.html#agentscope.exception.RAGExceptionBase">RAGExceptionBase</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.rating">rating（Community 属性）</a>, <a href="api/agentscope.rag.html#id15">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.rating">rating（Community 属性）</a>, <a href="api/agentscope.rag.html#id17">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.rating">rating（CommunityDict 属性）</a>
 </li>
@@ -1800,7 +1817,7 @@
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.ImageBlock.source">source（ImageBlock 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.source">source（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id6">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.source">source（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id8">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.source">source（RelationshipDict 属性）</a>
 </li>
@@ -1838,7 +1855,7 @@
 </li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.ToolResponse.stream">stream（ToolResponse 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.strength">strength（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id10">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.strength">strength（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id12">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.strength">strength（RelationshipDict 属性）</a>
 </li>
@@ -1854,7 +1871,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput.success">success（SolutionOutput 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.summary">summary（Community 属性）</a>, <a href="api/agentscope.rag.html#id14">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.summary">summary（Community 属性）</a>, <a href="api/agentscope.rag.html#id16">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.summary">summary（CommunityDict 属性）</a>
 </li>
@@ -1984,7 +2001,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.Task.tags">tags（Task 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.target">target（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id7">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.target">target（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id9">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.target">target（RelationshipDict 属性）</a>
 </li>
@@ -2004,7 +2021,7 @@
 </li>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.EmbeddingUsage.time">time（EmbeddingUsage 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.title">title（Community 属性）</a>, <a href="api/agentscope.rag.html#id13">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Community.title">title（Community 属性）</a>, <a href="api/agentscope.rag.html#id15">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.title">title（CommunityDict 属性）</a>
 </li>
@@ -2034,10 +2051,10 @@
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.ToolUseBlock">ToolUseBlock（agentscope.message 中的类）</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.DocMetadata.total_chunks">total_chunks（DocMetadata 属性）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace">trace()（在 agentscope.tracing 模块中）</a>
 </li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_embedding">trace_embedding()（在 agentscope.tracing 模块中）</a>
@@ -2052,7 +2069,11 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput.trajectory">trajectory（SolutionOutput 属性）</a>
 </li>
+        <li><a href="api/agentscope.model.html#agentscope.model.TrinityChatModel">TrinityChatModel（agentscope.model 中的类）</a>
+</li>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.TruncatedFormatterBase">TruncatedFormatterBase（agentscope.formatter 中的类）</a>
+</li>
+        <li><a href="api/agentscope.tune.html#agentscope.tune.tune">tune()（在 agentscope.tune 模块中）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.ACEPhone.turn_on_wifi">turn_on_wifi() （ACEPhone 方法）</a>
 </li>
@@ -2066,13 +2087,13 @@
 </li>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.EmbeddingUsage.type">type（EmbeddingUsage 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.type">type（Entity 属性）</a>, <a href="api/agentscope.rag.html#id3">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Entity.type">type（Entity 属性）</a>, <a href="api/agentscope.rag.html#id5">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.type">type（EntityDict 属性）</a>
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.ImageBlock.type">type（ImageBlock 属性）</a>
 </li>
-        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.type">type（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id8">[1]</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.Relationship.type">type（Relationship 属性）</a>, <a href="api/agentscope.rag.html#id10">[1]</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.type">type（RelationshipDict 属性）</a>
 </li>
@@ -2148,9 +2169,11 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.plan.html#agentscope.plan.DefaultPlanToHint.when_a_subtask_in_progress">when_a_subtask_in_progress（DefaultPlanToHint 属性）</a>
 </li>
+        <li><a href="api/agentscope.plan.html#agentscope.plan.DefaultPlanToHint.when_no_subtask_in_progress">when_no_subtask_in_progress（DefaultPlanToHint 属性）</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api/agentscope.plan.html#agentscope.plan.DefaultPlanToHint.when_no_subtask_in_progress">when_no_subtask_in_progress（DefaultPlanToHint 属性）</a>
+        <li><a href="api/agentscope.rag.html#agentscope.rag.WordReader">WordReader（agentscope.rag 中的类）</a>
 </li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.write_text_file">write_text_file()（在 agentscope.tool 模块中）</a>
 </li>
