@@ -105,7 +105,7 @@ AgentScope 内置支持以下 API：
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "5a687af2-3519-45ed-9293-019b98160f7c", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "7960236a-ab83-470f-af1e-fb3095fe746d", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -186,7 +186,7 @@ AgentScope 提供了用于缓存 embedding 的基类 ``EmbeddingCacheBase``，�
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.629 seconds)
+   **Total running time of the script:** (0 minutes 0.572 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_embedding.py:

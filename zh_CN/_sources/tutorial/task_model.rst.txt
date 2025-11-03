@@ -132,7 +132,7 @@ AgentScope 目前支持的模型 API 和模型提供商包括：
 
  .. code-block:: none
 
-    ChatResponse(content=[{'type': 'thinking', 'thinking': '我应该在 Google 上搜索 AgentScope。'}, {'type': 'text', 'text': '我将在 Google 上搜索 AgentScope。'}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope'}}], id='2025-11-03 10:32:42.428_fa0aca', created_at='2025-11-03 10:32:42.428', type='chat', usage=None, metadata=None)
+    ChatResponse(content=[{'type': 'thinking', 'thinking': '我应该在 Google 上搜索 AgentScope。'}, {'type': 'text', 'text': '我将在 Google 上搜索 AgentScope。'}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope'}}], id='2025-11-03 10:43:51.661_e78d4d', created_at='2025-11-03 10:43:51.661', type='chat', usage=None, metadata=None)
 
 
 
@@ -191,7 +191,7 @@ AgentScope 目前支持的模型 API 和模型提供商包括：
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "f24163bc-48d2-4b7e-a647-9c11ae0598a0", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "9ddcc989-bbb8-4987-9f14-2a367e024f86", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -326,7 +326,7 @@ AgentScope 通过提供 ``ThinkingBlock`` 来支持推理模型。
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.692 seconds)
+   **Total running time of the script:** (0 minutes 0.509 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_model.py:

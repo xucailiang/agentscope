@@ -251,7 +251,7 @@
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "8dd41410-0d9a-40e9-b581-c280d9f598ca", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "e1599930-b22b-4f3f-a659-51c2e3898c54", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -375,7 +375,7 @@ AgentScope 提供了 ``SessionBase`` 类，包含两个用于会话管理的抽�
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.649 seconds)
+   **Total running time of the script:** (0 minutes 0.576 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_state.py:
