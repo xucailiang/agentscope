@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """Test entity extraction functionality."""
 import pytest
-from agentscope.rag import GraphKnowledgeBase, Document, DocMetadata
+
+from agentscope.embedding import EmbeddingModelBase
+from agentscope.model import ChatModelBase
+from agentscope.rag import (
+    DocMetadata,
+    Document,
+    GraphKnowledgeBase,
+    Neo4jGraphStore,
+)
 
 
 @pytest.mark.medium
@@ -34,7 +42,7 @@ async def test_entity_extraction_basic(
 @pytest.mark.asyncio
 async def test_entity_extraction_verification(
     entity_kb: GraphKnowledgeBase,
-    graph_store: "Neo4jGraphStore",  # type: ignore
+    graph_store: Neo4jGraphStore,
 ) -> None:
     """Test that extracted entities are stored in the graph."""
     from .conftest import wait_for_entities
@@ -70,9 +78,9 @@ async def test_entity_extraction_verification(
 @pytest.mark.slow
 @pytest.mark.asyncio
 async def test_entity_extraction_with_gleanings(
-    graph_store: "Neo4jGraphStore",  # type: ignore
-    embedding_model: "EmbeddingModel",  # type: ignore
-    llm_model: "ChatModel",  # type: ignore
+    graph_store: Neo4jGraphStore,
+    embedding_model: EmbeddingModelBase,
+    llm_model: ChatModelBase,
 ) -> None:
     """Test multi-round entity extraction (gleanings)."""
     from .conftest import wait_for_entities
@@ -163,9 +171,9 @@ async def test_max_entities_limit(
 @pytest.mark.medium
 @pytest.mark.asyncio
 async def test_entity_types_configuration(
-    graph_store: "Neo4jGraphStore",  # type: ignore
-    embedding_model: "EmbeddingModel",  # type: ignore
-    llm_model: "ChatModel",  # type: ignore
+    graph_store: Neo4jGraphStore,
+    embedding_model: EmbeddingModelBase,
+    llm_model: ChatModelBase,
 ) -> None:
     """Test configuring specific entity types to extract."""
     kb = GraphKnowledgeBase(
@@ -211,7 +219,7 @@ async def test_entity_types_configuration(
 @pytest.mark.asyncio
 async def test_entity_embedding_generation(
     entity_kb: GraphKnowledgeBase,
-    graph_store: "Neo4jGraphStore",  # type: ignore
+    graph_store: Neo4jGraphStore,
 ) -> None:
     """Test that entity embeddings are generated."""
     from .conftest import wait_for_entity_embeddings

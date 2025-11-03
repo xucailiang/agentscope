@@ -9,17 +9,17 @@
 ## Run Tests
 
 ```bash
-# All tests (~7 min)
-pytest tests/graph_rag/ -v
+# All tests
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
 
-# Fast tests only (~10 sec)
-pytest tests/graph_rag/ -v -m fast
+# Fast tests only
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m fast
 
-# Skip slow tests (~3 min)
-pytest tests/graph_rag/ -v -m "not slow"
+# Skip slow tests
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m "not slow"
 
-# Skip community detection tests (no GDS needed)
-pytest tests/graph_rag/ -v -m "not requires_gds"
+# Skip community detection tests (no GDS plugin required)
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m "not requires_gds"
 ```
 
 ## Test Coverage
@@ -70,15 +70,15 @@ pytest tests/graph_rag/ -v -m "not requires_gds"
 
 ```bash
 # By speed
-pytest tests/graph_rag/ -v -m fast      # <5s tests
-pytest tests/graph_rag/ -v -m medium    # 5-15s tests
-pytest tests/graph_rag/ -v -m slow      # >15s tests
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m fast      # <5s tests
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m medium    # 5-15s tests
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m slow      # >15s tests
 
 # By feature
-pytest tests/graph_rag/test_basic_operations.py -v
-pytest tests/graph_rag/test_search_modes.py -v
-pytest tests/graph_rag/test_entity_extraction.py -v
-pytest tests/graph_rag/test_relationship.py -v
-pytest tests/graph_rag/test_community.py -v
-pytest tests/graph_rag/test_error_handling.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_basic_operations.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_search_modes.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_entity_extraction.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_relationship.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_community.py -v
+NEO4J_AVAILABLE=true pytest tests/graph_rag/test_error_handling.py -v
 ```

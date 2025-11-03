@@ -57,8 +57,8 @@ class MockTextEmbedding(EmbeddingModelBase):
             # Extract text content
             if isinstance(t, dict):
                 content = t.get("text", "")
-            elif isinstance(t, TextBlock):
-                content = t.text
+            elif isinstance(t, str):
+                content = t
             else:
                 content = str(t)
 
@@ -101,7 +101,7 @@ class MockChatModel(ChatModelBase):
                     },
                     {
                         "name": "OpenAI",
-                        "type": "ORGANIZATION",
+                        "type": "ORG",
                         "description": "An AI company",
                     },
                     {

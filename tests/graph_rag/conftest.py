@@ -57,17 +57,24 @@ class MockTextEmbedding(EmbeddingModelBase):
         embeddings = []
         for t in text:
             # Extract text content
+            # Note: TextBlock is a TypedDict, so we check dict structure
             if isinstance(t, dict):
                 content = t.get("text", "")
-            elif isinstance(t, TextBlock):
-                content = t.text
             else:
                 content = str(t)
 
-            # Generate deterministic embedding based on text hash
+            # Generate embedding with shared base vector + small content-based variation
+            # This ensures all embeddings are similar (good for mock testing)
+            # while still being deterministic and unique per content
+            base_value = 0.5
             hash_val = int(hashlib.md5(content.encode()).hexdigest(), 16)
-            # Create a 1536-dimensional embedding
-            embedding = [(hash_val % 1000 + i) / 1000.0 for i in range(1536)]
+            
+            embedding = []
+            for i in range(1536):
+                # Base value + small perturbation (0 to 0.1)
+                perturbation = ((hash_val + i) % 100) / 1000.0
+                embedding.append(base_value + perturbation)
+            
             embeddings.append(embedding)
 
         return EmbeddingResponse(embeddings=embeddings)
@@ -86,66 +93,40 @@ class MockChatModel(ChatModelBase):
         **kwargs: Any,
     ) -> ChatResponse:
         """Return mock responses for entity/relationship extraction."""
-        # Check if this is an entity extraction request
+        import re
+        
         last_message = messages[-1].get("content", "") if messages else ""
-
-        # Mock entity extraction response
-        if (
-            "entity" in last_message.lower()
-            or "Entity Extraction" in last_message
-        ):
-            mock_entities = {
-                "entities": [
-                    {
-                        "name": "Alice",
-                        "type": "PERSON",
-                        "description": "A person",
-                    },
-                    {
-                        "name": "OpenAI",
-                        "type": "ORGANIZATION",
-                        "description": "An AI company",
-                    },
-                    {
-                        "name": "Bob",
-                        "type": "PERSON",
-                        "description": "A person",
-                    },
-                ],
-            }
+        
+        # Entity extraction: extract capitalized words from "Text: xxx"
+        if "entity" in last_message.lower():
+            match = re.search(r'Text:\s*(.+?)(?:\n\n|$)', last_message, re.DOTALL)
+            text = match.group(1) if match else ""
+            
+            # Extract capitalized words as entities
+            names = list(set(re.findall(r'\b[A-Z][a-z]+', text)))[:5]
+            entities = [
+                {"name": name, "type": "CONCEPT", "description": name}
+                for name in names
+            ] or [{"name": "Default", "type": "CONCEPT", "description": "Default"}]
+            
             return ChatResponse(
-                content=[
-                    TextBlock(type="text", text=json.dumps(mock_entities)),
-                ],
+                content=[TextBlock(type="text", text=json.dumps(entities))],
             )
-
-        # Mock relationship extraction response
+        
+        # Relationship extraction: create chain relationships from entity list
         if "relationship" in last_message.lower():
-            mock_relationships = {
-                "relationships": [
-                    {
-                        "source": "Alice",
-                        "target": "OpenAI",
-                        "type": "WORKS_AT",
-                        "description": "Alice works at OpenAI",
-                    },
-                    {
-                        "source": "Alice",
-                        "target": "Bob",
-                        "type": "COLLABORATES_WITH",
-                        "description": "Alice collaborates with Bob",
-                    },
-                ],
-            }
+            match = re.search(r'Known entities:\s*(.+?)(?:\n\n|$)', last_message)
+            names = [n.strip() for n in match.group(1).split(',')[:4]] if match else []
+            
+            relationships = [
+                {"source": names[i], "target": names[i+1], "type": "RELATED", "description": ""}
+                for i in range(len(names)-1)
+            ]
+            
             return ChatResponse(
-                content=[
-                    TextBlock(
-                        type="text",
-                        text=json.dumps(mock_relationships),
-                    ),
-                ],
+                content=[TextBlock(type="text", text=json.dumps(relationships))],
             )
-
+        
         # Default response
         return ChatResponse(
             content=[TextBlock(type="text", text="Mock response")],

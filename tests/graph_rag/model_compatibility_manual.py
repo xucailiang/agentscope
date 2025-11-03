@@ -39,10 +39,12 @@ from pathlib import Path
 
 from agentscope.embedding import (
     DashScopeTextEmbedding,
+    EmbeddingModelBase,
     OllamaTextEmbedding,
     OpenAITextEmbedding,
 )
 from agentscope.model import (
+    ChatModelBase,
     DashScopeChatModel,
     OllamaChatModel,
     OpenAIChatModel,
@@ -198,7 +200,7 @@ async def cleanup_collection(graph_store: Neo4jGraphStore) -> None:
 
 async def test_vector_only_mode(
     name: str,
-    embedding_model: "EmbeddingModel",  # type: ignore
+    embedding_model: EmbeddingModelBase,
     embedding_dimensions: int,
 ) -> None:
     """Test vector-only mode (no graph features).
@@ -275,8 +277,8 @@ async def test_vector_only_mode(
 
 async def test_with_graph_features(
     name: str,
-    embedding_model: "EmbeddingModel",  # type: ignore
-    llm_model: "ChatModel",  # type: ignore
+    embedding_model: EmbeddingModelBase,
+    llm_model: ChatModelBase,
     embedding_dimensions: int,
 ) -> None:
     """Test with graph features (entity/relationship extraction).
