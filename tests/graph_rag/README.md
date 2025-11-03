@@ -1,84 +1,40 @@
-# GraphKnowledgeBase Test Suite
-
-## Requirements
-
-- **Neo4j**: Running with GDS plugin at `bolt://localhost:7687`
-- **Python**: 3.8+ with virtual environment activated
-- **API Key**: Valid DashScope API key in environment or `conftest.py`
-
-## Run Tests
-
+### For Local Development (Optional - With Neo4j)
 ```bash
-# All tests
+# Start Neo4j with GDS plugin
+docker run -d --rm \
+  --name neo4j \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/password \
+  -e "NEO4J_PLUGINS=[\"graph-data-science\"]" \
+  neo4j:latest
+
+# Run tests with Neo4j
 NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
-
-# Fast tests only
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m fast
-
-# Skip slow tests
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m "not slow"
-
-# Skip community detection tests (no GDS plugin required)
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m "not requires_gds"
 ```
 
-## Test Coverage
-
-### Modules (51 tests total)
-
-| Module | Tests | Coverage |
-|--------|-------|----------|
-| Basic Operations | 9 | Initialization, document adding, embeddings |
-| Search Modes | 9 | Vector, graph, hybrid, global search |
-| Entity Extraction | 7 | LLM extraction, storage, embeddings |
-| Relationship Extraction | 6 | Relation extraction, graph traversal |
-| Community Detection | 6 | Leiden/Louvain algorithms, global search |
-| Error Handling | 14 | Edge cases, validation |
-
-### Features Tested
-
-✅ **Vector Search** - Pure semantic similarity
-✅ **Graph Search** - Relationship-based traversal
-✅ **Hybrid Search** - Combined vector + graph
-✅ **Global Search** - Community-level understanding
-✅ **Entity Extraction** - LLM-powered entity identification
-✅ **Relationship Extraction** - Entity relationship mapping
-✅ **Community Detection** - Leiden & Louvain algorithms
-✅ **Multi-hop Traversal** - 2-hop graph navigation
-✅ **Auto Cleanup** - Isolated test collections
-
-## Test Results
-
-**Status**: ✅ All Passed
-**Total**: 51 tests
-**Pass Rate**: 100%
-**Duration**: ~6.5 minutes
-**Environment**: Real Neo4j + DashScope API
-
-### Integration Verified
-
-- Neo4j database connection
-- Neo4j GDS plugin (Leiden & Louvain)
-- DashScope Embedding API (text-embedding-v2, 1536 dims)
-- DashScope LLM API (qwen-max)
-- Vector index creation and search
-- Graph traversal and relationship queries
-- Async operations
-- Automatic data cleanup
-
-## Quick Reference
+## 🚀 Running Tests
 
 ```bash
-# By speed
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m fast      # <5s tests
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m medium    # 5-15s tests
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v -m slow      # >15s tests
+# Run all tests (mock mode - works in GitHub Actions)
+pytest tests/graph_rag/ -v
 
-# By feature
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_basic_operations.py -v
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_search_modes.py -v
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_entity_extraction.py -v
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_relationship.py -v
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_community.py -v
-NEO4J_AVAILABLE=true pytest tests/graph_rag/test_error_handling.py -v
+# Run specific scenario
+pytest tests/graph_rag/test_graph_knowledge_scenarios.py::TestVectorOnlyMode -v
+
+# Run by speed markers
+pytest tests/graph_rag/ -v -m fast        # <5s tests
+pytest tests/graph_rag/ -v -m medium      # 5-15s tests
+pytest tests/graph_rag/ -v -m slow        # >15s tests
+
+# Skip tests requiring Neo4j GDS plugin
+pytest tests/graph_rag/ -v -m "not requires_gds"
+
+# Run with real Neo4j (if available)
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
 ```
+
+## 📝 Note on GDS Community Detection Tests
+
+Community detection tests require real API models and are not included in the test suite.
+
+**To test GDS features:** Use `examples/graph_rag/graph_knowledge_example.py` with real DashScope API credentials.

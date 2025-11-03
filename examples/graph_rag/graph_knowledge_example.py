@@ -70,7 +70,10 @@ async def example_basic_vector_only() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Alice works at OpenAI as a researcher specializing in language models.",
+                    "text": (
+                        "Alice works at OpenAI as a researcher "
+                        "specializing in language models."
+                    ),
                 },
                 doc_id="doc1",
                 chunk_id=0,
@@ -82,7 +85,10 @@ async def example_basic_vector_only() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "OpenAI is located in San Francisco and develops advanced AI systems.",
+                    "text": (
+                        "OpenAI is located in San Francisco and "
+                        "develops advanced AI systems."
+                    ),
                 },
                 doc_id="doc2",
                 chunk_id=0,
@@ -94,7 +100,10 @@ async def example_basic_vector_only() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Bob collaborates with Alice on transformer architecture research.",
+                    "text": (
+                        "Bob collaborates with Alice on transformer "
+                        "architecture research."
+                    ),
                 },
                 doc_id="doc3",
                 chunk_id=0,
@@ -166,7 +175,10 @@ async def example_with_graph_features() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Alice works at OpenAI as a researcher specializing in language models.",
+                    "text": (
+                        "Alice works at OpenAI as a researcher "
+                        "specializing in language models."
+                    ),
                 },
                 doc_id="doc4",
                 chunk_id=0,
@@ -178,7 +190,10 @@ async def example_with_graph_features() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "OpenAI is located in San Francisco and develops advanced AI systems.",
+                    "text": (
+                        "OpenAI is located in San Francisco and "
+                        "develops advanced AI systems."
+                    ),
                 },
                 doc_id="doc5",
                 chunk_id=0,
@@ -190,7 +205,10 @@ async def example_with_graph_features() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Bob collaborates with Alice on transformer architecture research.",
+                    "text": (
+                        "Bob collaborates with Alice on transformer "
+                        "architecture research."
+                    ),
                 },
                 doc_id="doc6",
                 chunk_id=0,
@@ -243,13 +261,11 @@ async def example_with_graph_features() -> None:
         print(f"     {doc.metadata.content['text']}")
 
 
-async def example_with_community_detection() -> None:
-    """Example 3: Full features including community detection and global search."""
-    print("\n" + "=" * 80)
-    print(
-        "Example 3: Full Features (Entities + Relationships + Communities + Global Search)",
-    )
-    print("=" * 80)
+async def example_with_community_detection() -> None:  # pylint: disable=R0915
+    """
+    Example 3:
+    Full features including community detection and global search.
+    """
 
     # Initialize Neo4j graph store
     graph_store = Neo4jGraphStore(
@@ -293,7 +309,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "OpenAI conducts cutting-edge research in artificial intelligence, focusing on large language models, reinforcement learning, and neural network architectures like GPT-4 and transformer models.",
+                    "text": (
+                        "OpenAI conducts cutting-edge research in "
+                        "artificial intelligence, focusing on large language "
+                        "models, reinforcement learning, and neural network "
+                        "architectures like GPT-4 and transformer models."
+                    ),
                 },
                 doc_id="doc7",
                 chunk_id=0,
@@ -305,7 +326,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Google DeepMind in London is a leading AI research laboratory that pioneered breakthroughs in deep reinforcement learning, including AlphaGo, AlphaFold, and various machine learning techniques.",
+                    "text": (
+                        "Google DeepMind in London is a leading AI research "
+                        "laboratory that pioneered breakthroughs in deep "
+                        "reinforcement learning, including AlphaGo, AlphaFold"
+                        "and various machine learning techniques."
+                    ),
                 },
                 doc_id="doc8",
                 chunk_id=0,
@@ -317,7 +343,13 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Microsoft Research AI division collaborates with OpenAI to advance artificial intelligence research, integrating AI capabilities into Azure cloud platform and developing neural language models.",
+                    "text": (
+                        "Microsoft Research AI division collaborates with "
+                        "OpenAI to advance artificial intelligence "
+                        "research, integrating AI capabilities into Azure "
+                        "cloud platform and developing neural language "
+                        "models."
+                    ),
                 },
                 doc_id="doc9",
                 chunk_id=0,
@@ -330,7 +362,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Alice works as a software engineer at a tech startup in San Francisco, where she occasionally uses machine learning libraries for data analysis tasks.",
+                    "text": (
+                        "Alice works as a software engineer at a tech "
+                        "startup in San Francisco, where she occasionally "
+                        "uses machine learning libraries for data analysis "
+                        "tasks."
+                    ),
                 },
                 doc_id="doc10",
                 chunk_id=0,
@@ -342,7 +379,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Bob is studying computer science at Stanford University and taking courses in algorithms, data structures, and an introductory class on artificial intelligence.",
+                    "text": (
+                        "Bob is studying computer science at Stanford "
+                        "University and taking courses in algorithms, data "
+                        "structures, and an introductory class on artificial "
+                        "intelligence."
+                    ),
                 },
                 doc_id="doc11",
                 chunk_id=0,
@@ -355,7 +397,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "The Python programming language is widely used in software development for web applications, data analysis, and automation scripts across various industries.",
+                    "text": (
+                        "The Python programming language is widely used in "
+                        "software development for web applications, data "
+                        "analysis, and automation scripts across various "
+                        "industries."
+                    ),
                 },
                 doc_id="doc12",
                 chunk_id=0,
@@ -367,7 +414,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "San Francisco is a major city in California known for its Golden Gate Bridge, diverse culture, tech industry presence, and foggy weather patterns.",
+                    "text": (
+                        "San Francisco is a major city in California known "
+                        "for its Golden Gate Bridge, diverse culture, "
+                        "tech industry "
+                        "presence, and foggy weather patterns."
+                    ),
                 },
                 doc_id="doc13",
                 chunk_id=0,
@@ -379,7 +431,12 @@ async def example_with_community_detection() -> None:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Cloud computing services like Azure, AWS, and Google Cloud provide scalable infrastructure for businesses to host applications, store data, and manage workloads efficiently.",
+                    "text": (
+                        "Cloud computing services like Azure, AWS, and Google "
+                        "Cloud provide scalable infrastructure for businesses "
+                        "to host applications, store data, and manage "
+                        "workloads efficiently."
+                    ),
                 },
                 doc_id="doc14",
                 chunk_id=0,
@@ -388,7 +445,6 @@ async def example_with_community_detection() -> None:
         ),
     ]
 
-    # Add documents (will trigger community detection in background on first call)
     print("\n📥 Adding documents (with all features)...")
     print(f"   Total documents: {len(documents)}")
     await knowledge.add_documents(documents)
@@ -434,7 +490,8 @@ async def example_with_community_detection() -> None:
         print(f"   ✅ Found {len(vector_results)} results")
         for i, doc in enumerate(vector_results, 1):
             print(
-                f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...",
+                f"   {i}. [Score: {doc.score:.3f}] "
+                f"{doc.metadata.content['text'][:80]}...",
             )
     except Exception as e:
         print(f"   ❌ Error: {e}")
@@ -451,7 +508,8 @@ async def example_with_community_detection() -> None:
         print(f"   ✅ Found {len(graph_results)} results")
         for i, doc in enumerate(graph_results, 1):
             print(
-                f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...",
+                f"   {i}. [Score: {doc.score:.3f}] "
+                f"{doc.metadata.content['text'][:80]}...",
             )
     except Exception as e:
         print(f"   ❌ Error: {e}")
@@ -469,7 +527,8 @@ async def example_with_community_detection() -> None:
         print(f"   ✅ Found {len(hybrid_results)} results")
         for i, doc in enumerate(hybrid_results, 1):
             print(
-                f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...",
+                f"   {i}. [Score: {doc.score:.3f}] "
+                f"{doc.metadata.content['text'][:80]}...",
             )
     except Exception as e:
         print(f"   ❌ Error: {e}")
@@ -488,7 +547,8 @@ async def example_with_community_detection() -> None:
         print(f"   ✅ Found {len(global_results)} results")
         for i, doc in enumerate(global_results, 1):
             print(
-                f"   {i}. [Score: {doc.score:.3f}] {doc.metadata.content['text'][:80]}...",
+                f"   {i}. [Score: {doc.score:.3f}] "
+                f"{doc.metadata.content['text'][:80]}...",
             )
 
         # Show detailed results for global search
@@ -511,7 +571,8 @@ async def example_with_community_detection() -> None:
     print("   - Use 'graph' when relationships matter (entity-centric)")
     print("   - Use 'hybrid' for best overall quality (recommended)")
     print(
-        "   - Use 'global' for thematic/overview questions (slowest, most comprehensive)",
+        "   - Use 'global' for thematic/overview questions "
+        "(slowest, most comprehensive)",
     )
     print("=" * 80)
 

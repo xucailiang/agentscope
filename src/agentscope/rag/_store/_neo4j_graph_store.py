@@ -139,22 +139,26 @@ class Neo4jGraphStore(GraphStoreBase):
                     await result.single()
 
                 logger.info(
-                    f"Neo4j connection established: {self.uri} "
-                    f"(database: {self.database})",
+                    "Neo4j connection established: %s (database: %s)",
+                    self.uri,
+                    self.database,
                 )
                 return
 
             except (ServiceUnavailable, AuthError) as e:
                 if attempt < max_retries - 1:
                     logger.warning(
-                        f"Connection attempt {attempt + 1} failed: {e}, "
-                        f"retrying in {retry_delay}s...",
+                        "Connection attempt %s failed: %s, retrying in %ss...",
+                        attempt + 1,
+                        e,
+                        retry_delay,
                     )
                     await asyncio.sleep(retry_delay)
                     retry_delay *= 2  # Exponential backoff
                 else:
                     logger.error(
-                        f"Failed to connect to Neo4j after {max_retries} attempts",
+                        "Failed to connect to Neo4j after %s attempts",
+                        max_retries,
                     )
                     raise DatabaseConnectionError(
                         f"Cannot connect to Neo4j at {self.uri}: {e}",
@@ -174,7 +178,9 @@ class Neo4jGraphStore(GraphStoreBase):
             async with self.driver.session(database=self.database) as session:
                 # Create document vector index (unique per collection)
                 document_index_query = f"""
-                CREATE VECTOR INDEX document_vector_idx_{self.collection_name} IF NOT EXISTS
+                CREATE VECTOR INDEX document_vector_idx_{
+                    self.collection_name
+                } IF NOT EXISTS
                 FOR (d:Document_{self.collection_name})
                 ON d.embedding
                 OPTIONS {{
@@ -187,9 +193,12 @@ class Neo4jGraphStore(GraphStoreBase):
                 """
                 await session.run(document_index_query)
 
-                # Create entity vector index (optional, for entity search)
+                # Create entity vector index (optional, for entity
+                # search)
                 entity_index_query = f"""
-                CREATE VECTOR INDEX entity_vector_idx_{self.collection_name} IF NOT EXISTS
+                CREATE VECTOR INDEX entity_vector_idx_{
+                    self.collection_name
+                } IF NOT EXISTS
                 FOR (e:Entity_{self.collection_name})
                 ON e.embedding
                 OPTIONS {{
@@ -202,9 +211,10 @@ class Neo4jGraphStore(GraphStoreBase):
                 """
                 await session.run(entity_index_query)
 
-                # Create community vector index (optional, for global search)
                 community_index_query = f"""
-                CREATE VECTOR INDEX community_vector_idx_{self.collection_name} IF NOT EXISTS
+                CREATE VECTOR INDEX community_vector_idx_{
+                    self.collection_name
+                } IF NOT EXISTS
                 FOR (c:Community_{self.collection_name})
                 ON c.embedding
                 OPTIONS {{
@@ -218,11 +228,12 @@ class Neo4jGraphStore(GraphStoreBase):
                 await session.run(community_index_query)
 
                 logger.info(
-                    f"Vector indexes ensured for collection: {self.collection_name}",
+                    "Vector indexes ensured for collection: %s",
+                    self.collection_name,
                 )
 
         except Exception as e:
-            logger.error(f"Failed to create vector indexes: {e}")
+            logger.error("Failed to create vector indexes: %s", e)
             raise GraphQueryError(
                 f"Failed to create vector indexes: {e}",
             ) from e
@@ -267,7 +278,6 @@ class Neo4jGraphStore(GraphStoreBase):
                     for doc in documents
                 ]
 
-                # Batch insert using UNWIND
                 query = f"""
                 UNWIND $docs AS doc
                 MERGE (d:Document_{self.collection_name} {{id: doc.id}})
@@ -282,12 +292,13 @@ class Neo4jGraphStore(GraphStoreBase):
                 await session.run(query, {"docs": doc_data})
 
                 logger.info(
-                    f"Added {len(documents)} documents to Neo4j "
-                    f"(collection: {self.collection_name})",
+                    "Added %s documents to Neo4j (collection: %s)",
+                    len(documents),
+                    self.collection_name,
                 )
 
         except Exception as e:
-            logger.error(f"Failed to add documents: {e}")
+            logger.error("Failed to add documents: %s", e)
             raise GraphQueryError(f"Failed to add documents: {e}") from e
 
     async def delete(self, *args: Any, **kwargs: Any) -> None:
@@ -312,7 +323,7 @@ class Neo4jGraphStore(GraphStoreBase):
                     DETACH DELETE d
                     """
                     await session.run(query, {"doc_ids": doc_ids})
-                    logger.info(f"Deleted {len(doc_ids)} documents by IDs")
+                    logger.info("Deleted %s documents by IDs", len(doc_ids))
 
                 elif "doc_id" in kwargs:
                     # Delete by doc_id (all chunks)
@@ -323,14 +334,15 @@ class Neo4jGraphStore(GraphStoreBase):
                     """
                     await session.run(query, {"doc_id": kwargs["doc_id"]})
                     logger.info(
-                        f"Deleted documents with doc_id: {kwargs['doc_id']}",
+                        "Deleted documents with doc_id: %s",
+                        kwargs["doc_id"],
                     )
 
                 else:
                     logger.warning("No valid deletion criteria provided")
 
         except Exception as e:
-            logger.error(f"Failed to delete documents: {e}")
+            logger.error("Failed to delete documents: %s", e)
             raise GraphQueryError(f"Failed to delete documents: {e}") from e
 
     async def search(
@@ -401,14 +413,17 @@ class Neo4jGraphStore(GraphStoreBase):
                     documents.append(doc)
 
                 logger.debug(
-                    f"Vector search found {len(documents)} documents "
-                    f"(limit: {limit}, threshold: {score_threshold})",
+                    "Vector search found %s documents (limit: %s, "
+                    "threshold: %s)",
+                    len(documents),
+                    limit,
+                    score_threshold,
                 )
 
                 return documents
 
         except Exception as e:
-            logger.error(f"Vector search failed: {e}")
+            logger.error("Vector search failed: %s", e)
             raise GraphQueryError(f"Vector search failed: {e}") from e
 
     def get_client(self) -> AsyncDriver:
@@ -427,13 +442,15 @@ class Neo4jGraphStore(GraphStoreBase):
         document_id: str,
         **kwargs: Any,
     ) -> None:
-        """Add entity nodes and link to document (implements GraphStoreBase.add_entities).
+        """Add entity nodes and link to document (implements
+        GraphStoreBase.add_entities).
 
         This method creates entity nodes and MENTIONS relationships from
         the document to the entities.
 
         Args:
-            entities: List of entity dicts with keys: name, type, description, embedding
+            entities: List of entity dicts with keys: name, type,
+                description, embedding
             document_id: ID of the document these entities are from
             **kwargs: Additional arguments (unused)
 
@@ -467,11 +484,13 @@ class Neo4jGraphStore(GraphStoreBase):
                 )
 
                 logger.info(
-                    f"Added {len(entities)} entities for document {document_id}",
+                    "Added %s entities for document %s",
+                    len(entities),
+                    document_id,
                 )
 
         except Exception as e:
-            logger.error(f"Failed to add entities: {e}")
+            logger.error("Failed to add entities: %s", e)
             raise GraphQueryError(f"Failed to add entities: {e}") from e
 
     async def add_relationships(
@@ -479,7 +498,8 @@ class Neo4jGraphStore(GraphStoreBase):
         relationships: list[dict],
         **kwargs: Any,
     ) -> None:
-        """Add relationships between entities (implements GraphStoreBase.add_relationships).
+        """Add relationships between entities (implements
+        GraphStoreBase.add_relationships).
 
         Args:
             relationships: List of relationship dicts with keys:
@@ -497,9 +517,12 @@ class Neo4jGraphStore(GraphStoreBase):
                 # Batch create relationships
                 query = f"""
                 UNWIND $relationships AS rel
-                MATCH (source:Entity_{self.collection_name} {{name: rel.source}})
-                MATCH (target:Entity_{self.collection_name} {{name: rel.target}})
-                MERGE (source)-[r:RELATED_TO {{type: rel.type}}]->(target)
+                MATCH (source:Entity_{self.collection_name} {{\
+name: rel.source}})
+                MATCH (target:Entity_{self.collection_name} {{\
+name: rel.target}})
+                MERGE (source)-[r:RELATED_TO {{type: rel.type}}]->\
+(target)
                 SET r.description = rel.description,
                     r.strength = rel.strength,
                     r.updated_at = datetime()
@@ -507,10 +530,10 @@ class Neo4jGraphStore(GraphStoreBase):
 
                 await session.run(query, {"relationships": relationships})
 
-                logger.info(f"Added {len(relationships)} relationships")
+                logger.info("Added %s relationships", len(relationships))
 
         except Exception as e:
-            logger.error(f"Failed to add relationships: {e}")
+            logger.error("Failed to add relationships: %s", e)
             raise GraphQueryError(f"Failed to add relationships: {e}") from e
 
     async def search_entities(
@@ -519,7 +542,8 @@ class Neo4jGraphStore(GraphStoreBase):
         limit: int = 5,
         **kwargs: Any,
     ) -> list[dict]:
-        """Vector search for entities (implements GraphStoreBase.search_entities).
+        """Vector search for entities (implements
+        GraphStoreBase.search_entities).
 
         Args:
             query_embedding: Query embedding vector
@@ -565,11 +589,11 @@ class Neo4jGraphStore(GraphStoreBase):
                         },
                     )
 
-                logger.debug(f"Entity search found {len(entities)} entities")
+                logger.debug("Entity search found %s entities", len(entities))
                 return entities
 
         except Exception as e:
-            logger.error(f"Entity search failed: {e}")
+            logger.error("Entity search failed: %s", e)
             raise GraphQueryError(f"Entity search failed: {e}") from e
 
     async def search_with_graph(
@@ -579,7 +603,8 @@ class Neo4jGraphStore(GraphStoreBase):
         limit: int = 5,
         **kwargs: Any,
     ) -> list[Document]:
-        """Graph traversal-based search (implements GraphStoreBase.search_with_graph).
+        """Graph traversal-based search (implements
+        GraphStoreBase.search_with_graph).
 
         Process:
         1. Vector search to find seed entities
@@ -600,7 +625,8 @@ class Neo4jGraphStore(GraphStoreBase):
         """
         try:
             async with self.driver.session(database=self.database) as session:
-                # Combined query: vector search + graph traversal + document collection
+                # Combined query: vector search + graph traversal +
+                # document collection
                 index_name = f"entity_vector_idx_{self.collection_name}"
                 query = f"""
                 // Step 1: Vector search for seed entities
@@ -612,10 +638,14 @@ class Neo4jGraphStore(GraphStoreBase):
                 YIELD node AS seed_entity
 
                 // Step 2: Graph traversal to find related entities
-                MATCH path = (seed_entity)-[:RELATED_TO*1..{max_hops}]-(related_entity)
+                MATCH path = (seed_entity)-[:RELATED_TO*1..{max_hops}]-(
+                    related_entity
+                )
 
                 // Step 3: Collect documents mentioning these entities
-                MATCH (related_entity)<-[:MENTIONS]-(doc:Document_{self.collection_name})
+                MATCH (related_entity)<-[:MENTIONS]-(doc:Document_{
+                    self.collection_name
+                })
 
                 RETURN DISTINCT doc,
                        length(path) AS hops,
@@ -648,14 +678,15 @@ class Neo4jGraphStore(GraphStoreBase):
                     documents.append(doc)
 
                 logger.debug(
-                    f"Graph search found {len(documents)} documents "
-                    f"(max_hops: {max_hops})",
+                    "Graph search found %s documents (max_hops: %s)",
+                    len(documents),
+                    max_hops,
                 )
 
                 return documents
 
         except Exception as e:
-            logger.error(f"Graph search failed: {e}")
+            logger.error("Graph search failed: %s", e)
             raise GraphQueryError(f"Graph search failed: {e}") from e
 
     # === Optional community detection methods ===
@@ -665,7 +696,8 @@ class Neo4jGraphStore(GraphStoreBase):
         communities: list[dict],
         **kwargs: Any,
     ) -> None:
-        """Add community nodes (optional, implements GraphStoreBase.add_communities).
+        """Add community nodes (optional, implements
+        GraphStoreBase.add_communities).
 
         Args:
             communities: List of community dicts with keys:
@@ -702,11 +734,12 @@ class Neo4jGraphStore(GraphStoreBase):
                 await session.run(query, {"communities": communities})
 
                 logger.info(
-                    f"Added {len(communities)} communities to database",
+                    "Added %s communities to database",
+                    len(communities),
                 )
 
         except Exception as e:
-            logger.error(f"Failed to add communities: {e}")
+            logger.error("Failed to add communities: %s", e)
             raise GraphQueryError(f"Failed to add communities: {e}") from e
 
     async def search_communities(
@@ -716,7 +749,8 @@ class Neo4jGraphStore(GraphStoreBase):
         limit: int = 10,
         **kwargs: Any,
     ) -> list[dict]:
-        """Search for communities (optional, implements GraphStoreBase.search_communities).
+        """Search for communities (optional, implements
+        GraphStoreBase.search_communities).
 
         Args:
             query_embedding: Query embedding vector
@@ -732,7 +766,8 @@ class Neo4jGraphStore(GraphStoreBase):
         """
         try:
             async with self.driver.session(database=self.database) as session:
-                # Perform vector search using collection-specific index
+                # Perform vector search using collection-specific
+                # index
                 index_name = f"community_vector_idx_{self.collection_name}"
                 query = f"""
                 CALL db.index.vector.queryNodes(
@@ -744,7 +779,8 @@ class Neo4jGraphStore(GraphStoreBase):
                 WHERE community.level >= $min_level
 
                 // Get entities belonging to this community
-                OPTIONAL MATCH (entity:Entity_{self.collection_name})-[:BELONGS_TO]->(community)
+                OPTIONAL MATCH (entity:Entity_{self.collection_name})-\
+[:BELONGS_TO]->(community)
 
                 WITH community, score, collect(entity.name) AS entity_names
 
@@ -779,19 +815,22 @@ class Neo4jGraphStore(GraphStoreBase):
                             "summary": record["summary"],
                             "rating": record["rating"],
                             "entity_count": record["entity_count"],
-                            "entity_ids": entity_ids,  # Now includes entity IDs!
+                            "entity_ids": entity_ids,  # Now includes
+                            # entity IDs!
                             "score": record["score"],
                         },
                     )
 
                 logger.info(
-                    f"Community search returned {len(communities)} communities "
-                    f"with {sum(len(c['entity_ids']) for c in communities)} total entities",
+                    "Community search returned %s communities with %s "
+                    "total entities",
+                    len(communities),
+                    sum(len(c["entity_ids"]) for c in communities),
                 )
                 return communities
 
         except Exception as e:
-            logger.error(f"Community search failed: {e}")
+            logger.error("Community search failed: %s", e)
             raise GraphQueryError(f"Community search failed: {e}") from e
 
     async def close(self) -> None:

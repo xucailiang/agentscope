@@ -41,8 +41,10 @@ class KnowledgeBase:
         """Initialize the knowledge base.
 
         Args:
-            embedding_store: The storage backend (VDBStoreBase or GraphStoreBase)
-            embedding_model: The embedding model for generating vector embeddings
+            embedding_store: The storage backend (VDBStoreBase or
+                GraphStoreBase)
+            embedding_model: The embedding model for generating vector
+                embeddings
         """
         self.embedding_store = embedding_store
         self.embedding_model = embedding_model
@@ -84,9 +86,6 @@ class KnowledgeBase:
                 A list of documents to add.
         """
 
-    # A quick method that enable the agent to retrieve knowledge
-    # Developers can wrap the `retrieve` method by themselves to support
-    # more flexible usage
     async def retrieve_knowledge(
         self,
         query: str,

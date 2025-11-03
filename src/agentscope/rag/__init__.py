@@ -26,7 +26,7 @@ from ._simple_knowledge import SimpleKnowledge
 try:
     from ._store import Neo4jGraphStore
     from ._graph_knowledge import GraphKnowledgeBase
-    from ._graph_types import (
+    from ._graph._types import (
         Entity,
         Relationship,
         Community,

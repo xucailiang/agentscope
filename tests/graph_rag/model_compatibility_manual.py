@@ -85,10 +85,7 @@ OLLAMA_EMBEDDING_MODEL = os.getenv(
 )
 OLLAMA_LLM_MODEL = os.getenv("OLLAMA_LLM_MODEL", "qwen3:4b")
 
-# OpenAI Models (using SiliconFlow compatible models)
-OPENAI_EMBEDDING_MODEL = (
-    "BAAI/bge-large-zh-v1.5"  # SiliconFlow embedding model (1024 dimensions)
-)
+OPENAI_EMBEDDING_MODEL = "BAAI/bge-large-zh-v1.5"
 OPENAI_EMBEDDING_DIMENSIONS = 1024  # bge-large-zh-v1.5 uses 1024 dimensions
 OPENAI_LLM_MODEL = "Qwen/Qwen2.5-7B-Instruct"  # SiliconFlow LLM model
 
@@ -107,7 +104,10 @@ SIMPLE_DOCUMENTS = [
         metadata=DocMetadata(
             content={
                 "type": "text",
-                "text": "Alice works at OpenAI as a researcher specializing in language models.",
+                "text": (
+                    "Alice works at OpenAI as a researcher specializing "
+                    "in language models."
+                ),
             },
             doc_id="simple_1",
             chunk_id=0,
@@ -119,7 +119,10 @@ SIMPLE_DOCUMENTS = [
         metadata=DocMetadata(
             content={
                 "type": "text",
-                "text": "Bob collaborates with Alice on transformer architecture research at OpenAI.",
+                "text": (
+                    "Bob collaborates with Alice on transformer "
+                    "architecture research at OpenAI."
+                ),
             },
             doc_id="simple_2",
             chunk_id=0,
@@ -131,7 +134,10 @@ SIMPLE_DOCUMENTS = [
         metadata=DocMetadata(
             content={
                 "type": "text",
-                "text": "OpenAI is located in San Francisco and develops advanced AI systems.",
+                "text": (
+                    "OpenAI is located in San Francisco and develops "
+                    "advanced AI systems."
+                ),
             },
             doc_id="simple_3",
             chunk_id=0,
@@ -258,7 +264,8 @@ async def test_vector_only_mode(
             result.details["top_score"] = f"{results[0].score:.3f}"
             result.success = True
             print(
-                f"  ✅ Found {len(results)} results (top score: {results[0].score:.3f})",
+                f"  ✅ Found {len(results)} results "
+                f"(top score: {results[0].score:.3f})",
             )
         else:
             result.error = "No search results returned"
@@ -314,7 +321,8 @@ async def test_with_graph_features(
             llm_model=llm_model,
             enable_entity_extraction=True,
             enable_relationship_extraction=True,
-            enable_community_detection=False,  # Skip community detection for speed
+            enable_community_detection=False,  # Skip community
+            # detection for speed
             entity_extraction_config={
                 "max_entities_per_chunk": 10,
                 "enable_gleanings": False,  # Disable for speed
@@ -491,7 +499,8 @@ async def test_mixed_ollama_openai() -> None:
     """Test Ollama embedding + OpenAI LLM."""
     if not TEST_OLLAMA or not OPENAI_API_KEY:
         print(
-            "\n⚠️  Skipping Ollama+OpenAI mixed test (Ollama disabled or no OpenAI API key)",
+            "\n⚠️  Skipping Ollama+OpenAI mixed test "
+            "(Ollama disabled or no OpenAI API key)",
         )
         return
 
@@ -525,7 +534,8 @@ async def test_mixed_openai_ollama() -> None:
     """Test OpenAI embedding + Ollama LLM."""
     if not TEST_OLLAMA or not OPENAI_API_KEY:
         print(
-            "\n⚠️  Skipping OpenAI+Ollama mixed test (Ollama disabled or no OpenAI API key)",
+            "\n⚠️  Skipping OpenAI+Ollama mixed test "
+            "(Ollama disabled or no OpenAI API key)",
         )
         return
 
@@ -614,17 +624,21 @@ async def main() -> int:
     print(f"   Ollama Host: {OLLAMA_HOST}")
     print(f"   Ollama Embedding Model: {OLLAMA_EMBEDDING_MODEL}")
     print(f"   Ollama LLM Model: {OLLAMA_LLM_MODEL}")
-    print(f"   OpenAI API Key: {'✅ Set' if OPENAI_API_KEY else '❌ Not Set'}")
+    print(
+        f"   OpenAI API Key: " f"{'✅ Set' if OPENAI_API_KEY else '❌ Not Set'}",
+    )
     print(f"   OpenAI Base URL: {OPENAI_BASE_URL}")
     print(
-        f"   DashScope API Key: {'✅ Set' if DASHSCOPE_API_KEY else '❌ Not Set'}",
+        f"   DashScope API Key: "
+        f"{'✅ Set' if DASHSCOPE_API_KEY else '❌ Not Set'}",
     )
 
     print("\n⚠️  Please ensure:")
     print("   1. Neo4j is running locally with GDS plugin")
     print("   2. Ollama is running locally with required models")
     print(
-        "   3. API keys are set in environment variables (if testing those providers)",
+        "   3. API keys are set in environment variables "
+        "(if testing those providers)",
     )
 
     print("\n📋 Test Plan:")

@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
-"""Pytest configuration and shared fixtures for GraphKnowledgeBase tests."""
+# pylint: disable=redefined-outer-name
+"""Pytest configuration and shared fixtures for GraphKnowledgeBase tests.
+
+This module provides:
+- Mock models (embedding and LLM) for testing without API calls
+- Pytest fixtures for different KB configurations
+- Sample document fixtures
+- Helper functions for async operations
+
+All tests use mock models by default to work in CI/CD environments
+without Neo4j or external API access.
+"""
 import asyncio
 import json
 import os
 import sys
 import time
 from pathlib import Path
-from typing import Any, AsyncGenerator
+from typing import Any, AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
@@ -32,7 +43,7 @@ NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "password")
 NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "neo4j")
 
-# Check if Neo4j is available
+# Check if Neo4j is available (default: false for CI/CD)
 NEO4J_AVAILABLE = os.getenv("NEO4J_AVAILABLE", "false").lower() == "true"
 
 
@@ -63,18 +74,15 @@ class MockTextEmbedding(EmbeddingModelBase):
             else:
                 content = str(t)
 
-            # Generate embedding with shared base vector + small content-based variation
-            # This ensures all embeddings are similar (good for mock testing)
-            # while still being deterministic and unique per content
             base_value = 0.5
             hash_val = int(hashlib.md5(content.encode()).hexdigest(), 16)
-            
+
             embedding = []
             for i in range(1536):
                 # Base value + small perturbation (0 to 0.1)
                 perturbation = ((hash_val + i) % 100) / 1000.0
                 embedding.append(base_value + perturbation)
-            
+
             embeddings.append(embedding)
 
         return EmbeddingResponse(embeddings=embeddings)
@@ -94,39 +102,63 @@ class MockChatModel(ChatModelBase):
     ) -> ChatResponse:
         """Return mock responses for entity/relationship extraction."""
         import re
-        
+
         last_message = messages[-1].get("content", "") if messages else ""
-        
+
         # Entity extraction: extract capitalized words from "Text: xxx"
         if "entity" in last_message.lower():
-            match = re.search(r'Text:\s*(.+?)(?:\n\n|$)', last_message, re.DOTALL)
+            match = re.search(
+                r"Text:\s*(.+?)(?:\n\n|$)",
+                last_message,
+                re.DOTALL,
+            )
             text = match.group(1) if match else ""
-            
+
             # Extract capitalized words as entities
-            names = list(set(re.findall(r'\b[A-Z][a-z]+', text)))[:5]
+            names = list(set(re.findall(r"\b[A-Z][a-z]+", text)))[:5]
             entities = [
                 {"name": name, "type": "CONCEPT", "description": name}
                 for name in names
-            ] or [{"name": "Default", "type": "CONCEPT", "description": "Default"}]
-            
+            ] or [
+                {
+                    "name": "Default",
+                    "type": "CONCEPT",
+                    "description": "Default",
+                },
+            ]
+
             return ChatResponse(
                 content=[TextBlock(type="text", text=json.dumps(entities))],
             )
-        
+
         # Relationship extraction: create chain relationships from entity list
         if "relationship" in last_message.lower():
-            match = re.search(r'Known entities:\s*(.+?)(?:\n\n|$)', last_message)
-            names = [n.strip() for n in match.group(1).split(',')[:4]] if match else []
-            
-            relationships = [
-                {"source": names[i], "target": names[i+1], "type": "RELATED", "description": ""}
-                for i in range(len(names)-1)
-            ]
-            
-            return ChatResponse(
-                content=[TextBlock(type="text", text=json.dumps(relationships))],
+            match = re.search(
+                r"Known entities:\s*(.+?)(?:\n\n|$)",
+                last_message,
             )
-        
+            names = (
+                [n.strip() for n in match.group(1).split(",")[:4]]
+                if match
+                else []
+            )
+
+            relationships = [
+                {
+                    "source": names[i],
+                    "target": names[i + 1],
+                    "type": "RELATED",
+                    "description": "",
+                }
+                for i in range(len(names) - 1)
+            ]
+
+            return ChatResponse(
+                content=[
+                    TextBlock(type="text", text=json.dumps(relationships)),
+                ],
+            )
+
         # Default response
         return ChatResponse(
             content=[TextBlock(type="text", text="Mock response")],
@@ -145,14 +177,15 @@ def pytest_configure(config: Any) -> None:
     )
     config.addinivalue_line(
         "markers",
-        "requires_neo4j: Requires Neo4j database (skip if NEO4J_AVAILABLE is not true)",
+        "requires_neo4j: Requires Neo4j database "
+        "(skip if NEO4J_AVAILABLE is not true)",
     )
 
 
 # Event loop fixture for async tests
 @pytest.fixture(scope="session")
-def event_loop() -> "Generator[asyncio.AbstractEventLoop, None, None]":  # type: ignore
-    """Create an event loop for the test session."""
+def event_loop() -> "Generator[asyncio.AbstractEventLoop, None, None]":
+    """Create an event loop for the test session."""  # type: ignore
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
@@ -173,7 +206,8 @@ async def graph_store(
     """Create a Neo4j graph store for testing."""
     if not NEO4J_AVAILABLE:
         pytest.skip(
-            "Neo4j is not available. Set NEO4J_AVAILABLE=true to run these tests.",
+            "Neo4j is not available. "
+            "Set NEO4J_AVAILABLE=true to run these tests.",
         )
 
     store = Neo4jGraphStore(
@@ -283,7 +317,7 @@ async def community_kb(
     embedding_model: MockTextEmbedding,
     llm_model: MockChatModel,
 ) -> GraphKnowledgeBase:
-    """Create a knowledge base with all features including community detection."""
+    """Create a KB with all features including community detection."""
     return GraphKnowledgeBase(
         graph_store=graph_store,
         embedding_model=embedding_model,
@@ -341,7 +375,11 @@ def diverse_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "OpenAI conducts cutting-edge research in artificial intelligence, focusing on large language models like GPT-4.",
+                    "text": (
+                        "OpenAI conducts cutting-edge research in artificial "
+                        "intelligence, focusing on large language models like "
+                        "GPT-4."
+                    ),
                 },
                 doc_id="high_1",
                 chunk_id=0,
@@ -353,7 +391,11 @@ def diverse_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Google DeepMind in London pioneered breakthroughs in deep reinforcement learning, including AlphaGo and AlphaFold.",
+                    "text": (
+                        "Google DeepMind in London pioneered breakthroughs in "
+                        "deep reinforcement learning, including AlphaGo and "
+                        "AlphaFold."
+                    ),
                 },
                 doc_id="high_2",
                 chunk_id=0,
@@ -366,7 +408,10 @@ def diverse_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Alice is a software engineer at a tech startup in San Francisco.",
+                    "text": (
+                        "Alice is a software engineer at a tech "
+                        "startup in San Francisco."
+                    ),
                 },
                 doc_id="med_1",
                 chunk_id=0,
@@ -379,7 +424,10 @@ def diverse_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Python is a popular programming language used in web development.",
+                    "text": (
+                        "Python is a popular programming language "
+                        "used in web development."
+                    ),
                 },
                 doc_id="low_1",
                 chunk_id=0,
@@ -398,7 +446,11 @@ def entity_rich_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Alice Smith works at OpenAI in San Francisco as a senior researcher specializing in transformer architectures.",
+                    "text": (
+                        "Alice Smith works at OpenAI in San Francisco as a "
+                        "senior researcher specializing in transformer "
+                        "architectures."
+                    ),
                 },
                 doc_id="entity_1",
                 chunk_id=0,
@@ -410,7 +462,11 @@ def entity_rich_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "Bob Johnson collaborates with Alice on the GPT-4 project at OpenAI, focusing on model alignment and safety.",
+                    "text": (
+                        "Bob Johnson collaborates with Alice on the GPT-4 "
+                        "project at OpenAI, focusing on model alignment and "
+                        "safety."
+                    ),
                 },
                 doc_id="entity_2",
                 chunk_id=0,
@@ -422,7 +478,11 @@ def entity_rich_documents() -> list[Document]:
             metadata=DocMetadata(
                 content={
                     "type": "text",
-                    "text": "OpenAI, headquartered in San Francisco, partners with Microsoft to develop advanced AI systems.",
+                    "text": (
+                        "OpenAI, headquartered in San Francisco, "
+                        "partners with Microsoft to develop advanced "
+                        "AI systems."
+                    ),
                 },
                 doc_id="entity_3",
                 chunk_id=0,
@@ -432,153 +492,48 @@ def entity_rich_documents() -> list[Document]:
     ]
 
 
-# Helper functions for polling async operations
-async def wait_for_condition(
-    check_func: Any,
-    condition: Any,
+# Helper functions for async operations
+async def wait_for_entities(
+    graph_store: Any,  # pylint: disable=redefined-outer-name
+    min_count: int = 1,
     timeout: int = 10,
-    interval: float = 0.5,
-    error_msg: str = "Condition not met",
-) -> Any:
-    """Poll until condition is met or timeout.
+) -> int:
+    """Wait for entities to be created in Neo4j (used by some tests).
 
     Args:
-        check_func: Async function to call repeatedly
-        condition: Function to test the result
+        graph_store: Neo4j graph store instance
+        min_count: Minimum number of entities expected
         timeout: Maximum wait time in seconds
-        interval: Time between checks in seconds
-        error_msg: Error message if timeout
 
     Returns:
-        The result that satisfied the condition
+        Number of entities found
 
     Raises:
         TimeoutError: If condition not met within timeout
     """
     start_time = time.time()
-    last_result = None
 
     while time.time() - start_time < timeout:
         try:
-            result = await check_func()
-            last_result = result
-            if condition(result):
-                return result
+            driver = graph_store.get_client()
+            async with driver.session(
+                database=graph_store.database,
+            ) as session:
+                result = await session.run(
+                    f"""
+                    MATCH (e:Entity_{graph_store.collection_name})
+                    RETURN count(e) as entity_count
+                    """,
+                )
+                record = await result.single()
+                count = record["entity_count"]
+                if count >= min_count:
+                    return count
         except Exception:
-            # Log but continue polling
             pass
 
-        await asyncio.sleep(interval)
+        await asyncio.sleep(0.5)
 
     raise TimeoutError(
-        f"{error_msg}. Timeout after {timeout}s. Last result: {last_result}",
-    )
-
-
-async def wait_for_entities(
-    graph_store: Any,
-    min_count: int = 1,
-    timeout: int = 10,
-) -> int:
-    """Wait for entities to be created in Neo4j."""
-
-    async def check_entities() -> int:
-        driver = graph_store.get_client()
-        async with driver.session(database=graph_store.database) as session:
-            result = await session.run(
-                f"""
-                MATCH (e:Entity_{graph_store.collection_name})
-                RETURN count(e) as entity_count
-                """,
-            )
-            record = await result.single()
-            return record["entity_count"]
-
-    return await wait_for_condition(
-        check_func=check_entities,
-        condition=lambda count: count >= min_count,
-        timeout=timeout,
-        error_msg=f"Expected at least {min_count} entities",
-    )
-
-
-async def wait_for_relationships(
-    graph_store: Any,
-    min_count: int = 1,
-    timeout: int = 10,
-) -> int:
-    """Wait for relationships to be created in Neo4j."""
-
-    async def check_relationships() -> int:
-        driver = graph_store.get_client()
-        async with driver.session(database=graph_store.database) as session:
-            result = await session.run(
-                f"""
-                MATCH ()-[r:RELATED_TO_{graph_store.collection_name}]->()
-                RETURN count(r) as rel_count
-                """,
-            )
-            record = await result.single()
-            return record["rel_count"]
-
-    return await wait_for_condition(
-        check_func=check_relationships,
-        condition=lambda count: count >= min_count,
-        timeout=timeout,
-        error_msg=f"Expected at least {min_count} relationships",
-    )
-
-
-async def wait_for_entity_embeddings(
-    graph_store: Any,
-    min_count: int = 1,
-    timeout: int = 10,
-) -> int:
-    """Wait for entity embeddings to be generated."""
-
-    async def check_embeddings() -> int:
-        driver = graph_store.get_client()
-        async with driver.session(database=graph_store.database) as session:
-            result = await session.run(
-                f"""
-                MATCH (e:Entity_{graph_store.collection_name})
-                WHERE e.embedding IS NOT NULL
-                RETURN count(e) as count_with_embedding
-                """,
-            )
-            record = await result.single()
-            return record["count_with_embedding"]
-
-    return await wait_for_condition(
-        check_func=check_embeddings,
-        condition=lambda count: count >= min_count,
-        timeout=timeout,
-        error_msg=f"Expected at least {min_count} entities with embeddings",
-    )
-
-
-async def wait_for_communities(
-    graph_store: Any,
-    min_count: int = 1,
-    timeout: int = 15,
-) -> int:
-    """Wait for communities to be created."""
-
-    async def check_communities() -> int:
-        driver = graph_store.get_client()
-        async with driver.session(database=graph_store.database) as session:
-            result = await session.run(
-                f"""
-                MATCH (c:Community_{graph_store.collection_name})
-                RETURN count(c) as community_count
-                """,
-            )
-            record = await result.single()
-            return record["community_count"]
-
-    return await wait_for_condition(
-        check_func=check_communities,
-        condition=lambda count: count >= min_count,
-        timeout=timeout,
-        error_msg=f"Expected at least {min_count} communities",
+        f"Expected at least {min_count} entities after {timeout}s",
     )
