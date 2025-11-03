@@ -1244,8 +1244,10 @@ StoreBase interface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>embedding_store</strong> (<a class="reference internal" href="#agentscope.rag.StoreBase" title="agentscope.rag._store._store_base.StoreBase"><em>StoreBase</em></a>) -- The storage backend (VDBStoreBase or GraphStoreBase)</p></li>
-<li><p><strong>embedding_model</strong> (<a class="reference internal" href="agentscope.embedding.html#agentscope.embedding.EmbeddingModelBase" title="agentscope.embedding._embedding_base.EmbeddingModelBase"><em>EmbeddingModelBase</em></a>) -- The embedding model for generating vector embeddings</p></li>
+<li><p><strong>embedding_store</strong> (<a class="reference internal" href="#agentscope.rag.StoreBase" title="agentscope.rag._store._store_base.StoreBase"><em>StoreBase</em></a>) -- The storage backend (VDBStoreBase or
+GraphStoreBase)</p></li>
+<li><p><strong>embedding_model</strong> (<a class="reference internal" href="agentscope.embedding.html#agentscope.embedding.EmbeddingModelBase" title="agentscope.embedding._embedding_base.EmbeddingModelBase"><em>EmbeddingModelBase</em></a>) -- The embedding model for generating vector
+embeddings</p></li>
 </ul>
 </dd>
 <dt class="field-even">返回类型<span class="colon">:</span></dt>
@@ -1385,9 +1387,355 @@ The threshold of the score to filter the results.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Neo4jGraphStore</span></span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore" title="Link to this definition">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="#agentscope.rag.GraphStoreBase" title="agentscope.rag._store._store_base.GraphStoreBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphStoreBase</span></code></a></p>
+<p>Neo4j graph database store implementation.</p>
+<p>This class implements the GraphStoreBase interface using Neo4j as
+the backend graph database. It supports:</p>
+<ul class="simple">
+<li><p>Document storage with vector embeddings</p></li>
+<li><p>Entity extraction and storage</p></li>
+<li><p>Relationship management</p></li>
+<li><p>Graph traversal-based retrieval</p></li>
+<li><p>Community detection (optional)</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.uri">
+<span class="sig-name descname"><span class="pre">uri</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.uri" title="Link to this definition">¶</a></dt>
+<dd><p>Neo4j connection URI (e.g., bolt://localhost:7687)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.user" title="Link to this definition">¶</a></dt>
+<dd><p>Neo4j username</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.password" title="Link to this definition">¶</a></dt>
+<dd><p>Neo4j password</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.database">
+<span class="sig-name descname"><span class="pre">database</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.database" title="Link to this definition">¶</a></dt>
+<dd><p>Neo4j database name</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.collection_name">
+<span class="sig-name descname"><span class="pre">collection_name</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.collection_name" title="Link to this definition">¶</a></dt>
+<dd><p>Collection name (used as node label prefix)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.dimensions">
+<span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>Vector embedding dimensions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.driver" title="Link to this definition">¶</a></dt>
+<dd><p>Neo4j async driver instance</p>
+</dd></dl>
+
+<p class="rubric">示例</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">Neo4jGraphStore</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">uri</span><span class="o">=</span><span class="s2">&quot;bolt://localhost:7687&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;neo4j&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">database</span><span class="o">=</span><span class="s2">&quot;neo4j&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;knowledge&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dimensions</span><span class="o">=</span><span class="mi">1536</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">await</span> <span class="n">store</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_embedding</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bolt://localhost:7687'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neo4j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'password'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neo4j'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'knowledge'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1536</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize Neo4j graph store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uri</strong> (<em>str</em>) -- Neo4j connection URI</p></li>
+<li><p><strong>user</strong> (<em>str</em>) -- Neo4j username</p></li>
+<li><p><strong>password</strong> (<em>str</em>) -- Neo4j password</p></li>
+<li><p><strong>database</strong> (<em>str</em>) -- Neo4j database name</p></li>
+<li><p><strong>collection_name</strong> (<em>str</em>) -- Collection name prefix for node labels</p></li>
+<li><p><strong>dimensions</strong> (<em>int</em>) -- Vector embedding dimensions (default: 1536 for OpenAI)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.DatabaseConnectionError" title="agentscope.exception.DatabaseConnectionError"><strong>DatabaseConnectionError</strong></a> -- If connection to Neo4j fails after retries</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.add">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.add"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add documents to Neo4j (implements StoreBase.add).</p>
+<p>This method stores document nodes with their vector embeddings.
+Each document becomes a node with properties:
+- id: Document ID
+- content: Document text content
+- embedding: Vector embedding
+- doc_id: Original document ID
+- chunk_id: Chunk identifier
+- total_chunks: Total number of chunks
+- created_at: Timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> (<em>list</em><em>[</em><a class="reference internal" href="#agentscope.rag.Document" title="agentscope.rag._document.Document"><em>Document</em></a><em>]</em>) -- List of documents to add</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If document addition fails</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.delete">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.delete"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Delete documents from Neo4j (implements StoreBase.delete).</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> (<em>Any</em>) -- Can be document IDs (str) or a list of IDs</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (e.g., doc_id, chunk_id)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If deletion fails</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.search">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.search"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.search" title="Link to this definition">¶</a></dt>
+<dd><p>Vector search for documents (implements StoreBase.search).</p>
+<p>This method performs pure vector similarity search on document nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_embedding</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) -- Query embedding vector</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) -- Maximum number of documents to return</p></li>
+<li><p><strong>score_threshold</strong> (<em>float</em><em> | </em><em>None</em>) -- Minimum similarity score threshold</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional search arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of relevant documents sorted by similarity score</p>
+</dd>
+<dt class="field-odd">抛出<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If search fails</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#agentscope.rag.Document" title="agentscope.rag._document.Document"><em>Document</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.get_client">
+<span class="sig-name descname"><span class="pre">get_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.get_client"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.get_client" title="Link to this definition">¶</a></dt>
+<dd><p>Get Neo4j driver (implements StoreBase.get_client).</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Neo4j async driver instance</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>AsyncDriver</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.add_entities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.add_entities"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.add_entities" title="Link to this definition">¶</a></dt>
+<dd><p>Add entity nodes and link to document (implements
+GraphStoreBase.add_entities).</p>
+<p>This method creates entity nodes and MENTIONS relationships from
+the document to the entities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entities</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) -- List of entity dicts with keys: name, type,
+description, embedding</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) -- ID of the document these entities are from</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If entity addition fails</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.add_relationships">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_relationships</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relationships</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.add_relationships"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.add_relationships" title="Link to this definition">¶</a></dt>
+<dd><p>Add relationships between entities (implements
+GraphStoreBase.add_relationships).</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>relationships</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) -- List of relationship dicts with keys:
+source, target, type, description, strength</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If relationship addition fails</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.search_entities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_entities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.search_entities"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.search_entities" title="Link to this definition">¶</a></dt>
+<dd><p>Vector search for entities (implements
+GraphStoreBase.search_entities).</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_embedding</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) -- Query embedding vector</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) -- Maximum number of entities to return</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional search arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of entity dictionaries</p>
+</dd>
+<dt class="field-odd">抛出<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If entity search fails</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.search_with_graph">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_with_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_hops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.search_with_graph"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.search_with_graph" title="Link to this definition">¶</a></dt>
+<dd><p>Graph traversal-based search (implements
+GraphStoreBase.search_with_graph).</p>
+<p>Process:
+1. Vector search to find seed entities
+2. Graph traversal to find related entities (N hops)
+3. Collect documents that mention these entities</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_embedding</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) -- Query embedding vector</p></li>
+<li><p><strong>max_hops</strong> (<em>int</em>) -- Maximum number of hops for graph traversal</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) -- Maximum number of documents to return</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional search arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of relevant documents</p>
+</dd>
+<dt class="field-odd">抛出<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If graph search fails</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#agentscope.rag.Document" title="agentscope.rag._document.Document"><em>Document</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.add_communities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">communities</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.add_communities"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.add_communities" title="Link to this definition">¶</a></dt>
+<dd><p>Add community nodes (optional, implements
+GraphStoreBase.add_communities).</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>communities</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) -- List of community dicts with keys:
+id, level, title, summary, rating, entity_count,
+entity_ids, embedding</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (unused)</p></li>
+</ul>
+</dd>
+<dt class="field-even">抛出<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If community addition fails</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.search_communities">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_embedding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.search_communities"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.search_communities" title="Link to this definition">¶</a></dt>
+<dd><p>Search for communities (optional, implements
+GraphStoreBase.search_communities).</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_embedding</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) -- Query embedding vector</p></li>
+<li><p><strong>min_level</strong> (<em>int</em>) -- Minimum community hierarchical level</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) -- Maximum number of communities to return</p></li>
+<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional search arguments</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of community dictionaries with entity_ids</p>
+</dd>
+<dt class="field-odd">抛出<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If community search fails</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agentscope.rag.Neo4jGraphStore.close">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_store/_neo4j_graph_store.html#Neo4jGraphStore.close"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Neo4jGraphStore.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the Neo4j driver connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GraphKnowledgeBase</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_knowledge.html#GraphKnowledgeBase"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase" title="Link to this definition">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="#agentscope.rag.KnowledgeBase" title="agentscope.rag._knowledge_base.KnowledgeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">KnowledgeBase</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GraphKnowledgeBase</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_knowledge_base.html#GraphKnowledgeBase"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase" title="Link to this definition">¶</a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">GraphEmbedding</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphSearch</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphEntity</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphRelationship</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphCommunity</span></code>, <a class="reference internal" href="#agentscope.rag.KnowledgeBase" title="agentscope.rag._knowledge_base.KnowledgeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">KnowledgeBase</span></code></a></p>
 <p>Graph-based knowledge base implementation.</p>
 <p>This knowledge base uses a graph database (GraphStoreBase) as the
 storage backend and provides advanced features including:</p>
@@ -1398,7 +1746,8 @@ storage backend and provides advanced features including:</p>
 <li><p>Community detection for global understanding</p></li>
 <li><p>Multiple search modes (vector, graph, hybrid, global)</p></li>
 </ul>
-<p>The class follows the design principle of &quot;content embedding + graph traversal&quot;:
+<p>The class follows the design principle of &quot;content embedding + graph
+traversal&quot;:
 - Embeddings contain only content (documents, entities, communities)
 - Relationships are stored in graph structure
 - Graph traversal is used during retrieval to leverage relationships</p>
@@ -1412,11 +1761,6 @@ storage backend and provides advanced features including:</p>
 <dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase.embedding_model">
 <span class="sig-name descname"><span class="pre">embedding_model</span></span><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.embedding_model" title="Link to this definition">¶</a></dt>
 <dd><p>Embedding model for generating vectors</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="agentscope.embedding.html#agentscope.embedding.EmbeddingModelBase" title="agentscope.embedding._embedding_base.EmbeddingModelBase">agentscope.embedding._embedding_base.EmbeddingModelBase</a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1471,7 +1815,7 @@ storage backend and provides advanced features including:</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph_store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_entity_extraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_extraction_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_relationship_extraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_community_detection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">community_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leiden'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph_knowledge.html#GraphKnowledgeBase.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph_store</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_entity_extraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_extraction_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_relationship_extraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_community_detection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">community_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leiden'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_knowledge_base.html#GraphKnowledgeBase.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize graph knowledge base.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
@@ -1479,22 +1823,45 @@ storage backend and provides advanced features including:</p>
 <li><p><strong>graph_store</strong> (<a class="reference internal" href="#agentscope.rag.GraphStoreBase" title="agentscope.rag._store._store_base.GraphStoreBase"><em>GraphStoreBase</em></a>) -- Graph database store backend</p></li>
 <li><p><strong>embedding_model</strong> (<a class="reference internal" href="agentscope.embedding.html#agentscope.embedding.EmbeddingModelBase" title="agentscope.embedding._embedding_base.EmbeddingModelBase"><em>EmbeddingModelBase</em></a>) -- Embedding model for vector generation</p></li>
 <li><p><strong>llm_model</strong> (<a class="reference internal" href="agentscope.model.html#agentscope.model.ChatModelBase" title="agentscope.model._model_base.ChatModelBase"><em>ChatModelBase</em></a><em> | </em><em>None</em>) -- Language model for entity/relationship extraction
-(required if entity_extraction or relationship_extraction is enabled)</p></li>
-<li><p><strong>enable_entity_extraction</strong> (<em>bool</em>) -- Whether to extract entities from documents</p></li>
-<li><p><strong>entity_extraction_config</strong> (<em>dict</em><em> | </em><em>None</em>) -- Entity extraction configuration dict:
-- max_entities_per_chunk: Max entities per document (default: 10)
-- enable_gleanings: Enable multi-round extraction (default: False)
-- gleanings_rounds: Number of gleaning rounds (default: 2)
-- entity_types: List of entity types (default: standard types)
-- generate_entity_embeddings: Generate entity embeddings (default: True)</p></li>
+(required if entity_extraction or relationship_extraction
+is enabled)</p></li>
+<li><p><strong>enable_entity_extraction</strong> (<em>bool</em>) -- Whether to extract entities from
+documents</p></li>
+<li><p><strong>entity_extraction_config</strong> (<em>dict</em><em> | </em><em>None</em>) -- <p>Entity extraction configuration dict:
+- max_entities_per_chunk: Max entities per document</p>
+<blockquote>
+<div><p>(default: 10)</p>
+</div></blockquote>
+<ul>
+<li><dl class="simple">
+<dt>enable_gleanings: Enable multi-round extraction</dt><dd><p>(default: False)</p>
+</dd>
+</dl>
+</li>
+<li><p>gleanings_rounds: Number of gleaning rounds (default: 2)</p></li>
+<li><dl class="simple">
+<dt>entity_types: List of entity types (default: standard</dt><dd><p>types)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>generate_entity_embeddings: Generate entity embeddings</dt><dd><p>(default: True)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
 <li><p><strong>enable_relationship_extraction</strong> (<em>bool</em>) -- Whether to extract relationships</p></li>
-<li><p><strong>enable_community_detection</strong> (<em>bool</em>) -- Whether to enable community detection
-(if True, first add_documents call triggers detection)</p></li>
-<li><p><strong>community_algorithm</strong> (<em>Literal</em><em>[</em><em>'leiden'</em><em>, </em><em>'louvain'</em><em>]</em>) -- Community detection algorithm (leiden or louvain)</p></li>
+<li><p><strong>enable_community_detection</strong> (<em>bool</em>) -- Whether to enable community
+detection (if True, first add_documents call triggers
+detection)</p></li>
+<li><p><strong>community_algorithm</strong> (<em>Literal</em><em>[</em><em>'leiden'</em><em>, </em><em>'louvain'</em><em>]</em>) -- Community detection algorithm (leiden
+or louvain)</p></li>
 </ul>
 </dd>
 <dt class="field-even">抛出<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> -- If entity/relationship extraction is enabled but llm_model is None</p>
+<dd class="field-even"><p><strong>ValueError</strong> -- If entity/relationship extraction is enabled but
+    llm_model is None</p>
 </dd>
 <dt class="field-odd">返回类型<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
@@ -1504,7 +1871,7 @@ storage backend and provides advanced features including:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase.add_documents">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph_knowledge.html#GraphKnowledgeBase.add_documents"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.add_documents" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_knowledge_base.html#GraphKnowledgeBase.add_documents"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.add_documents" title="Link to this definition">¶</a></dt>
 <dd><p>Add documents to the graph knowledge base.</p>
 <p>Process:
 1. Generate document embeddings
@@ -1522,7 +1889,8 @@ storage backend and provides advanced features including:</p>
 <dt class="field-even">抛出<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.GraphQueryError" title="agentscope.exception.GraphQueryError"><strong>GraphQueryError</strong></a> -- If document storage fails</p></li>
-<li><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.EntityExtractionError" title="agentscope.exception.EntityExtractionError"><strong>EntityExtractionError</strong></a> -- If entity extraction fails (when configured to raise)</p></li>
+<li><p><a class="reference internal" href="agentscope.exception.html#agentscope.exception.EntityExtractionError" title="agentscope.exception.EntityExtractionError"><strong>EntityExtractionError</strong></a> -- If entity extraction fails (when
+    configured to raise)</p></li>
 </ul>
 </dd>
 <dt class="field-odd">返回类型<span class="colon">:</span></dt>
@@ -1533,7 +1901,7 @@ storage backend and provides advanced features including:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase.retrieve">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hybrid'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph_knowledge.html#GraphKnowledgeBase.retrieve"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.retrieve" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hybrid'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_knowledge_base.html#GraphKnowledgeBase.retrieve"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.retrieve" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve relevant documents from the knowledge base.</p>
 <p>Supports multiple search modes:
 - vector: Pure vector similarity search (fastest)
@@ -1569,49 +1937,11 @@ storage backend and provides advanced features including:</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="agentscope.rag.GraphKnowledgeBase.detect_communities">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">detect_communities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph_knowledge.html#GraphKnowledgeBase.detect_communities"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.GraphKnowledgeBase.detect_communities" title="Link to this definition">¶</a></dt>
-<dd><p>Manually trigger community detection.</p>
-<p>This method runs community detection on the graph using Neo4j GDS
-algorithms. It should be called:
-- After adding large batches of documents
-- Periodically to update communities
-- When the graph structure has changed significantly</p>
-<p>The method:
-1. Runs Neo4j GDS community detection (Leiden or Louvain)
-2. Generates community summaries using LLM
-3. Generates community embeddings
-4. Stores communities in graph database</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>algorithm</strong> (<em>Literal</em><em>[</em><em>'leiden'</em><em>, </em><em>'louvain'</em><em>] </em><em>| </em><em>None</em>) -- Override the default community detection algorithm</p></li>
-<li><p><strong>**kwargs</strong> (<em>Any</em>) -- Additional arguments (e.g., max_level)</p></li>
-</ul>
-</dd>
-<dt class="field-even">返回<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>community_count: Number of communities detected</p></li>
-<li><p>levels: Number of hierarchical levels</p></li>
-<li><p>algorithm: Algorithm used</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">返回类型<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dictionary with detection results</p>
-</dd>
-<dt class="field-even">抛出<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> -- If community detection is not enabled</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.Entity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Entity</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#Entity"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Entity" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Entity</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#Entity"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Entity" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Entity model for graph knowledge base.</p>
 <p>Represents an entity extracted from documents, such as a person,
@@ -1698,7 +2028,7 @@ organization, location, product, or event.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.Relationship">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Relationship</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#Relationship"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Relationship" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Relationship</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#Relationship"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Relationship" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Relationship model for graph knowledge base.</p>
 <p>Represents a relationship between two entities, capturing the
@@ -1801,7 +2131,7 @@ connection type, description, and strength.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.rag.Relationship.validate_type">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#Relationship.validate_type"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Relationship.validate_type" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#Relationship.validate_type"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Relationship.validate_type" title="Link to this definition">¶</a></dt>
 <dd><p>Validate and normalize relationship type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
@@ -1817,7 +2147,7 @@ connection type, description, and strength.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.Community">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Community</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#Community"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Community" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Community</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#Community"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.Community" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Community model for graph knowledge base.</p>
 <p>Represents a community of related entities detected by graph
@@ -1972,7 +2302,7 @@ algorithms (e.g., Leiden, Louvain).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.EntityDict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EntityDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#EntityDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.EntityDict" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EntityDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#EntityDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.EntityDict" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
 <p>TypedDict for entity data (for type hints).</p>
 <dl class="py attribute">
@@ -1999,7 +2329,7 @@ algorithms (e.g., Leiden, Louvain).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.RelationshipDict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RelationshipDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#RelationshipDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.RelationshipDict" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RelationshipDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#RelationshipDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.RelationshipDict" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
 <p>TypedDict for relationship data (for type hints).</p>
 <dl class="py attribute">
@@ -2031,7 +2361,7 @@ algorithms (e.g., Leiden, Louvain).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="agentscope.rag.CommunityDict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommunityDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph_types.html#CommunityDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.CommunityDict" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommunityDict</span></span><a class="reference internal" href="../_modules/agentscope/rag/_graph/_types.html#CommunityDict"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.rag.CommunityDict" title="Link to this definition">¶</a></dt>
 <dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
 <p>TypedDict for community data (for type hints).</p>
 <dl class="py attribute">
@@ -2242,6 +2572,28 @@ algorithms (e.g., Leiden, Louvain).</p>
 <li><a class="reference internal" href="#agentscope.rag.SimpleKnowledge.add_documents"><code class="docutils literal notranslate"><span class="pre">SimpleKnowledge.add_documents()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore</span></code></a><ul>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.uri"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.uri</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.user"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.user</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.password"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.password</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.database"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.database</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.collection_name"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.collection_name</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.dimensions"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.dimensions</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.driver"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.driver</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.__init__"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.add"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.add()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.delete"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.delete()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.search"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.search()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.get_client"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.get_client()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.add_entities"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.add_entities()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.add_relationships"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.add_relationships()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.search_entities"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.search_entities()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.search_with_graph"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.search_with_graph()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.add_communities"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.add_communities()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.search_communities"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.search_communities()</span></code></a></li>
+<li><a class="reference internal" href="#agentscope.rag.Neo4jGraphStore.close"><code class="docutils literal notranslate"><span class="pre">Neo4jGraphStore.close()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase</span></code></a><ul>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.graph_store"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.graph_store</span></code></a></li>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.embedding_model"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.embedding_model</span></code></a></li>
@@ -2252,7 +2604,6 @@ algorithms (e.g., Leiden, Louvain).</p>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.__init__"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.add_documents"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.add_documents()</span></code></a></li>
 <li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.retrieve"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.retrieve()</span></code></a></li>
-<li><a class="reference internal" href="#agentscope.rag.GraphKnowledgeBase.detect_communities"><code class="docutils literal notranslate"><span class="pre">GraphKnowledgeBase.detect_communities()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#agentscope.rag.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a><ul>

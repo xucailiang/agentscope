@@ -293,7 +293,7 @@ User-assistant 对话，也称为聊天机器人（chatbot），是最常见的�
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "e8d49576-a001-4ed6-b3a4-208bec47fff7", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "3deaefc8-b0f0-499a-aceb-b85e2f9b68e2", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -333,7 +333,7 @@ User-assistant 对话，也称为聊天机器人（chatbot），是最常见的�
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.655 seconds)
+   **Total running time of the script:** (0 minutes 0.705 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_conversation.py:
