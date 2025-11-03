@@ -132,7 +132,7 @@ The ``ChatResponse`` instance contains the generated thinking/text/tool use cont
 
  .. code-block:: none
 
-    ChatResponse(content=[{'type': 'thinking', 'thinking': 'I should search for AgentScope on Google.'}, {'type': 'text', 'text': "I'll search for AgentScope on Google."}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope?'}}], id='2025-11-03 10:30:37.878_390308', created_at='2025-11-03 10:30:37.878', type='chat', usage=None, metadata=None)
+    ChatResponse(content=[{'type': 'thinking', 'thinking': 'I should search for AgentScope on Google.'}, {'type': 'text', 'text': "I'll search for AgentScope on Google."}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope?'}}], id='2025-11-03 10:41:47.277_b1e521', created_at='2025-11-03 10:41:47.277', type='chat', usage=None, metadata=None)
 
 
 
@@ -191,7 +191,7 @@ Taking ``DashScopeChatModel`` as an example, we can use it to create a chat mode
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "cc40a82f-f410-45f3-a047-64da72692169", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "3bdd8d59-7f3f-43ff-ae8a-c4dc0f0a4637", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
