@@ -375,8 +375,10 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the knowledge base.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            embedding_store: The storage backend (VDBStoreBase or GraphStoreBase)</span>
-<span class="sd">            embedding_model: The embedding model for generating vector embeddings</span>
+<span class="sd">            embedding_store: The storage backend (VDBStoreBase or</span>
+<span class="sd">                GraphStoreBase)</span>
+<span class="sd">            embedding_model: The embedding model for generating vector</span>
+<span class="sd">                embeddings</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_store</span> <span class="o">=</span> <span class="n">embedding_store</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_model</span></div>
@@ -425,9 +427,6 @@
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 
-    <span class="c1"># A quick method that enable the agent to retrieve knowledge</span>
-    <span class="c1"># Developers can wrap the `retrieve` method by themselves to support</span>
-    <span class="c1"># more flexible usage</span>
 <div class="viewcode-block" id="KnowledgeBase.retrieve_knowledge">
 <a class="viewcode-back" href="../../../api/agentscope.rag.html#agentscope.rag.KnowledgeBase.retrieve_knowledge">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_knowledge</span><span class="p">(</span>
