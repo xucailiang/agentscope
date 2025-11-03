@@ -251,7 +251,7 @@ Then we change its state by generating a reply message:
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "801c70cc-66a6-47ba-8c88-2dd91218fcdb", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "419bad47-91ec-4993-8efa-546b3247d480", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -376,7 +376,7 @@ Now we can see the agent state is restored to the saved state.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.649 seconds)
+   **Total running time of the script:** (0 minutes 0.686 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_state.py:
