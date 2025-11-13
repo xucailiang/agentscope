@@ -525,15 +525,15 @@ to download the full example code.</p>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">382</span>, in <span class="n">wrapper</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">319</span>, in <span class="n">reply</span>
-<span class="w">    </span><span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">()</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">292</span>, in <span class="n">reply</span>
+<span class="w">    </span><span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">(</span><span class="n">tool_choice</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py&quot;</span>, line <span class="m">120</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">394</span>, in <span class="n">_reasoning</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">423</span>, in <span class="n">_reasoning</span>
 <span class="w">    </span><span class="k">async</span> <span class="k">for</span> <span class="n">content_chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">271</span>, in <span class="n">_parse_dashscope_stream_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;29945cd2-d3fa-4ab9-a10f-94f7de25c9b5&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;9ae8c59b-d72c-46c8-9a3a-2158758e5281&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 </section>
@@ -662,7 +662,7 @@ to download the full example code.</p>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">工具</span></a></p></li>
 <li><p><a class="reference internal" href="task_hook.html#hook"><span class="std std-ref">智能体钩子函数</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.653 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.814 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-agent-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7dec07e2c813e72e1dad091b3ac4913a/task_agent.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_agent.ipynb</span></code></a></p>

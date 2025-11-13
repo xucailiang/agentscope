@@ -160,11 +160,11 @@ Multi-Agent debate 模拟不同智能体之间的多轮讨论场景，通常包�
         current_output = await original_func(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 382, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 319, in reply
-        msg_reasoning = await self._reasoning()
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 292, in reply
+        msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 383, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 411, in _reasoning
         res = await self.model(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 638, in async_wrapper
         return await func(self, *args, **kwargs)
@@ -172,7 +172,7 @@ Multi-Agent debate 模拟不同智能体之间的多轮讨论场景，通常包�
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "1457fc53-bc8c-42b9-9fcb-263a19d9c587", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "8ee475e4-c4be-4aea-8930-62d59d1dd981", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
