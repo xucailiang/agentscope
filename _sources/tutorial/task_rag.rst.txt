@@ -341,7 +341,7 @@ They can be used as follows:
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "15de6a9a-473a-4cee-9849-4494a5096f31", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "dce093fe-f65a-4795-8a06-c249d5022a28", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -471,7 +471,7 @@ Just set the ``knowledge`` parameter of the ``ReActAgent``, and the agent
 will automatically retrieve knowledge at the beginning of each reply.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-333
+.. GENERATED FROM PYTHON SOURCE LINES 304-337
 
 .. code-block:: Python
 
@@ -500,12 +500,16 @@ will automatically retrieve knowledge at the beginning of each reply.
             ),
         )
 
+        print("Take a look at the agent's memory:")
+        content = (await agent.memory.get_memory())[1].content
+        print(json.dumps(content, indent=2, ensure_ascii=False))
+
 
     asyncio.run(example_generic_manner())
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 334-345
+.. GENERATED FROM PYTHON SOURCE LINES 338-349
 
 Multimodal RAG
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -519,7 +523,7 @@ a multimodal knowledge base as follows.
 
 First we prepare an image with some text about my name.
 
-.. GENERATED FROM PYTHON SOURCE LINES 345-361
+.. GENERATED FROM PYTHON SOURCE LINES 349-365
 
 .. code-block:: Python
 
@@ -540,14 +544,14 @@ First we prepare an image with some text about my name.
     plt.close()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 362-366
+.. GENERATED FROM PYTHON SOURCE LINES 366-370
 
 Then we can build a multimodal knowledge base with the image document.
 The example is the same as before, just using the ``ImageReader`` and
 ``DashScopeMultiModalEmbedding`` instead of the text counterparts.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 366-416
+.. GENERATED FROM PYTHON SOURCE LINES 370-420
 
 .. code-block:: Python
 
@@ -596,13 +600,13 @@ The example is the same as before, just using the ``ImageReader`` and
 
         # Let's see the last message from the agent
         print("\nThe image is attached in the agent's memory:")
-        print((await agent.memory.get_memory())[-4])
+        print((await agent.memory.get_memory())[1])
 
 
     asyncio.run(example_multimodal_rag())
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 417-419
+.. GENERATED FROM PYTHON SOURCE LINES 421-423
 
 We can see that the agent can answer the question based on the retrieved
 image.
@@ -610,7 +614,7 @@ image.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.888 seconds)
+   **Total running time of the script:** (0 minutes 0.801 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_rag.py:

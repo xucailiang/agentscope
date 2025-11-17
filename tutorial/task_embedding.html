@@ -419,7 +419,7 @@ The <code class="docutils literal notranslate"><span class="pre">DashScopeMultiM
 <span class="w">    </span><span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">batch_kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py&quot;</span>, line <span class="m">87</span>, in <span class="n">_call_api</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;0c450fb7-fe2f-4deb-8c9d-3a48e265ae1a&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;33b587ce-6ac3-4e3a-990f-0a837285f03f&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <p>You can customize your embedding model by subclassing <code class="docutils literal notranslate"><span class="pre">EmbeddingModelBase</span></code> and implementing the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method.</p>
@@ -482,7 +482,7 @@ It works as follows in the embedding module:</p>
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">example_embedding_cache</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.909 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.749 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-embedding-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7516664176f3c9c48748a734807cea97/task_embedding.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_embedding.ipynb</span></code></a></p>

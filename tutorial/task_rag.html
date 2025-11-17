@@ -623,7 +623,7 @@ They can be used as follows:</p>
 <span class="w">    </span><span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">batch_kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py&quot;</span>, line <span class="m">87</span>, in <span class="n">_call_api</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;15de6a9a-473a-4cee-9849-4494a5096f31&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;dce093fe-f65a-4795-8a06-c249d5022a28&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <p>The knowledge base class provides two main methods: <code class="docutils literal notranslate"><span class="pre">add_documents</span></code> and
@@ -769,6 +769,10 @@ will automatically retrieve knowledge at the beginning of each reply.</p>
         <span class="p">),</span>
     <span class="p">)</span>
 
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Take a look at the agent&#39;s memory:&quot;</span><span class="p">)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">example_generic_manner</span><span class="p">())</span>
 </pre></div>
@@ -847,7 +851,7 @@ The example is the same as before, just using the <code class="docutils literal 
 
     <span class="c1"># Let&#39;s see the last message from the agent</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The image is attached in the agent&#39;s memory:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">((</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">((</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="mi">1</span><span class="p">])</span>
 
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">example_multimodal_rag</span><span class="p">())</span>
@@ -855,7 +859,7 @@ The example is the same as before, just using the <code class="docutils literal 
 </div>
 <p>We can see that the agent can answer the question based on the retrieved
 image.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.888 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.801 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-rag-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/dc35bacf6284d8bd4018ad68eeecf856/task_rag.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_rag.ipynb</span></code></a></p>

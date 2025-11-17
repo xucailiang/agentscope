@@ -128,13 +128,13 @@ As an example, we first store a user preference and then retrieve related inform
         return future.result()
       File "/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/task_long_term_memory.py", line 69, in basic_usage
         await long_term_memory.record(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py", line 478, in record
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py", line 486, in record
         await self._mem0_record(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py", line 511, in _mem0_record
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py", line 519, in _mem0_record
         results = await self.long_term_working_memory.add(
-      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1392, in add
+      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1400, in add
         vector_store_result, graph_result = await asyncio.gather(vector_store_task, graph_task)
-      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1455, in _add_to_vector_store
+      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1463, in _add_to_vector_store
         response = await asyncio.to_thread(
       File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/asyncio/threads.py", line 25, in to_thread
         return await loop.run_in_executor(None, func_call)
@@ -142,7 +142,7 @@ As an example, we first store a user preference and then retrieve related inform
         result = self.fn(*self.args, **self.kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py", line 138, in generate_response
         raise RuntimeError(
-    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "4ff48224-aff9-4c1f-a3ef-b492005d344f", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "c18de60d-27cd-47d5-ba37-fa01adfee89e", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -520,7 +520,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.854 seconds)
+   **Total running time of the script:** (0 minutes 1.630 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_long_term_memory.py:
