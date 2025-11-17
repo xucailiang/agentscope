@@ -150,15 +150,15 @@
         current_output = await original_func(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 382, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 292, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 294, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 423, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 425, in _reasoning
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "6e6724e8-ee23-4438-8e69-7215cdf7163e", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "2ccb6d15-1fcb-429e-9783-9c93949ebe8f", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -383,7 +383,7 @@ Alice 一无所知，因为他没有包含在 ``MsgHub`` 上下文中。
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.779 seconds)
+   **Total running time of the script:** (0 minutes 0.564 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_pipeline.py:

@@ -184,15 +184,15 @@ AgentScope 在 ``agentscope.agent`` 模块下提供了开箱即用的 ReAct 智�
         current_output = await original_func(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 382, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 292, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 294, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 423, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 425, in _reasoning
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "25dc93ae-7135-4332-9091-5e4c59e6d41b", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "abcf1028-5cf1-4818-9056-e4bd9dd89f67", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -320,7 +320,7 @@ AgentScope 在 ``agentscope.agent`` 模块下提供了开箱即用的 ReAct 智�
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.817 seconds)
+   **Total running time of the script:** (0 minutes 0.512 seconds)
 
 
 .. _sphx_glr_download_tutorial_quickstart_agent.py:

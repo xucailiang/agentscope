@@ -599,6 +599,9 @@
         <span class="c1"># Retrieve relevant documents from the knowledge base(s) if any</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve_from_knowledge</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
+        <span class="c1"># Control if LLM generates tool calls in each reasoning step</span>
+        <span class="n">tool_choice</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="s2">&quot;required&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="c1"># -------------- Structured output management --------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_required_structured_model</span> <span class="o">=</span> <span class="n">structured_model</span>
         <span class="c1"># Record structured output model if provided</span>
@@ -615,13 +618,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">finish_function_name</span><span class="p">,</span>
                 <span class="n">structured_model</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="n">tool_choice</span> <span class="o">=</span> <span class="s2">&quot;required&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Remove generate_response tool if no structured output is required</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolkit</span><span class="o">.</span><span class="n">remove_tool_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">finish_function_name</span><span class="p">)</span>
 
         <span class="c1"># -------------- The reasoning-acting loop --------------</span>
-        <span class="c1"># Control if LLM generates tool calls in each reasoning step</span>
-        <span class="n">tool_choice</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># Cache the structured output generated in the finish function call</span>
         <span class="n">structured_output</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">):</span>

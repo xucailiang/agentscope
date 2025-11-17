@@ -618,7 +618,7 @@ AgentScope 目前内置支持基于 <a class="reference external" href="https://
 <span class="w">    </span><span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">batch_kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py&quot;</span>, line <span class="m">87</span>, in <span class="n">_call_api</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;1f6f7bc9-e9e6-4fbf-8e79-54095ae67333&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get embedding from DashScope API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;a0ac85a4-ae50-43e5-9295-f1918ec3fed8&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <p>AgentScope 中的知识库类提供两个核心方法：<code class="docutils literal notranslate"><span class="pre">add_documents</span></code> 和 <code class="docutils literal notranslate"><span class="pre">retrieve</span></code>，分别用于添加数据块和搜索检索数据块。</p>
@@ -757,7 +757,7 @@ AgentScope 目前内置支持基于 <a class="reference external" href="https://
     <span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">查看智能体记忆中检索信息如何插入：&quot;</span><span class="p">)</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
 
@@ -830,7 +830,7 @@ AgentScope 目前内置支持基于 <a class="reference external" href="https://
 
     <span class="c1"># 让我们看看检索到的图片数据是否已经加入了智能体的记忆中</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">查看智能体记忆中检索信息如何插入：&quot;</span><span class="p">)</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">get_memory</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
 
@@ -844,7 +844,7 @@ AgentScope 目前内置支持基于 <a class="reference external" href="https://
 <li><p><a class="reference internal" href="task_embedding.html#embedding"><span class="std std-ref">嵌入(Embedding)</span></a></p></li>
 <li><p><a class="reference internal" href="task_plan.html#plan"><span class="std std-ref">计划</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.799 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.566 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-rag-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/dc35bacf6284d8bd4018ad68eeecf856/task_rag.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_rag.ipynb</span></code></a></p>
