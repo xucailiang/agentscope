@@ -179,7 +179,7 @@ class GraphSearch:
         for doc_id in sorted_doc_ids:
             doc = doc_map[doc_id]
             # Update with combined score
-            doc.metadata.score = doc_scores[doc_id]
+            doc.score = doc_scores[doc_id]
             results.append(doc)
 
         logger.debug(

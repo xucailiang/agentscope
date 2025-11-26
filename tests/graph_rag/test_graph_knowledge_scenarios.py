@@ -42,6 +42,12 @@ class TestVectorOnlyMode:
         # Verify results are sorted by score (descending)
         if len(results) > 1:
             assert (
+                results[0].score is not None
+            ), "First result should have score"
+            assert (
+                results[1].score is not None
+            ), "Second result should have score"
+            assert (
                 results[0].score >= results[1].score
             ), "Results should be sorted by score"
 
@@ -183,7 +189,7 @@ class TestGraphFeaturesMode:
         )
         assert len(hybrid_results) > 0, "Hybrid search should return results"
         assert all(
-            0 <= r.score <= 1 for r in hybrid_results
+            r.score is not None and 0 <= r.score <= 1 for r in hybrid_results
         ), "Scores should be normalized"
 
     async def test_graph_search_with_different_hops(
@@ -241,6 +247,64 @@ class TestGraphFeaturesMode:
                 f"Should return results for "
                 f"weights ({vector_weight}, {graph_weight})"
             )
+
+    async def test_hybrid_search_score_correctness(
+        self,
+        full_graph_kb: GraphKnowledgeBase,
+        entity_rich_documents: list,
+    ) -> None:
+        """Test that hybrid search correctly combines vector and graph scores.
+
+        This test verifies that the bug where scores were assigned to
+        doc.metadata.score instead of doc.score has been fixed.
+        """
+        await full_graph_kb.add_documents(entity_rich_documents)
+        await asyncio.sleep(2)
+
+        query = "Alice research work"
+
+        # Execute hybrid search
+        hybrid_results = await full_graph_kb.retrieve(
+            query=query,
+            limit=3,
+            search_mode="hybrid",
+            vector_weight=0.6,
+            graph_weight=0.4,
+        )
+
+        # Verify results exist
+        assert len(hybrid_results) > 0, "Hybrid search should return results"
+
+        # Critical verification: score should be on Document, not metadata
+        for result in hybrid_results:
+            # Verify doc.score is set (this is where it should be)
+            assert (
+                result.score is not None
+            ), "Document.score must be set by hybrid search"
+            assert isinstance(
+                result.score,
+                float,
+            ), "Document.score must be a float"
+            assert (
+                0 <= result.score <= 1
+            ), "Document.score must be normalized [0,1]"
+
+            # Verify metadata.score is NOT set (it shouldn't be after fix)
+            # Use 'in' operator to check without triggering __getattr__
+            try:
+                # Attempt to access metadata.score
+                metadata_score = result.metadata.get("score")
+                if metadata_score is not None:
+                    # If metadata.score was set (old bug behavior),
+                    # it should not be used
+                    assert False, (
+                        f"Bug detected: metadata.score should not be set, "
+                        f"but found value {metadata_score}. "
+                        f"Score should only be in doc.score={result.score}"
+                    )
+            except (KeyError, AttributeError):
+                # Good! metadata.score doesn't exist (expected after fix)
+                pass
 
 
 @pytest.mark.fast

@@ -8,29 +8,21 @@ docker run -d --rm \
   -e "NEO4J_PLUGINS=[\"graph-data-science\"]" \
   neo4j:latest
 
-# Run tests with Neo4j
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
 ```
 
 ## 🚀 Running Tests
 
 ```bash
+
+# Run tests with Neo4j
+NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
+
 # Run all tests (mock mode - works in GitHub Actions)
 pytest tests/graph_rag/ -v
-
-# Run specific scenario
-pytest tests/graph_rag/test_graph_knowledge_scenarios.py::TestVectorOnlyMode -v
-
-# Run by speed markers
-pytest tests/graph_rag/ -v -m fast        # <5s tests
-pytest tests/graph_rag/ -v -m medium      # 5-15s tests
-pytest tests/graph_rag/ -v -m slow        # >15s tests
 
 # Skip tests requiring Neo4j GDS plugin
 pytest tests/graph_rag/ -v -m "not requires_gds"
 
-# Run with real Neo4j (if available)
-NEO4J_AVAILABLE=true pytest tests/graph_rag/ -v
 ```
 
 ## 📝 Note on GDS Community Detection Tests
