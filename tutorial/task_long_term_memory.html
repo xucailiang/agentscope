@@ -263,6 +263,7 @@
 <li class="toctree-l1"><a class="reference internal" href="task_state.html">State/Session Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_hook.html">Agent Hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_agent_skill.html">Agent Skill</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_eval.html">Evaluation</a></li>
@@ -421,9 +422,9 @@ They take a list of messages as input and record/retrieve information from long-
 <span class="w">    </span><span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/task_long_term_memory.py&quot;</span>, line <span class="m">69</span>, in <span class="n">basic_usage</span>
 <span class="w">    </span><span class="k">await</span> <span class="n">long_term_memory</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py&quot;</span>, line <span class="m">486</span>, in <span class="n">record</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py&quot;</span>, line <span class="m">490</span>, in <span class="n">record</span>
 <span class="w">    </span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mem0_record</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py&quot;</span>, line <span class="m">519</span>, in <span class="n">_mem0_record</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py&quot;</span>, line <span class="m">545</span>, in <span class="n">_mem0_record</span>
 <span class="w">    </span><span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">long_term_working_memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
   File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py&quot;</span>, line <span class="m">1400</span>, in <span class="n">add</span>
 <span class="w">    </span><span class="n">vector_store_result</span><span class="p">,</span> <span class="n">graph_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">vector_store_task</span><span class="p">,</span> <span class="n">graph_task</span><span class="p">)</span>
@@ -433,9 +434,9 @@ They take a list of messages as input and record/retrieve information from long-
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_call</span><span class="p">)</span>
   File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/concurrent/futures/thread.py&quot;</span>, line <span class="m">58</span>, in <span class="n">run</span>
 <span class="w">    </span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py&quot;</span>, line <span class="m">138</span>, in <span class="n">generate_response</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py&quot;</span>, line <span class="m">161</span>, in <span class="n">generate_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;c18de60d-27cd-47d5-ba37-fa01adfee89e&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;35c970ce-6c27-4841-8794-0507030297fc&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <section id="integration-with-react-agent">
@@ -804,7 +805,7 @@ memory systems according to their needs：</p>
 <li><p><a class="reference internal" href="task_agent.html#agent"><span class="std std-ref">Agent</span></a> - ReAct agent</p></li>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">Tool</span></a> - Tool system</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.630 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.572 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-long-term-memory-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/cf2bfcc46b2b3d58d3df8c98a6a13f87/task_long_term_memory.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_long_term_memory.ipynb</span></code></a></p>

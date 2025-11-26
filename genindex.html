@@ -261,6 +261,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_state.html">State/Session Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_hook.html">Agent Hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/task_agent_skill.html">Agent Skill</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_eval.html">Evaluation</a></li>
@@ -418,6 +419,8 @@
 </li>
           <li><a href="api/agentscope.model.html#agentscope.model.ChatResponse.__init__">(ChatResponse method)</a>
 </li>
+          <li><a href="api/agentscope.formatter.html#agentscope.formatter.DashScopeChatFormatter.__init__">(DashScopeChatFormatter method)</a>
+</li>
           <li><a href="api/agentscope.model.html#agentscope.model.DashScopeChatModel.__init__">(DashScopeChatModel method)</a>
 </li>
           <li><a href="api/agentscope.formatter.html#agentscope.formatter.DashScopeMultiAgentFormatter.__init__">(DashScopeMultiAgentFormatter method)</a>
@@ -445,6 +448,8 @@
           <li><a href="api/agentscope.embedding.html#agentscope.embedding.FileEmbeddingCache.__init__">(FileEmbeddingCache method)</a>
 </li>
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.__init__">(FileEvaluatorStorage method)</a>
+</li>
+          <li><a href="api/agentscope.formatter.html#agentscope.formatter.GeminiChatFormatter.__init__">(GeminiChatFormatter method)</a>
 </li>
           <li><a href="api/agentscope.model.html#agentscope.model.GeminiChatModel.__init__">(GeminiChatModel method)</a>
 </li>
@@ -490,11 +495,15 @@
 </li>
           <li><a href="api/agentscope.rag.html#agentscope.rag.Neo4jGraphStore.__init__">(Neo4jGraphStore method)</a>
 </li>
+          <li><a href="api/agentscope.formatter.html#agentscope.formatter.OllamaChatFormatter.__init__">(OllamaChatFormatter method)</a>
+</li>
           <li><a href="api/agentscope.model.html#agentscope.model.OllamaChatModel.__init__">(OllamaChatModel method)</a>
 </li>
           <li><a href="api/agentscope.formatter.html#agentscope.formatter.OllamaMultiAgentFormatter.__init__">(OllamaMultiAgentFormatter method)</a>
 </li>
           <li><a href="api/agentscope.embedding.html#agentscope.embedding.OllamaTextEmbedding.__init__">(OllamaTextEmbedding method)</a>
+</li>
+          <li><a href="api/agentscope.formatter.html#agentscope.formatter.OpenAIChatFormatter.__init__">(OpenAIChatFormatter method)</a>
 </li>
           <li><a href="api/agentscope.model.html#agentscope.model.OpenAIChatModel.__init__">(OpenAIChatModel method)</a>
 </li>
@@ -1224,6 +1233,8 @@
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_agent_pre_print_hook">(FileEvaluatorStorage method)</a>
 </li>
         </ul></li>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.get_agent_skill_prompt">get_agent_skill_prompt() (Toolkit method)</a>
+</li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.HttpStatelessClient.get_callable_function">get_callable_function() (HttpStatelessClient method)</a>
 
         <ul>
@@ -1775,6 +1786,8 @@
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.refresh_plan_state">refresh_plan_state() (Plan method)</a>
 </li>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.register_agent_skill">register_agent_skill() (Toolkit method)</a>
+</li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.register_class_hook">register_class_hook() (AgentBase class method)</a>
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.register_instance_hook">register_instance_hook() (AgentBase method)</a>
@@ -1803,12 +1816,14 @@
           <li><a href="api/agentscope.embedding.html#agentscope.embedding.FileEmbeddingCache.remove">(FileEmbeddingCache method)</a>
 </li>
         </ul></li>
-        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_class_hook">remove_class_hook() (AgentBase class method)</a>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.remove_agent_skill">remove_agent_skill() (Toolkit method)</a>
 </li>
-        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_instance_hook">remove_instance_hook() (AgentBase method)</a>
+        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_class_hook">remove_class_hook() (AgentBase class method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_instance_hook">remove_instance_hook() (AgentBase method)</a>
+</li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.remove_mcp_clients">remove_mcp_clients() (Toolkit method)</a>
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.PlanNotebook.remove_plan_change_hook">remove_plan_change_hook() (PlanNotebook method)</a>

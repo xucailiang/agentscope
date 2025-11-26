@@ -74,11 +74,11 @@ The supported model APIs and providers include:
 
 .. note:: When using vLLM, you need to configure the appropriate tool calling parameters for different models during deployment, such as ``--enable-auto-tool-choice``, ``--tool-call-parser``, etc. For more details, refer to the `official vLLM documentation <https://docs.vllm.ai/en/latest/features/tool_calling.html>`_.
 
-.. note:: For OpenAI-compatible models (e.g. vLLM, Deepseek), developers can use the ``OpenAIChatModel`` class, and specify the API endpoint by the ``client_args`` parameter: ``client_args={"base_url": "http://your-api-endpoint"}``. For example:
+.. note:: For OpenAI-compatible models (e.g. vLLM, Deepseek), developers can use the ``OpenAIChatModel`` class, and specify the API endpoint by the ``client_kwargs`` parameter: ``client_kwargs={"base_url": "http://your-api-endpoint"}``. For example:
 
     .. code-block:: python
 
-        OpenAIChatModel(client_args={"base_url": "http://localhost:8000/v1"})
+        OpenAIChatModel(client_kwargs={"base_url": "http://localhost:8000/v1"})
 
 .. note:: Model behavior parameters (such as temperature, maximum length, etc.) can be preset in the constructor function via the ``generate_kwargs`` parameter. For example:
 
@@ -132,7 +132,7 @@ The ``ChatResponse`` instance contains the generated thinking/text/tool use cont
 
  .. code-block:: none
 
-    ChatResponse(content=[{'type': 'thinking', 'thinking': 'I should search for AgentScope on Google.'}, {'type': 'text', 'text': "I'll search for AgentScope on Google."}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope?'}}], id='2025-11-17 05:42:53.986_5b59a0', created_at='2025-11-17 05:42:53.986', type='chat', usage=None, metadata=None)
+    ChatResponse(content=[{'type': 'thinking', 'thinking': 'I should search for AgentScope on Google.'}, {'type': 'text', 'text': "I'll search for AgentScope on Google."}, {'type': 'tool_use', 'id': '642n298gjna', 'name': 'google_search', 'input': {'query': 'AgentScope?'}}], id='2025-11-26 02:57:51.230_442cd8', created_at='2025-11-26 02:57:51.230', type='chat', usage=None, metadata=None)
 
 
 
@@ -191,7 +191,7 @@ Taking ``DashScopeChatModel`` as an example, we can use it to create a chat mode
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "29d42abb-5af2-4bc2-9724-da16e3bd2b35", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "f4a7c118-cc0a-4922-a769-921a302b5dda", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -326,7 +326,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.754 seconds)
+   **Total running time of the script:** (0 minutes 0.829 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_model.py:

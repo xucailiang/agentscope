@@ -263,6 +263,7 @@
 <li class="toctree-l1"><a class="reference internal" href="task_state.html">State/Session Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_hook.html">Agent Hooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_agent_skill.html">Agent Skill</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_eval.html">Evaluation</a></li>
@@ -443,7 +444,7 @@ features. In quickstart, we focus on how to create a ReAct agent and run it.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">agent_control</span></code>: allow agent to control the long-term memory by itself</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">static_control</span></code>: retrieving and recording from/to long-term memory will happen in the beginning/end of each reply.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">both</span></code>: active the above two modes at the same time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">both</span></code>: activate the above two modes at the same time</p></li>
 </ul>
 </td>
 </tr>
@@ -518,15 +519,15 @@ features. In quickstart, we focus on how to create a ReAct agent and run it.</p>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">382</span>, in <span class="n">wrapper</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">294</span>, in <span class="n">reply</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">298</span>, in <span class="n">reply</span>
 <span class="w">    </span><span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">(</span><span class="n">tool_choice</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py&quot;</span>, line <span class="m">120</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">425</span>, in <span class="n">_reasoning</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">429</span>, in <span class="n">_reasoning</span>
 <span class="w">    </span><span class="k">async</span> <span class="k">for</span> <span class="n">content_chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">271</span>, in <span class="n">_parse_dashscope_stream_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;5c6078a2-c85f-47fa-aff5-a9290af85922&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;5f0b9c0f-eb7c-4988-9749-2e6a7e816854&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 </section>
@@ -655,7 +656,7 @@ class by inheriting from it and implementing the <code class="docutils literal n
 <li><p><a class="reference internal" href="task_prompt.html#prompt"><span class="std std-ref">Prompt Formatter</span></a></p></li>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">Tool</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.815 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.825 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-quickstart-agent-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/aa553c3d61de8335d21a5136b32f5098/quickstart_agent.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">quickstart_agent.ipynb</span></code></a></p>
