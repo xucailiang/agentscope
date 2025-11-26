@@ -261,6 +261,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_state.html">状态/会话管理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_hook.html">智能体钩子函数</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/task_agent_skill.html">智能体技能</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_tracing.html">追踪</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/task_eval.html">智能体评测</a></li>
@@ -415,6 +416,8 @@
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.ChatResponse.__init__">__init__() （ChatResponse 方法）</a>
 </li>
+        <li><a href="api/agentscope.formatter.html#agentscope.formatter.DashScopeChatFormatter.__init__">__init__() （DashScopeChatFormatter 方法）</a>
+</li>
         <li><a href="api/agentscope.model.html#agentscope.model.DashScopeChatModel.__init__">__init__() （DashScopeChatModel 方法）</a>
 </li>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.DashScopeMultiAgentFormatter.__init__">__init__() （DashScopeMultiAgentFormatter 方法）</a>
@@ -442,6 +445,8 @@
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.FileEmbeddingCache.__init__">__init__() （FileEmbeddingCache 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.__init__">__init__() （FileEvaluatorStorage 方法）</a>
+</li>
+        <li><a href="api/agentscope.formatter.html#agentscope.formatter.GeminiChatFormatter.__init__">__init__() （GeminiChatFormatter 方法）</a>
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.GeminiChatModel.__init__">__init__() （GeminiChatModel 方法）</a>
 </li>
@@ -489,11 +494,15 @@
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Neo4jGraphStore.__init__">__init__() （Neo4jGraphStore 方法）</a>
 </li>
+        <li><a href="api/agentscope.formatter.html#agentscope.formatter.OllamaChatFormatter.__init__">__init__() （OllamaChatFormatter 方法）</a>
+</li>
         <li><a href="api/agentscope.model.html#agentscope.model.OllamaChatModel.__init__">__init__() （OllamaChatModel 方法）</a>
 </li>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.OllamaMultiAgentFormatter.__init__">__init__() （OllamaMultiAgentFormatter 方法）</a>
 </li>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.OllamaTextEmbedding.__init__">__init__() （OllamaTextEmbedding 方法）</a>
+</li>
+        <li><a href="api/agentscope.formatter.html#agentscope.formatter.OpenAIChatFormatter.__init__">__init__() （OpenAIChatFormatter 方法）</a>
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.OpenAIChatModel.__init__">__init__() （OpenAIChatModel 方法）</a>
 </li>
@@ -1162,6 +1171,8 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_agent_pre_print_hook">get_agent_pre_print_hook() （FileEvaluatorStorage 方法）</a>
 </li>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.get_agent_skill_prompt">get_agent_skill_prompt() （Toolkit 方法）</a>
+</li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.HttpStatelessClient.get_callable_function">get_callable_function() （HttpStatelessClient 方法）</a>
 </li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.MCPClientBase.get_callable_function">get_callable_function() （MCPClientBase 方法）</a>
@@ -1663,6 +1674,8 @@
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.refresh_plan_state">refresh_plan_state() （Plan 方法）</a>
 </li>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.register_agent_skill">register_agent_skill() （Toolkit 方法）</a>
+</li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.register_class_hook">register_class_hook()（AgentBase 类方法）</a>
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.register_instance_hook">register_instance_hook() （AgentBase 方法）</a>
@@ -1689,12 +1702,14 @@
 </li>
         <li><a href="api/agentscope.embedding.html#agentscope.embedding.FileEmbeddingCache.remove">remove() （FileEmbeddingCache 方法）</a>
 </li>
-        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_class_hook">remove_class_hook()（AgentBase 类方法）</a>
+        <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.remove_agent_skill">remove_agent_skill() （Toolkit 方法）</a>
 </li>
-        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_instance_hook">remove_instance_hook() （AgentBase 方法）</a>
+        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_class_hook">remove_class_hook()（AgentBase 类方法）</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/agentscope.agent.html#agentscope.agent.AgentBase.remove_instance_hook">remove_instance_hook() （AgentBase 方法）</a>
+</li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.remove_mcp_clients">remove_mcp_clients() （Toolkit 方法）</a>
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.PlanNotebook.remove_plan_change_hook">remove_plan_change_hook() （PlanNotebook 方法）</a>

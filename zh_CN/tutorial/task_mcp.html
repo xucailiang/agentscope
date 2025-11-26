@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="AgentScope Studio" href="task_studio.html"><link rel="prev" title="智能体钩子函数" href="task_hook.html">
+<link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="智能体技能" href="task_agent_skill.html"><link rel="prev" title="智能体钩子函数" href="task_hook.html">
         <link rel="prefetch" href="../_static/logo.svg" as="image">
 
     <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
@@ -263,6 +263,7 @@
 <li class="toctree-l1"><a class="reference internal" href="task_state.html">状态/会话管理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_hook.html">智能体钩子函数</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_agent_skill.html">智能体技能</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_tracing.html">追踪</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_eval.html">智能体评测</a></li>
@@ -487,13 +488,13 @@ to download the full example code.</p>
 <span class="w">    </span><span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/docs/tutorial/zh_CN/src/task_mcp.py&quot;</span>, line <span class="m">107</span>, in <span class="n">example_register_stateless_mcp</span>
 <span class="w">    </span><span class="k">await</span> <span class="n">toolkit</span><span class="o">.</span><span class="n">register_mcp_client</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tool/_toolkit.py&quot;</span>, line <span class="m">705</span>, in <span class="n">register_mcp_client</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tool/_toolkit.py&quot;</span>, line <span class="m">829</span>, in <span class="n">register_mcp_client</span>
 <span class="w">    </span><span class="k">for</span> <span class="n">mcp_tool</span> <span class="ow">in</span> <span class="k">await</span> <span class="n">mcp_client</span><span class="o">.</span><span class="n">list_tools</span><span class="p">():</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/mcp/_http_stateless_client.py&quot;</span>, line <span class="m">142</span>, in <span class="n">list_tools</span>
 <span class="w">    </span><span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">cli</span><span class="p">:</span>
   File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/contextlib.py&quot;</span>, line <span class="m">217</span>, in <span class="n">__aexit__</span>
 <span class="w">    </span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen</span><span class="o">.</span><span class="n">athrow</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">)</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mcp/client/streamable_http.py&quot;</span>, line <span class="m">478</span>, in <span class="n">streamablehttp_client</span>
+  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mcp/client/streamable_http.py&quot;</span>, line <span class="m">480</span>, in <span class="n">streamablehttp_client</span>
 <span class="w">    </span><span class="k">async</span> <span class="k">with</span> <span class="n">anyio</span><span class="o">.</span><span class="n">create_task_group</span><span class="p">()</span> <span class="k">as</span> <span class="n">tg</span><span class="p">:</span>
   File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/anyio/_backends/_asyncio.py&quot;</span>, line <span class="m">781</span>, in <span class="n">__aexit__</span>
 <span class="w">    </span><span class="k">raise</span> <span class="n">BaseExceptionGroup</span><span class="p">(</span>
@@ -566,7 +567,7 @@ to download the full example code.</p>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">工具</span></a></p></li>
 <li><p><a class="reference internal" href="task_agent.html#agent"><span class="std std-ref">智能体</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.078 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.371 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-mcp-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/da545788627514321d5d0429de9a0028/task_mcp.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_mcp.ipynb</span></code></a></p>
@@ -587,12 +588,12 @@ to download the full example code.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="task_studio.html">
+          <a class="next-page" href="task_agent_skill.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">AgentScope Studio</div>
+                <div class="title">智能体技能</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
