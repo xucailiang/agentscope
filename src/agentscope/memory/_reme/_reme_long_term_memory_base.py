@@ -24,8 +24,6 @@ Dependencies:
         .. code-block:: bash
 
             pip install reme-ai
-
-    Python 3.12 or greater is required to use ReMe.
     For more information, visit: https://github.com/modelscope/reMe
 
 Subclasses:
@@ -91,9 +89,6 @@ class ReMeLongTermMemoryBase(LongTermMemoryBase, metaclass=ABCMeta):
 
     The ReMe library must be installed separately:
         pip install reme-ai
-
-    Requirements:
-        Python 3.12 or greater is required to use ReMe.
 
     If the library is not installed, a warning will be issued during
     initialization,
@@ -238,11 +233,12 @@ class ReMeLongTermMemoryBase(LongTermMemoryBase, metaclass=ABCMeta):
             embedding_api_key = embedding_model.api_key
 
         elif isinstance(embedding_model, OpenAITextEmbedding):
-            embedding_api_base = getattr(
+            base_url = getattr(
                 embedding_model.client,
                 "base_url",
                 None,
             )
+            embedding_api_base = str(base_url) if base_url else None
             embedding_api_key = getattr(
                 embedding_model.client,
                 "api_key",
@@ -263,6 +259,11 @@ class ReMeLongTermMemoryBase(LongTermMemoryBase, metaclass=ABCMeta):
             config_args.append(
                 f"embedding_model.default.model_name={embedding_model_name}",
             )
+
+        dimensions = embedding_model.dimensions
+        config_args.append(
+            f'embedding_model.default.params={{"dimensions": {dimensions}}}',
+        )
 
         # Attempt to import and initialize ReMe
         # If import fails, set app to None and issue a warning
