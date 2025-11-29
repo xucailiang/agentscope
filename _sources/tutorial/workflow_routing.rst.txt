@@ -135,7 +135,7 @@ Initialize a routing agent
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "5481c55f-1c12-4d64-a1bd-6e2cc392fd2c", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "f66ee02c-1fd2-42b9-88dd-1f3a3423082c", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -251,7 +251,7 @@ After that, we define a routing agent and equip it with the above tool functions
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.812 seconds)
+   **Total running time of the script:** (0 minutes 0.683 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_routing.py:

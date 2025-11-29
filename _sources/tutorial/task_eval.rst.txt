@@ -355,7 +355,7 @@ as well.
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "dd588f50-6f58-4c85-8471-1a08497303ac", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "afd9e35f-56cc-4599-9169-f9d9c7a1d946", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -363,7 +363,7 @@ as well.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.863 seconds)
+   **Total running time of the script:** (0 minutes 0.686 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_eval.py:
