@@ -337,7 +337,7 @@ AgentScope 目前内置支持基于 `Qdrant <https://qdrant.tech/>`_ 实现的�
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "c5630407-024d-4fab-838d-9fc033a4cf77", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "536179d0-e8ca-4df9-9fe9-bfc1be479663", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -596,7 +596,7 @@ AgentScope 中的 RAG 模块原生支持多模态，因为
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.697 seconds)
+   **Total running time of the script:** (0 minutes 0.679 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_rag.py:
