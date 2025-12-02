@@ -105,7 +105,7 @@ Taking the DashScope embedding class as an example, you can use it as follows:
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "2ea7f875-0d51-4a47-90eb-89f4e061fc8f", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "ef3e14f5-e2ac-4e22-8df0-0b31693e16cb", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -186,7 +186,7 @@ To use caching, just pass an instance of ``FileEmbeddingCache`` (or your custom 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.742 seconds)
+   **Total running time of the script:** (0 minutes 0.880 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_embedding.py:

@@ -142,7 +142,7 @@ As an example, we first store a user preference and then retrieve related inform
         result = self.fn(*self.args, **self.kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py", line 161, in generate_response
         raise RuntimeError(
-    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "860c0488-9819-463d-9fee-f000278ea233", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "0787d76c-f9d2-4455-9df9-74fdd149e960", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -520,7 +520,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.402 seconds)
+   **Total running time of the script:** (0 minutes 1.663 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_long_term_memory.py:
