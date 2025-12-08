@@ -137,7 +137,7 @@ AgentScope 为长期记忆提供了一个基类 ``LongTermMemoryBase`` 和一个
         result = self.fn(*self.args, **self.kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py", line 161, in generate_response
         raise RuntimeError(
-    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "ea102f95-fd4f-4af3-96cf-bdff2c4de1ea", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "2e19304c-69b2-49dc-a7e7-17854e77ec48", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -493,7 +493,7 @@ AgentScope 提供了 ``LongTermMemoryBase`` 基类，它定义了长期记忆的
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.607 seconds)
+   **Total running time of the script:** (0 minutes 1.661 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_long_term_memory.py:

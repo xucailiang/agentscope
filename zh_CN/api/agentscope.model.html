@@ -249,26 +249,36 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/faq.html">常见问题</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Task Guides</span></p>
+<p class="caption" role="heading"><span class="caption-text">Model and Context</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_model.html">模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_prompt.html">提示词格式化</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_tool.html">工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_token.html">Token 计数</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_memory.html">记忆</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_long_term_memory.html">长期记忆</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tool</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_tool.html">工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_agent_skill.html">智能体技能</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agent</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_agent.html">智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_state.html">状态/会话管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_hook.html">智能体钩子函数</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Features</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_pipeline.html">管道 (Pipeline)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_plan.html">计划</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_rag.html">RAG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_state.html">状态/会话管理</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_hook.html">智能体钩子函数</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_mcp.html">MCP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_agent_skill.html">智能体技能</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_tracing.html">追踪</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_eval.html">智能体评测</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/task_embedding.html">嵌入(Embedding)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_token.html">Token 计数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/task_tts.html">TTS</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
 <ul class="current">
@@ -290,6 +300,7 @@
 <li class="toctree-l1"><a class="reference internal" href="agentscope.tracing.html">agentscope.tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agentscope.session.html">agentscope.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agentscope.exception.html">agentscope.exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agentscope.tts.html">agentscope.tts</a></li>
 </ul>
 
 </div>
@@ -463,7 +474,7 @@ tool use blocks, or thinking blocks.</p>
 MultimodalConversation APIs into one method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.model.DashScopeChatModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_http_api_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/model/_dashscope_model.html#DashScopeChatModel.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.model.DashScopeChatModel.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_http_api_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/model/_dashscope_model.html#DashScopeChatModel.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.model.DashScopeChatModel.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize the DashScope chat model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
@@ -478,6 +489,7 @@ for more details.</p></li>
 e.g. <cite>temperature</cite>, <cite>seed</cite>.</p></li>
 <li><p><strong>base_http_api_url</strong> (<cite>str | None</cite>, optional) -- The base URL for DashScope API requests. If not provided,
 the default base URL from the DashScope SDK will be used.</p></li>
+<li><p><strong>**_kwargs</strong> (<cite>Any</cite>) -- Additional keyword arguments.</p></li>
 </ul>
 </dd>
 <dt class="field-even">返回类型<span class="colon">:</span></dt>
@@ -503,8 +515,10 @@ the same functionality.</p>
 <li><p><strong>messages</strong> (<cite>list[dict[str, Any]]</cite>) -- A list of dictionaries, where <cite>role</cite> and <cite>content</cite> fields are
 required.</p></li>
 <li><p><strong>tools</strong> (<cite>list[dict] | None</cite>, default <cite>None</cite>) -- The tools JSON schemas that the model can use.</p></li>
-<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;] | str              |  None</cite>,  default <cite>None</cite>) -- <dl class="simple">
-<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, or specific tool name.
+<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;required&quot;] | str              |  None</cite>,  default <cite>None</cite>) -- <dl class="simple">
+<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;required&quot;, or specific tool name.
+Note: DashScope API only supports &quot;auto&quot; and &quot;none&quot;, so
+&quot;required&quot; will be converted to &quot;auto&quot;.
 For more details, please refer to
 <a class="reference external" href="https://help.aliyun.com/zh/model-studio/qwen-function-calling">https://help.aliyun.com/zh/model-studio/qwen-function-calling</a></p>
 </dd>
@@ -560,12 +574,9 @@ be read from the environment variable <cite>OPENAI_API_KEY</cite>.</p></li>
 for more details.</p></li>
 <li><p><strong>organization</strong> (<cite>str</cite>, default <cite>None</cite>) -- The organization ID for OpenAI API. If not specified, it will
 be read from the environment variable <cite>OPENAI_ORGANIZATION</cite>.</p></li>
-<li><p><strong>client_kwargs</strong> (<cite>dict</cite>, default <cite>None</cite>) -- The extra keyword arguments to initialize the OpenAI client.</p></li>
-<li><p><strong>generate_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- <dl class="simple">
-<dt>The extra keyword arguments used in OpenAI API generation,</dt><dd><p>e.g. <cite>temperature</cite>, <cite>seed</cite>.</p>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>client_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments to initialize the OpenAI client.</p></li>
+<li><p><strong>generate_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments used in OpenAI API generation,
+e.g. <cite>temperature</cite>, <cite>seed</cite>.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>Any</cite>) -- Additional keyword arguments.</p></li>
 </ul>
 </dd>
@@ -586,8 +597,8 @@ arguments.</p>
 <li><p><strong>messages</strong> (<cite>list[dict]</cite>) -- A list of dictionaries, where <cite>role</cite> and <cite>content</cite> fields are
 required, and <cite>name</cite> field is optional.</p></li>
 <li><p><strong>tools</strong> (<cite>list[dict]</cite>, default <cite>None</cite>) -- The tools JSON schemas that the model can use.</p></li>
-<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
-<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;, or specific tool
+<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
+<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;required&quot;, or specific tool
 name. For more details, please refer to
 <a class="reference external" href="https://platform.openai.com/docs/api-reference/responses/create#responses_create-tool_choice">https://platform.openai.com/docs/api-reference/responses/create#responses_create-tool_choice</a></p>
 </dd>
@@ -651,7 +662,7 @@ refer to the OpenAI API documentation for more details.</p></li>
 </div>
 </div>
 </p></li>
-<li><p><strong>client_kwargs</strong> (<cite>dict | None</cite>, optional) -- The extra keyword arguments to initialize the Anthropic client.</p></li>
+<li><p><strong>client_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments to initialize the Anthropic client.</p></li>
 <li><p><strong>generate_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments used in Anthropic API generation,
 e.g. <cite>temperature</cite>, <cite>seed</cite>.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>Any</cite>) -- Additional keyword arguments.</p></li>
@@ -700,8 +711,8 @@ required, and <cite>name</cite> field is optional.</p></li>
 </div>
 </div>
 </p></li>
-<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
-<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;, or specific tool
+<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
+<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;required&quot;, or specific tool
 name. For more details, please refer to
 <a class="reference external" href="https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implement-tool-use">https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implement-tool-use</a></p>
 </dd>
@@ -744,7 +755,7 @@ refer to the Anthropic API documentation for more details.</p></li>
 <p>The Ollama chat model class in agentscope.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="agentscope.model.OllamaChatModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'5m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/model/_ollama_model.html#OllamaChatModel.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.model.OllamaChatModel.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'5m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/model/_ollama_model.html#OllamaChatModel.__init__"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#agentscope.model.OllamaChatModel.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize the Ollama chat model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数<span class="colon">:</span></dt>
@@ -761,6 +772,8 @@ deepseek-r1, etc. For more details, please refer to
 <a class="reference external" href="https://ollama.com/search?c=thinking">https://ollama.com/search?c=thinking</a></p></li>
 <li><p><strong>host</strong> (<cite>str | None</cite>, default <cite>None</cite>) -- The host address of the Ollama server. If None, uses the
 default address (typically <a class="reference external" href="http://localhost:11434">http://localhost:11434</a>).</p></li>
+<li><p><strong>client_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments to initialize the Ollama client.</p></li>
+<li><p><strong>generate_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments used in Ollama API generation.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>Any</cite>) -- Additional keyword arguments to pass to the base chat model
 class.</p></li>
 </ul>
@@ -782,12 +795,7 @@ arguments.</p>
 <li><p><strong>messages</strong> (<cite>list[dict]</cite>) -- A list of dictionaries, where <cite>role</cite> and <cite>content</cite> fields are
 required, and <cite>name</cite> field is optional.</p></li>
 <li><p><strong>tools</strong> (<cite>list[dict]</cite>, default <cite>None</cite>) -- The tools JSON schemas that the model can use.</p></li>
-<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;] | str                 | None</cite>, default <cite>None</cite>) -- <dl class="simple">
-<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;, or specific tool
-name.</p>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;required&quot;] | str                 | None</cite>, default <cite>None</cite>) -- Ollama doesn't support <cite>tool_choice</cite> argument yet.</p></li>
 <li><p><strong>structured_model</strong> (<cite>Type[BaseModel] | None</cite>, default <cite>None</cite>) -- A Pydantic BaseModel class that defines the expected structure
 for the model's output.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>Any</cite>) -- The keyword arguments for Ollama chat completions API,
@@ -834,7 +842,7 @@ more details.</p>
 </div>
 </div>
 </p></li>
-<li><p><strong>client_kwargs</strong> (<cite>dict</cite>, default <cite>None</cite>) -- The extra keyword arguments to initialize the Gemini client.</p></li>
+<li><p><strong>client_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments to initialize the Gemini client.</p></li>
 <li><p><strong>generate_kwargs</strong> (<cite>dict[str, JSONSerializableObject] | None</cite>,              optional) -- The extra keyword arguments used in Gemini API generation,
 e.g. <cite>temperature</cite>, <cite>seed</cite>.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>Any</cite>) -- Additional keyword arguments.</p></li>
@@ -856,9 +864,9 @@ e.g. <cite>temperature</cite>, <cite>seed</cite>.</p></li>
 <li><p><strong>messages</strong> (<cite>list[dict[str, Any]]</cite>) -- A list of dictionaries, where <cite>role</cite> and <cite>content</cite> fields are
 required.</p></li>
 <li><p><strong>tools</strong> (<cite>list[dict] | None</cite>, default <cite>None</cite>) -- The tools JSON schemas that the model can use.</p></li>
-<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
-<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;any&quot;, &quot;required&quot;, or specific tool
-name. For more details, please refer to
+<li><p><strong>tool_choice</strong> (<cite>Literal[&quot;auto&quot;, &quot;none&quot;, &quot;required&quot;] | str             | None</cite>, default <cite>None</cite>) -- <dl class="simple">
+<dt>Controls which (if any) tool is called by the model.</dt><dd><p>Can be &quot;auto&quot;, &quot;none&quot;, &quot;required&quot;, or specific tool name.
+For more details, please refer to
 <a class="reference external" href="https://ai.google.dev/gemini-api/docs/function-calling?hl=en&amp;example=meeting#function_calling_modes">https://ai.google.dev/gemini-api/docs/function-calling?hl=en&amp;example=meeting#function_calling_modes</a></p>
 </dd>
 </dl>
