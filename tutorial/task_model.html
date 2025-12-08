@@ -465,7 +465,7 @@ The supported model APIs and providers include:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ChatResponse(content=[{&#39;type&#39;: &#39;thinking&#39;, &#39;thinking&#39;: &#39;I should search for AgentScope on Google.&#39;}, {&#39;type&#39;: &#39;text&#39;, &#39;text&#39;: &quot;I&#39;ll search for AgentScope on Google.&quot;}, {&#39;type&#39;: &#39;tool_use&#39;, &#39;id&#39;: &#39;642n298gjna&#39;, &#39;name&#39;: &#39;google_search&#39;, &#39;input&#39;: {&#39;query&#39;: &#39;AgentScope?&#39;}}], id=&#39;2025-12-08 06:05:02.140_3cfc02&#39;, created_at=&#39;2025-12-08 06:05:02.140&#39;, type=&#39;chat&#39;, usage=None, metadata=None)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ChatResponse(content=[{&#39;type&#39;: &#39;thinking&#39;, &#39;thinking&#39;: &#39;I should search for AgentScope on Google.&#39;}, {&#39;type&#39;: &#39;text&#39;, &#39;text&#39;: &quot;I&#39;ll search for AgentScope on Google.&quot;}, {&#39;type&#39;: &#39;tool_use&#39;, &#39;id&#39;: &#39;642n298gjna&#39;, &#39;name&#39;: &#39;google_search&#39;, &#39;input&#39;: {&#39;query&#39;: &#39;AgentScope?&#39;}}], id=&#39;2025-12-08 15:15:20.994_89d33e&#39;, created_at=&#39;2025-12-08 15:15:20.994&#39;, type=&#39;chat&#39;, usage=None, metadata=None)
 </pre></div>
 </div>
 <p>Taking <code class="docutils literal notranslate"><span class="pre">DashScopeChatModel</span></code> as an example, we can use it to create a chat model instance and call it with messages and tools:</p>
@@ -508,7 +508,7 @@ The supported model APIs and providers include:</p>
 <span class="w">    </span><span class="n">parsed_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dashscope_generation_response</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">414</span>, in <span class="n">_parse_dashscope_generation_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;0c72671f-83a7-4442-b4d3-adf7fd914653&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;ef193198-d21d-460b-aae1-d963c5613153&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <section id="streaming">
@@ -613,7 +613,7 @@ To provide a unified interface, AgentScope solves the problem by:</p>
 <li><p><a class="reference internal" href="quickstart_message.html#message"><span class="std std-ref">Create Message</span></a></p></li>
 <li><p><a class="reference internal" href="task_prompt.html#prompt"><span class="std std-ref">Prompt Formatter</span></a></p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.772 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.863 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-model-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/6d26becb6abae50c483b7d863e1725fb/task_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_model.ipynb</span></code></a></p>

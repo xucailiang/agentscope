@@ -301,7 +301,7 @@ Specifically, the agents within the same ``MsgHub`` will receive messages from o
         async for content_chunk in res:
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 284, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "be6ab387-7e65-4c0f-b87c-22a7434cfc25", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "896ddda9-26ad-4314-98a2-c7f3264738dc", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -339,7 +339,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.790 seconds)
+   **Total running time of the script:** (0 minutes 0.869 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_conversation.py:
