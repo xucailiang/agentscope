@@ -54,6 +54,7 @@
 </p>
 
 ## 📢 News
+- **[2025-12]** AgentScope supports [TTS(Text-to-Speech)](https://doc.agentscope.io/tutorial/task_tts.html) now! Check our [example]() and [tutorial](https://doc.agentscope.io/tutorial/task_tts.html) for more details.
 - **[2025-11]** AgentScope supports [Anthropic Agent Skill](https://claude.com/blog/skills) now! Check our [example](https://github.com/agentscope-ai/agentscope/tree/main/examples/functionality/agent_skill) and [tutorial](https://doc.agentscope.io/tutorial/task_agent_skill.html) for more details.
 - **[2025-11]** AgentScope open-sources [Alias-Agent](https://github.com/agentscope-ai/agentscope-samples/tree/main/alias) for diverse real-world tasks and [Data-Juicer Agent](https://github.com/agentscope-ai/agentscope-samples/tree/main/data_juicer_agent) for data processing.
 - **[2025-11]** AgentScope supports [Agentic RL](https://github.com/agentscope-ai/agentscope/tree/main/examples/training/react_agent) via integrating [Trinity-RFT](https://github.com/modelscope/Trinity-RFT) library.
@@ -108,7 +109,7 @@ Quick overview of important features in **AgentScope 1.0**:
 |            | Support agent-controlled long-term memory                                          |                                                                         |
 |            | Support agent hooks                                                                |                                                                         |
 | tracing    | Support OpenTelemetry-based tracing in LLM, tools, agent and formatter             | [Tracing](https://doc.agentscope.io/tutorial/task_tracing.html)         |
-|            | Support connecting to third-party tracing platforms (e.g. Arize-Phoenix, Langfuse) |                                                                         |
+|            | Support connecting to third-party tracing platforms (e.g. Alibaba Cloud CloudMonitor, Arize-Phoenix, Langfuse) |                                                                         |
 | memory     | Support long-term memory                                                           | [Memory](https://doc.agentscope.io/tutorial/task_long_term_memory.html) |
 | session    | Provide session/application-level automatic state management                       | [Session](https://doc.agentscope.io/tutorial/task_state.html)           |
 | evaluation | Provide distributed and parallel evaluation                                        | [Evaluation](https://doc.agentscope.io/tutorial/task_eval.html)         |
@@ -125,9 +126,9 @@ Quick overview of important features in **AgentScope 1.0**:
 
 Welcome to join our community on
 
-| [Discord](https://discord.gg/eYMpfnkG8h)                                                                                         | DingTalk                                                                                                                          |
-|----------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| <img src="https://gw.alicdn.com/imgextra/i1/O1CN01hhD1mu1Dd3BWVUvxN_!!6000000000238-2-tps-400-400.png" width="100" height="100"> | <img src="https://img.alicdn.com/imgextra/i1/O1CN01LxzZha1thpIN2cc2E_!!6000000005934-2-tps-497-477.png" width="100" height="100"> |
+| [Discord](https://discord.gg/eYMpfnkG8h)                                                                                         | DingTalk                                                                  |
+|----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| <img src="https://gw.alicdn.com/imgextra/i1/O1CN01hhD1mu1Dd3BWVUvxN_!!6000000000238-2-tps-400-400.png" width="100" height="100"> | <img src="./assets/images/dingtalk_qr_code.png" width="100" height="100"> |
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -389,6 +390,7 @@ as_studio
     - [Long-Term Memory](https://github.com/agentscope-ai/agentscope/tree/main/examples/functionality/long_term_memory)
     - [Session with SQLite](https://github.com/agentscope-ai/agentscope/tree/main/examples/functionality/session_with_sqlite)
     - [Stream Printing Messages](https://github.com/agentscope-ai/agentscope/tree/main/examples/functionality/stream_printing_messages)
+    - [TTS](https://github.com/agentscope-ai/agentscope/tree/main/examples/functionality/tts)
   - Agent
     - [ReAct Agent](https://github.com/agentscope-ai/agentscope/tree/main/examples/agent/react_agent)
     - [Voice Agent](https://github.com/agentscope-ai/agentscope/tree/main/examples/agent/voice_agent)
