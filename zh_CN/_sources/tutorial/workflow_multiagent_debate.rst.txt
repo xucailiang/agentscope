@@ -172,7 +172,7 @@ Multi-Agent debate 模拟不同智能体之间的多轮讨论场景，通常包�
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 414, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "3a645677-465d-4e42-8fc6-299ea49a125c", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "70c68d1b-78aa-45ad-b32d-9fa487fdf6d2", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -191,7 +191,7 @@ Encouraging Divergent Thinking in Large Language Models through Multi-Agent Deba
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.862 seconds)
+   **Total running time of the script:** (0 minutes 0.770 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_multiagent_debate.py:
