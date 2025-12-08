@@ -47,25 +47,25 @@ First, we create a function to allow the orchestrator to create workers dynamica
         return future.result()
       File "/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/workflow_handoffs.py", line 89, in run_handoffs
         await orchestrator(Msg("user", task_description, "user"))
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py", line 422, in __call__
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py", line 451, in __call__
         reply_msg = await self.reply(*args, **kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 382, in wrapper
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 392, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 298, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 309, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 417, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 430, in _reasoning
         res = await self.model(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 638, in async_wrapper
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 604, in async_wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 221, in __call__
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 234, in __call__
         parsed_response = await self._parse_dashscope_generation_response(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 401, in _parse_dashscope_generation_response
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 414, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "b1a725a0-452c-4cb0-92d3-42e53a5d8088", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "ad20b484-bca1-48af-a1da-50f774d55ebc", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -156,7 +156,7 @@ First, we create a function to allow the orchestrator to create workers dynamica
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.202 seconds)
+   **Total running time of the script:** (0 minutes 1.363 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_handoffs.py:

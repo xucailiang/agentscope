@@ -341,7 +341,7 @@ They can be used as follows:
         res = await self._call_api(batch_kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/embedding/_dashscope_embedding.py", line 87, in _call_api
         raise RuntimeError(
-    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "fcc9a689-030e-40e1-b3f5-cb63fdef54ca", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get embedding from DashScope API: {"status_code": 401, "request_id": "ff575720-efb0-4128-9eeb-316e6e69482d", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -614,7 +614,7 @@ image.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.888 seconds)
+   **Total running time of the script:** (0 minutes 0.785 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_rag.py:

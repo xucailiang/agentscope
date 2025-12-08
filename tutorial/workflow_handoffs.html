@@ -249,26 +249,36 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Task Guides</span></p>
+<p class="caption" role="heading"><span class="caption-text">Model and Context</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="task_model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_prompt.html">Prompt Formatter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_tool.html">Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_token.html">Token</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_memory.html">Memory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_long_term_memory.html">Long-Term Memory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tool</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="task_tool.html">Tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_mcp.html">MCP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_agent_skill.html">Agent Skill</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agent</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="task_agent.html">Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_state.html">State/Session Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_hook.html">Agent Hooks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Features</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="task_pipeline.html">Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_plan.html">Plan</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_rag.html">RAG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_state.html">State/Session Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_hook.html">Agent Hooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_mcp.html">MCP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_agent_skill.html">Agent Skill</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_studio.html">AgentScope Studio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_tracing.html">Tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_eval.html">Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="task_embedding.html">Embedding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="task_token.html">Token</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_tts.html">TTS</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Docs</span></p>
 <ul>
@@ -290,6 +300,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/agentscope.tracing.html">agentscope.tracing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/agentscope.session.html">agentscope.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/agentscope.exception.html">agentscope.exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/agentscope.tts.html">agentscope.tts</a></li>
 </ul>
 
 </div>
@@ -360,25 +371,25 @@ First, we create a function to allow the orchestrator to create workers dynamica
 <span class="w">    </span><span class="k">return</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/workflow_handoffs.py&quot;</span>, line <span class="m">89</span>, in <span class="n">run_handoffs</span>
 <span class="w">    </span><span class="k">await</span> <span class="n">orchestrator</span><span class="p">(</span><span class="n">Msg</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">task_description</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">))</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py&quot;</span>, line <span class="m">422</span>, in <span class="n">__call__</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py&quot;</span>, line <span class="m">451</span>, in <span class="n">__call__</span>
 <span class="w">    </span><span class="n">reply_msg</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py&quot;</span>, line <span class="m">120</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">382</span>, in <span class="n">wrapper</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">392</span>, in <span class="n">wrapper</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">298</span>, in <span class="n">reply</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">309</span>, in <span class="n">reply</span>
 <span class="w">    </span><span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">(</span><span class="n">tool_choice</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py&quot;</span>, line <span class="m">120</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">417</span>, in <span class="n">_reasoning</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">430</span>, in <span class="n">_reasoning</span>
 <span class="w">    </span><span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">638</span>, in <span class="n">async_wrapper</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">604</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">221</span>, in <span class="n">__call__</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">234</span>, in <span class="n">__call__</span>
 <span class="w">    </span><span class="n">parsed_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_dashscope_generation_response</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">401</span>, in <span class="n">_parse_dashscope_generation_response</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">414</span>, in <span class="n">_parse_dashscope_generation_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;b1a725a0-452c-4cb0-92d3-42e53a5d8088&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">{&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;ad20b484-bca1-48af-a1da-50f774d55ebc&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -461,7 +472,7 @@ First, we create a function to allow the orchestrator to create workers dynamica
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_handoffs</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.202 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.363 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-workflow-handoffs-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/91c90a0c5fa0aaee5502046f62e97d67/workflow_handoffs.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">workflow_handoffs.ipynb</span></code></a></p>

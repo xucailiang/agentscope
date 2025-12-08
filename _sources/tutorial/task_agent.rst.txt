@@ -230,21 +230,21 @@ they will be executed in parallel by the ``asyncio.gather`` function.
         return future.result()
       File "/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/task_agent.py", line 173, in example_parallel_tool_calls
         await agent(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py", line 422, in __call__
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_base.py", line 451, in __call__
         reply_msg = await self.reply(*args, **kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 382, in wrapper
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 392, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 298, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 309, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 429, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 448, in _reasoning
         async for content_chunk in res:
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 271, in _parse_dashscope_stream_response
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 284, in _parse_dashscope_stream_response
         raise RuntimeError(
-    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "f2495d74-775a-46e0-ba42-64434f0dc9b2", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Failed to get response from _ API: {"status_code": 401, "request_id": "220db2fc-eafc-43b6-a903-70a74a88cd99", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -377,7 +377,7 @@ Further Reading
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.810 seconds)
+   **Total running time of the script:** (0 minutes 0.843 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_agent.py:
