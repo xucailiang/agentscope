@@ -11,7 +11,7 @@ from .._reader import Document
 from ._embedding import _clean_llm_json_response, _extract_text_content
 
 if TYPE_CHECKING:
-    from ..model import ChatModelBase
+    from agentscope.model._model_base import ChatModelBase
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,6 @@ class GraphEntity:
     - Multi-round gleanings for improved recall
     - Entity deduplication and resolution
     """
-
-    # pylint: disable=too-few-public-methods
 
     llm_model: "ChatModelBase | None"
     entity_extraction_config: dict
