@@ -24,8 +24,8 @@ from ._simple_knowledge import SimpleKnowledge
 # Optional imports for graph features (requires neo4j package)
 try:
     from ._store import Neo4jGraphStore
-    from ._graph_knowledge import GraphKnowledgeBase
-    from ._graph._types import (
+    from ._graph import (
+        GraphKnowledgeBase,
         Entity,
         Relationship,
         Community,
