@@ -3,20 +3,15 @@
 
 import asyncio
 import json
-import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from agentscope.exception import GraphQueryError
-
-from ._types import Community, CommunityAlgorithm
+from ...embedding import EmbeddingModelBase
+from ...exception import GraphQueryError
+from ...model import ChatModelBase
+from ..._logging import logger
+from .._store import GraphStoreBase
 from ._embedding import _clean_llm_json_response
-
-if TYPE_CHECKING:
-    from .._store import GraphStoreBase
-    from ..embedding import EmbeddingModelBase
-    from ..model import ChatModelBase
-
-logger = logging.getLogger(__name__)
+from ._types import Community, CommunityAlgorithm
 
 
 class GraphCommunity:
@@ -30,9 +25,9 @@ class GraphCommunity:
 
     # pylint: disable=too-few-public-methods
 
-    graph_store: "GraphStoreBase"
-    embedding_model: "EmbeddingModelBase"
-    llm_model: "ChatModelBase | None"
+    graph_store: GraphStoreBase
+    embedding_model: EmbeddingModelBase
+    llm_model: ChatModelBase | None
     enable_community_detection: bool
     community_algorithm: CommunityAlgorithm
 
@@ -185,8 +180,13 @@ class GraphCommunity:
                     await session.run(
                         f"CALL gds.graph.drop('{projection_name}', false)",
                     )
-                except Exception:
-                    pass  # Projection doesn't exist, that's fine
+                except Exception as e:
+                    # Projection doesn't exist, which is expected on first run
+                    logger.debug(
+                        "Graph projection '%s' does not exist (expected): %s",
+                        projection_name,
+                        e,
+                    )
 
                 # Create new projection
                 project_query = f"""
@@ -312,8 +312,12 @@ class GraphCommunity:
                 await session.run(
                     f"CALL gds.graph.drop('{projection_name}', false)",
                 )
-            except Exception:
-                pass
+            except Exception as cleanup_error:
+                logger.debug(
+                    "Failed to clean up graph projection '%s' after error: %s",
+                    projection_name,
+                    cleanup_error,
+                )
             raise
 
     async def _batch_generate_summaries(

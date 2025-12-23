@@ -3,18 +3,13 @@
 
 import asyncio
 import json
-import logging
-from typing import TYPE_CHECKING
 
-from ._types import Entity, Relationship
+from ...model import ChatModelBase
+from ..._logging import logger
 from .._reader import Document
-from ._embedding import _clean_llm_json_response, _extract_text_content
-
-if TYPE_CHECKING:
-    from .._store import GraphStoreBase
-    from ..model import ChatModelBase
-
-logger = logging.getLogger(__name__)
+from .._store import GraphStoreBase
+from ._embedding import _clean_llm_json_response
+from ._types import Entity, Relationship
 
 
 class GraphRelationship:
@@ -28,8 +23,8 @@ class GraphRelationship:
 
     # pylint: disable=too-few-public-methods
 
-    llm_model: "ChatModelBase | None"
-    graph_store: "GraphStoreBase"
+    llm_model: ChatModelBase | None
+    graph_store: GraphStoreBase
     enable_relationship_extraction: bool
 
     async def _process_entities_and_relationships(
@@ -135,7 +130,7 @@ class GraphRelationship:
         async def extract_from_doc(doc: Document) -> list[Relationship]:
             async with semaphore:
                 return await self._extract_relationships_from_text(
-                    _extract_text_content(doc),
+                    doc.get_text(),
                     entity_names_str,
                 )
 

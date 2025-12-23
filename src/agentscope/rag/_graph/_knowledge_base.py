@@ -7,9 +7,9 @@ with entity and relationship awareness.
 """
 
 import asyncio
-import logging
 from typing import Any
 
+from ..._logging import logger
 from ._types import CommunityAlgorithm, SearchMode
 from .._knowledge_base import KnowledgeBase
 from .._reader import Document
@@ -21,8 +21,6 @@ from ._embedding import GraphEmbedding
 from ._entity import GraphEntity
 from ._relationship import GraphRelationship
 from ._search import GraphSearch
-
-logger = logging.getLogger(__name__)
 
 
 class GraphKnowledgeBase(

@@ -3,17 +3,12 @@
 
 import asyncio
 import json
-import logging
-from typing import TYPE_CHECKING
 
-from ._types import Entity
+from ...model import ChatModelBase
+from ..._logging import logger
 from .._reader import Document
-from ._embedding import _clean_llm_json_response, _extract_text_content
-
-if TYPE_CHECKING:
-    from ..model import ChatModelBase
-
-logger = logging.getLogger(__name__)
+from ._embedding import _clean_llm_json_response
+from ._types import Entity
 
 
 class GraphEntity:
@@ -27,7 +22,7 @@ class GraphEntity:
 
     # pylint: disable=too-few-public-methods
 
-    llm_model: "ChatModelBase | None"
+    llm_model: ChatModelBase | None
     entity_extraction_config: dict
 
     async def _extract_entities(
@@ -93,7 +88,7 @@ class GraphEntity:
         async def extract_from_doc(doc: Document) -> list[Entity]:
             async with semaphore:
                 return await self._extract_entities_from_text(
-                    _extract_text_content(doc),
+                    doc.get_text(),
                     max_entities=self.entity_extraction_config.get(
                         "max_entities_per_chunk",
                         10,
@@ -226,7 +221,7 @@ JSON array:"""
 Review the text again and find any entities you might have missed. You \
 must return ONLY a valid JSON array with no additional text.
 
-Text: {_extract_text_content(doc)}
+Text: {doc.get_text()}
 
 Requirements:
 1. Return ONLY new entities not in the list above

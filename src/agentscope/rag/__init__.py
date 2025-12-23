@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The retrieval-augmented generation (RAG) module in AgentScope."""
 
 from ._document import (

@@ -7,8 +7,6 @@ configurations and search modes.
 
 import asyncio
 import os
-import sys
-from pathlib import Path
 
 from agentscope.embedding import DashScopeTextEmbedding
 from agentscope.model import DashScopeChatModel
@@ -19,14 +17,9 @@ from agentscope.rag import (
     Neo4jGraphStore,
 )
 
-# Adjust path if needed for development
-src_path = Path(__file__).parent.parent.parent / "src"
-if src_path.exists() and str(src_path) not in sys.path:
-    sys.path.insert(0, str(src_path))
-
-# DashScope API Key
-DASHSCOPE_API_KEY = "your api key"
-os.environ["DASHSCOPE_API_KEY"] = DASHSCOPE_API_KEY
+DASHSCOPE_API_KEY = os.environ.get("DASHSCOPE_API_KEY", "")
+if not DASHSCOPE_API_KEY:
+    raise ValueError("place set DASHSCOPE_API_KEY")
 
 # Neo4j
 NEO4J_URI = "bolt://localhost:7687"
@@ -582,34 +575,35 @@ async def main() -> None:
     print("\n" + "=" * 80)
     print("GraphKnowledgeBase Usage Examples")
     print("=" * 80)
-    print("\n📌 配置信息:")
+    print("\n📌 Configuration:")
     print(f"   - Neo4j URI: {NEO4J_URI}")
     print(f"   - Neo4j User: {NEO4J_USER}")
     print(f"   - DashScope API Key: {os.environ['DASHSCOPE_API_KEY'][:20]}...")
-    print("\n⚠️  请确保:")
-    print("   1. Neo4j 正在运行")
-    print("   2. 修改了脚本中的 NEO4J_PASSWORD")
+    print("\n⚠️  Please ensure:")
+    print("   1. Neo4j is running")
+    print("   2. NEO4J_PASSWORD is updated in the script")
 
     try:
-        # 示例 1: 基础向量检索
+        # Example 1: Basic vector retrieval
         await example_basic_vector_only()
 
-        # 询问是否继续
+        # Ask whether to continue
         print("\n" + "=" * 80)
-        user_input = input("\n继续运行示例2（实体提取）吗? (y/n): ")
+        user_input = input("\nContinue with Example 2 (entity extraction)? (y/n): ")
         if user_input.lower() == "y":
             await example_with_graph_features()
 
-        # 询问是否运行社区检测
+        # Ask whether to run community detection
         print("\n" + "=" * 80)
         user_input = input(
-            "\n继续运行示例3（社区检测）吗? (需要GDS插件) (y/n): ",
+            "\nContinue with Example 3 (community detection)? "
+            "(requires GDS plugin) (y/n): ",
         )
         if user_input.lower() == "y":
             await example_with_community_detection()
 
         print("\n" + "=" * 80)
-        print("✅ 所有示例运行完成！")
+        print("✅ All examples completed!")
         print("=" * 80)
 
     except Exception as e:

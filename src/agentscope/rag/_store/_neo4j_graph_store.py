@@ -2,41 +2,13 @@
 """Neo4j graph database store implementation."""
 
 import asyncio
-import logging
 from typing import Any
 
-from neo4j import AsyncGraphDatabase, AsyncDriver
-from neo4j.exceptions import ServiceUnavailable, AuthError
-
+from ..._logging import logger
 from ._store_base import GraphStoreBase
 from .. import Document, DocMetadata
 from ...types import Embedding
 from ...exception import DatabaseConnectionError, GraphQueryError
-
-logger = logging.getLogger(__name__)
-
-
-def _extract_text_content(document: Document) -> str:
-    """Extract text content from a Document.
-
-    Args:
-        document: Document object
-
-    Returns:
-        Text content as string
-
-    Raises:
-        ValueError: If content is not a TextBlock or doesn't contain text
-    """
-    content = document.metadata.content
-    if isinstance(content, dict) and content.get("type") == "text":
-        text = content.get("text", "")
-        return str(text) if text is not None else ""
-    else:
-        raise ValueError(
-            f"Document {document.id} does not contain text content. "
-            f"Only TextBlock is supported for graph knowledge base.",
-        )
 
 
 class Neo4jGraphStore(GraphStoreBase):
@@ -95,6 +67,14 @@ class Neo4jGraphStore(GraphStoreBase):
         Raises:
             DatabaseConnectionError: If connection to Neo4j fails after retries
         """
+        try:
+            from neo4j import AsyncGraphDatabase
+        except ImportError as e:
+            raise ImportError(
+                "neo4j package is required for Neo4jGraphStore. "
+                "Please install it with: pip install neo4j",
+            ) from e
+
         self.uri = uri
         self.user = user
         self.password = password
@@ -103,7 +83,7 @@ class Neo4jGraphStore(GraphStoreBase):
         self.dimensions = dimensions
 
         # Initialize Neo4j driver
-        self.driver: AsyncDriver = AsyncGraphDatabase.driver(
+        self.driver = AsyncGraphDatabase.driver(
             uri,
             auth=(user, password),
         )
@@ -126,6 +106,8 @@ class Neo4jGraphStore(GraphStoreBase):
         Raises:
             DatabaseConnectionError: If connection fails after all retries
         """
+        from neo4j.exceptions import ServiceUnavailable, AuthError
+
         max_retries = 3
         retry_delay = 1  # Initial delay in seconds
 
@@ -269,7 +251,7 @@ class Neo4jGraphStore(GraphStoreBase):
                 doc_data = [
                     {
                         "id": doc.id,
-                        "content": _extract_text_content(doc),
+                        "content": doc.get_text(),
                         "embedding": doc.embedding,
                         "doc_id": doc.metadata.doc_id,
                         "chunk_id": doc.metadata.chunk_id,
@@ -426,13 +408,38 @@ class Neo4jGraphStore(GraphStoreBase):
             logger.error("Vector search failed: %s", e)
             raise GraphQueryError(f"Vector search failed: {e}") from e
 
-    def get_client(self) -> AsyncDriver:
+    def get_client(self) -> "AsyncDriver":
         """Get Neo4j driver (implements StoreBase.get_client).
 
         Returns:
             Neo4j async driver instance
         """
         return self.driver
+
+    async def __aenter__(self) -> "Neo4jGraphStore":
+        """Async context manager entry.
+
+        Returns:
+            Self for use in async with statements
+        """
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any,
+    ) -> None:
+        """Async context manager exit.
+
+        Ensures the Neo4j driver connection is properly closed.
+
+        Args:
+            exc_type: Exception type if an exception was raised
+            exc_val: Exception value if an exception was raised
+            exc_tb: Exception traceback if an exception was raised
+        """
+        await self.close()
 
     # === GraphStoreBase implementation ===
 

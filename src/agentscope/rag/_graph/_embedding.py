@@ -1,40 +1,11 @@
 # -*- coding: utf-8 -*-
 """Embedding and LLM call utilities for graph knowledge base."""
 
-import logging
-from typing import TYPE_CHECKING
-
-from ._types import Entity
+from ...embedding import EmbeddingModelBase
+from ...model import ChatModelBase
+from ..._logging import logger
 from .._reader import Document
-
-if TYPE_CHECKING:
-    from ..embedding import EmbeddingModelBase
-    from ..model import ChatModelBase
-
-logger = logging.getLogger(__name__)
-
-
-def _extract_text_content(document: Document) -> str:
-    """Extract text content from a Document.
-
-    Args:
-        document: Document object
-
-    Returns:
-        Text content as string
-
-    Raises:
-        ValueError: If content is not a TextBlock or doesn't contain text
-    """
-    content = document.metadata.content
-    if isinstance(content, dict) and content.get("type") == "text":
-        text = content.get("text", "")
-        return str(text) if text is not None else ""
-    else:
-        raise ValueError(
-            f"Document {document.id} does not contain text content. "
-            f"Only TextBlock is supported for graph knowledge base.",
-        )
+from ._types import Entity
 
 
 def _clean_llm_json_response(response_text: str) -> str:
@@ -86,7 +57,7 @@ class GraphEmbedding:
             List of documents with embeddings
         """
         # Extract text content
-        texts = [_extract_text_content(doc) for doc in documents]
+        texts = [doc.get_text() for doc in documents]
 
         # Generate embeddings in batches
         response = await self.embedding_model(texts)

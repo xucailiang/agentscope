@@ -2,19 +2,14 @@
 """Search strategies for graph knowledge base."""
 
 import asyncio
-import logging
 import math
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from agentscope.exception import GraphQueryError
-
+from ...exception import GraphQueryError
+from ..._logging import logger
 from .._document import DocMetadata
 from .._reader import Document
-
-if TYPE_CHECKING:
-    from .._store import GraphStoreBase
-
-logger = logging.getLogger(__name__)
+from .._store import GraphStoreBase
 
 
 class GraphSearch:
@@ -29,7 +24,7 @@ class GraphSearch:
 
     # pylint: disable=too-few-public-methods
 
-    graph_store: "GraphStoreBase"
+    graph_store: GraphStoreBase
     enable_community_detection: bool
 
     async def _vector_search(
