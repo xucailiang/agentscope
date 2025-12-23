@@ -6,10 +6,10 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Plan" href="task_plan.html"><link rel="prev" title="Agent Hooks" href="task_hook.html">
         <link rel="prefetch" href="../_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>Pipeline - AgentScope</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -439,15 +439,15 @@ Note David is not included in this meeting.</p>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py&quot;</span>, line <span class="m">392</span>, in <span class="n">wrapper</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">309</span>, in <span class="n">reply</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">311</span>, in <span class="n">reply</span>
 <span class="w">    </span><span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">(</span><span class="n">tool_choice</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py&quot;</span>, line <span class="m">120</span>, in <span class="n">async_wrapper</span>
 <span class="w">    </span><span class="n">current_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">original_func</span><span class="p">(</span>
-  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">448</span>, in <span class="n">_reasoning</span>
+  File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py&quot;</span>, line <span class="m">454</span>, in <span class="n">_reasoning</span>
 <span class="w">    </span><span class="k">async</span> <span class="k">for</span> <span class="n">content_chunk</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py&quot;</span>, line <span class="m">284</span>, in <span class="n">_parse_dashscope_stream_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;19a35f76-b392-40de-b06e-a31f0bfddd0f&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Failed to get response from _ API: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;c984396e-aa08-488b-b5d8-b35943b2345a&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <p>Now let’s check if Bob, Charlie and David received Alice’s message.</p>
@@ -639,7 +639,7 @@ containing the printing message during execution of the coroutine task.</p>
 </pre></div>
 </div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.809 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.737 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-pipeline-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/a841049f564cf5f9c0fea523e59490f5/task_pipeline.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_pipeline.ipynb</span></code></a></p>

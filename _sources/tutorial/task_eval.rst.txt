@@ -331,9 +331,9 @@ as well.
         return future.result()
       File "/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/task_eval.py", line 254, in main
         await evaluator.run(toy_solution_generation)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/evaluate/_evaluator/_general_evaluator.py", line 121, in run
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/evaluate/_evaluator/_general_evaluator.py", line 161, in run
         await self.run_solution(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/evaluate/_evaluator/_general_evaluator.py", line 74, in run_solution
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/evaluate/_evaluator/_general_evaluator.py", line 96, in run_solution
         solution_result = await solution(
       File "/home/runner/work/agentscope/agentscope/docs/tutorial/en/src/task_eval.py", line 229, in toy_solution_generation
         res = await agent(
@@ -341,21 +341,25 @@ as well.
         reply_msg = await self.reply(*args, **kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 392, in wrapper
-        return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 309, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 433, in wrapper
+        raise e from None
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 424, in wrapper
+        res = await func(self, *args, **kwargs)
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 311, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 430, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 436, in _reasoning
         res = await self.model(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 604, in async_wrapper
-        return await func(self, *args, **kwargs)
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 646, in async_wrapper
+        raise e from None
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 633, in async_wrapper
+        res = await func(self, *args, **kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 234, in __call__
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 414, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "4d69f5e1-d9c2-4ef4-892d-538bb8009182", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "adfe463d-3d96-4032-ba06-554e5a556c5e", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -363,7 +367,7 @@ as well.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.812 seconds)
+   **Total running time of the script:** (0 minutes 0.750 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_eval.py:

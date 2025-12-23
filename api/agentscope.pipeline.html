@@ -6,10 +6,10 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="agentscope.agent" href="agentscope.agent.html"><link rel="prev" title="agentscope.module" href="agentscope.module.html">
         <link rel="prefetch" href="../_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>agentscope.pipeline - AgentScope</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -632,7 +632,7 @@ If False, agents are executed sequentially.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="agentscope.pipeline.stream_printing_messages">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stream_printing_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coroutine_task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'[END]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yield_speech</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/pipeline/_functional.html#stream_printing_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agentscope.pipeline.stream_printing_messages" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stream_printing_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coroutine_task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_signal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'[END]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yield_speech</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/agentscope/pipeline/_functional.html#stream_printing_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agentscope.pipeline.stream_printing_messages" title="Link to this definition">¶</a></dt>
 <dd><p>This pipeline will gather the printing messages from agents when
 execute the given coroutine task, and yield them one by one.
 Only the messages that are printed by <cite>await self.print(msg)</cite> in the agent
@@ -657,6 +657,7 @@ yielded.</p></li>
 <li><p><strong>coroutine_task</strong> (<cite>Coroutine</cite>) – The coroutine task to be executed. This task should involve the
 execution of the provided agents, so that their printing messages
 can be captured and yielded.</p></li>
+<li><p><strong>queue</strong> (<cite>asyncio.Queue | None</cite>, optional) – Use this queue instead of creating a new one if provided.</p></li>
 <li><p><strong>end_signal</strong> (<cite>str</cite>, defaults to <cite>“[END]”</cite>) – A special signal to indicate the end of message streaming. When
 this signal is received from the message queue, the generator will
 stop yielding messages and exit the loop.</p></li>

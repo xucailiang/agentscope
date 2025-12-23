@@ -53,11 +53,11 @@ First, we create a function to allow the orchestrator to create workers dynamica
         current_output = await original_func(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 392, in wrapper
         return await func(self, *args, **kwargs)
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 309, in reply
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 311, in reply
         msg_reasoning = await self._reasoning(tool_choice)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_agent_meta.py", line 120, in async_wrapper
         current_output = await original_func(
-      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 430, in _reasoning
+      File "/home/runner/work/agentscope/agentscope/src/agentscope/agent/_react_agent.py", line 436, in _reasoning
         res = await self.model(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/tracing/_trace.py", line 604, in async_wrapper
         return await func(self, *args, **kwargs)
@@ -65,7 +65,7 @@ First, we create a function to allow the orchestrator to create workers dynamica
         parsed_response = await self._parse_dashscope_generation_response(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/model/_dashscope_model.py", line 414, in _parse_dashscope_generation_response
         raise RuntimeError(response)
-    RuntimeError: {"status_code": 401, "request_id": "7c282c32-ea7f-4b8a-bf31-25b4d9a853c8", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: {"status_code": 401, "request_id": "3b281880-943c-4b57-b51b-98276693d05b", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -156,7 +156,7 @@ First, we create a function to allow the orchestrator to create workers dynamica
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.259 seconds)
+   **Total running time of the script:** (0 minutes 1.056 seconds)
 
 
 .. _sphx_glr_download_tutorial_workflow_handoffs.py:

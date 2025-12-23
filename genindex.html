@@ -5,9 +5,9 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#"><link rel="search" title="Search" href="search.html">
         <link rel="prefetch" href="_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 --><title>Index - AgentScope</title>
+    <link rel="shortcut icon" href="_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 --><title>Index - AgentScope</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -917,6 +917,8 @@
 </li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.call_tool_function">call_tool_function() (Toolkit method)</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.categories">categories (MetricBase attribute)</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricType.CATEGORY">CATEGORY (MetricType attribute)</a>
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.ChatModelBase">ChatModelBase (class in agentscope.model)</a>
@@ -1087,6 +1089,8 @@
           <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.description">(EntityDict attribute)</a>
 </li>
           <li><a href="api/agentscope.mcp.html#agentscope.mcp.MCPToolFunction.description">(MCPToolFunction attribute)</a>
+</li>
+          <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.description">(MetricBase attribute)</a>
 </li>
           <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.description">(Plan attribute)</a>
 </li>
@@ -1313,8 +1317,6 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.ACEPhone.get_current_state">get_current_state() (ACEPhone method)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.ImageReader.get_doc_id">get_doc_id() (ImageReader method)</a>
 
         <ul>
@@ -1327,6 +1329,8 @@
           <li><a href="api/agentscope.rag.html#agentscope.rag.WordReader.get_doc_id">(WordReader method)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.get_evaluation_result">get_evaluation_result() (EvaluatorStorageBase method)</a>
 
         <ul>
@@ -1357,6 +1361,12 @@
 
         <ul>
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_solution_result">(FileEvaluatorStorage method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.get_solution_stats">get_solution_stats() (EvaluatorStorageBase method)</a>
+
+        <ul>
+          <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_solution_stats">(FileEvaluatorStorage method)</a>
 </li>
         </ul></li>
         <li><a href="api/agentscope.message.html#agentscope.message.Msg.get_text_content">get_text_content() (Msg method)</a>
@@ -1583,6 +1593,8 @@
           <li><a href="api/agentscope.tts.html#agentscope.tts.TTSResponse.metadata">(TTSResponse attribute)</a>
 </li>
         </ul></li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.metric_type">metric_type (MetricBase attribute)</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase">MetricBase (class in agentscope.evaluate)</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricResult">MetricResult (class in agentscope.evaluate)</a>
@@ -1684,6 +1696,8 @@
           <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.name">(EntityDict attribute)</a>
 </li>
           <li><a href="api/agentscope.mcp.html#agentscope.mcp.MCPToolFunction.name">(MCPToolFunction attribute)</a>
+</li>
+          <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.name">(MetricBase attribute)</a>
 </li>
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricResult.name">(MetricResult attribute)</a>
 </li>
@@ -2016,6 +2030,18 @@
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_solution_result">(FileEvaluatorStorage method)</a>
 </li>
         </ul></li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.save_solution_stats">save_solution_stats() (EvaluatorStorageBase method)</a>
+
+        <ul>
+          <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_solution_stats">(FileEvaluatorStorage method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.save_task_meta">save_task_meta() (EvaluatorStorageBase method)</a>
+
+        <ul>
+          <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_task_meta">(FileEvaluatorStorage method)</a>
+</li>
+        </ul></li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Document.score">score (Document attribute)</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.MilvusLiteStore.search">search() (MilvusLiteStore method)</a>
@@ -2080,6 +2106,8 @@
           <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.solution_result_exists">(FileEvaluatorStorage method)</a>
 </li>
         </ul></li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.SOLUTION_STATS_FILE_NAME">SOLUTION_STATS_FILE_NAME (FileEvaluatorStorage attribute)</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput">SolutionOutput (class in agentscope.evaluate)</a>
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.AudioBlock.source">source (AudioBlock attribute)</a>
@@ -2152,6 +2180,8 @@
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.subtasks">subtasks (Plan attribute)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput.success">success (SolutionOutput attribute)</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Community.summary">summary (Community attribute)</a>, <a href="api/agentscope.rag.html#id16">[1]</a>
@@ -2160,8 +2190,6 @@
           <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.summary">(CommunityDict attribute)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.AnthropicChatFormatter.support_multiagent">support_multiagent (AnthropicChatFormatter attribute)</a>
 
         <ul>
@@ -2332,6 +2360,8 @@
         </ul></li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.Task">Task (class in agentscope.evaluate)</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.TASK_META_FILE">TASK_META_FILE (FileEvaluatorStorage attribute)</a>
+</li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.TerminalUserInput">TerminalUserInput (class in agentscope.agent)</a>
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.TextBlock.text">text (TextBlock attribute)</a>
@@ -2388,10 +2418,10 @@
 </li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace">trace() (in module agentscope.tracing)</a>
 </li>
-        <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_embedding">trace_embedding() (in module agentscope.tracing)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_embedding">trace_embedding() (in module agentscope.tracing)</a>
+</li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_format">trace_format() (in module agentscope.tracing)</a>
 </li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_llm">trace_llm() (in module agentscope.tracing)</a>

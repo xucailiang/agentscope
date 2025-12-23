@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
         <link rel="prefetch" href="../../../_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="../../../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <link rel="shortcut icon" href="../../../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>agentscope.agent._react_agent - AgentScope</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -359,6 +359,7 @@
     <span class="n">ToolUseBlock</span><span class="p">,</span>
     <span class="n">ToolResultBlock</span><span class="p">,</span>
     <span class="n">TextBlock</span><span class="p">,</span>
+    <span class="n">AudioBlock</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatModelBase</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..rag</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeBase</span><span class="p">,</span> <span class="n">Document</span>
@@ -653,6 +654,7 @@
         <span class="c1"># -------------- The reasoning-acting loop --------------</span>
         <span class="c1"># Cache the structured output generated in the finish function call</span>
         <span class="n">structured_output</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">reply_msg</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">):</span>
             <span class="c1"># -------------- The reasoning process --------------</span>
             <span class="n">msg_reasoning</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reasoning</span><span class="p">(</span><span class="n">tool_choice</span><span class="p">)</span>
@@ -687,12 +689,13 @@
                     <span class="k">if</span> <span class="n">msg_reasoning</span><span class="o">.</span><span class="n">has_content_blocks</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">):</span>
                         <span class="c1"># Re-use the existing text response if any to avoid</span>
                         <span class="c1"># duplicate text generation</span>
-                        <span class="k">return</span> <span class="n">Msg</span><span class="p">(</span>
+                        <span class="n">reply_msg</span> <span class="o">=</span> <span class="n">Msg</span><span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                             <span class="n">msg_reasoning</span><span class="o">.</span><span class="n">get_content_blocks</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">),</span>
                             <span class="s2">&quot;assistant&quot;</span><span class="p">,</span>
                             <span class="n">metadata</span><span class="o">=</span><span class="n">structured_output</span><span class="p">,</span>
                         <span class="p">)</span>
+                        <span class="k">break</span>
 
                     <span class="c1"># Generate a textual response in the next iteration</span>
                     <span class="n">msg_hint</span> <span class="o">=</span> <span class="n">Msg</span><span class="p">(</span>
@@ -731,11 +734,15 @@
                 <span class="c1"># Exit the loop when no structured output is required (or</span>
                 <span class="c1"># already satisfied) and only text response is generated</span>
                 <span class="n">msg_reasoning</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">structured_output</span>
-                <span class="k">return</span> <span class="n">msg_reasoning</span>
+                <span class="n">reply_msg</span> <span class="o">=</span> <span class="n">msg_reasoning</span>
+                <span class="k">break</span>
 
         <span class="c1"># When the maximum iterations are reached</span>
-        <span class="n">reply_msg</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_summarizing</span><span class="p">()</span>
-        <span class="n">reply_msg</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">structured_output</span>
+        <span class="c1"># and no reply message is generated</span>
+        <span class="k">if</span> <span class="n">reply_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">reply_msg</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_summarizing</span><span class="p">()</span>
+            <span class="n">reply_msg</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">structured_output</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">reply_msg</span><span class="p">)</span>
 
         <span class="c1"># Post-process the memory, long-term memory</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_static_control</span><span class="p">:</span>
@@ -747,7 +754,6 @@
                 <span class="p">],</span>
             <span class="p">)</span>
 
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">reply_msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reply_msg</span></div>
 
 
@@ -789,7 +795,7 @@
 
         <span class="c1"># TTS model context manager</span>
         <span class="n">tts_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_model</span> <span class="ow">or</span> <span class="n">_AsyncNullContext</span><span class="p">()</span>
-        <span class="n">speech</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">speech</span><span class="p">:</span> <span class="n">AudioBlock</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">AudioBlock</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">async</span> <span class="k">with</span> <span class="n">tts_context</span><span class="p">:</span>
@@ -961,7 +967,7 @@
 
         <span class="c1"># TTS model context manager</span>
         <span class="n">tts_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_model</span> <span class="ow">or</span> <span class="n">_AsyncNullContext</span><span class="p">()</span>
-        <span class="n">speech</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">speech</span><span class="p">:</span> <span class="n">AudioBlock</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">AudioBlock</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">async</span> <span class="k">with</span> <span class="n">tts_context</span><span class="p">:</span>
             <span class="n">res_msg</span> <span class="o">=</span> <span class="n">Msg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;assistant&quot;</span><span class="p">)</span>
@@ -1001,20 +1007,21 @@
 
             <span class="k">return</span> <span class="n">res_msg</span>
 
+    <span class="c1"># pylint: disable=unused-argument</span>
 <div class="viewcode-block" id="ReActAgent.handle_interrupt">
 <a class="viewcode-back" href="../../../api/agentscope.agent.html#agentscope.agent.ReActAgent.handle_interrupt">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_interrupt</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">_msg</span><span class="p">:</span> <span class="n">Msg</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Msg</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">_structured_model</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">:</span> <span class="n">Msg</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Msg</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">structured_model</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Msg</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The post-processing logic when the reply is interrupted by the</span>
 <span class="sd">        user or something else.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            _msg (`Msg | list[Msg] | None`, optional):</span>
+<span class="sd">            msg (`Msg | list[Msg] | None`, optional):</span>
 <span class="sd">                The input message(s) to the agent.</span>
-<span class="sd">            _structured_model (`Type[BaseModel] | None`, optional):</span>
+<span class="sd">            structured_model (`Type[BaseModel] | None`, optional):</span>
 <span class="sd">                The required structured output model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1133,7 +1140,12 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">Msg</span><span class="p">):</span>
                 <span class="n">query</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">get_text_content</span><span class="p">()</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">get_text_content</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">)</span>
+                <span class="n">texts</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_text_content</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+                        <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
 
             <span class="c1"># Skip if the query is empty</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
