@@ -75,6 +75,13 @@ AgentScope 为长期记忆提供了一个基类 ``LongTermMemoryBase`` 和一个
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    /opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/client/project.py:14: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+      class ProjectConfig(BaseModel):
+
 
 
 
@@ -127,9 +134,9 @@ AgentScope 为长期记忆提供了一个基类 ``LongTermMemoryBase`` 和一个
         await self._mem0_record(
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py", line 545, in _mem0_record
         results = await self.long_term_working_memory.add(
-      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1400, in add
+      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1088, in add
         vector_store_result, graph_result = await asyncio.gather(vector_store_task, graph_task)
-      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1463, in _add_to_vector_store
+      File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py", line 1158, in _add_to_vector_store
         response = await asyncio.to_thread(
       File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/asyncio/threads.py", line 25, in to_thread
         return await loop.run_in_executor(None, func_call)
@@ -137,7 +144,7 @@ AgentScope 为长期记忆提供了一个基类 ``LongTermMemoryBase`` 和一个
         result = self.fn(*self.args, **self.kwargs)
       File "/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py", line 161, in generate_response
         raise RuntimeError(
-    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "be5d4d55-134c-45eb-b309-b0c3e7ecc942", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
+    RuntimeError: Error generating response using agentscope model: {"status_code": 401, "request_id": "b6e12685-3f49-45a7-b3bd-d76b05a5f8b6", "code": "InvalidApiKey", "message": "No API-key provided.", "output": null, "usage": null}
 
 
 
@@ -493,7 +500,7 @@ AgentScope 提供了 ``LongTermMemoryBase`` 基类，它定义了长期记忆的
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.639 seconds)
+   **Total running time of the script:** (0 minutes 1.409 seconds)
 
 
 .. _sphx_glr_download_tutorial_task_long_term_memory.py:

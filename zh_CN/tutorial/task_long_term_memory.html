@@ -6,10 +6,10 @@
 <link rel="index" title="索引" href="../genindex.html"><link rel="search" title="搜索" href="../search.html"><link rel="next" title="工具" href="task_tool.html"><link rel="prev" title="记忆" href="task_memory.html">
         <link rel="prefetch" href="../_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <link rel="shortcut icon" href="../_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>长期记忆 - AgentScope</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -399,6 +399,10 @@ to download the full example code.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/client/project.py:14: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+  class ProjectConfig(BaseModel):
+</pre></div>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">Mem0LongTermMemory</span></code> 类提供了两个操作长期记忆的方法，<a href="#id3"><span class="problematic" id="id4">``</span></a>record` 和 <cite>retrieve</cite>。
 它们接收消息对象的列表作为输入，分别记录和检索长期记忆中的信息。</p>
 <p>例如下面的例子中，我们先存入用户的一条偏好，然后在长期记忆中检索相关信息。</p>
@@ -431,9 +435,9 @@ to download the full example code.</p>
 <span class="w">    </span><span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mem0_record</span><span class="p">(</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_long_term_memory.py&quot;</span>, line <span class="m">545</span>, in <span class="n">_mem0_record</span>
 <span class="w">    </span><span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">long_term_working_memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py&quot;</span>, line <span class="m">1400</span>, in <span class="n">add</span>
+  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py&quot;</span>, line <span class="m">1088</span>, in <span class="n">add</span>
 <span class="w">    </span><span class="n">vector_store_result</span><span class="p">,</span> <span class="n">graph_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">vector_store_task</span><span class="p">,</span> <span class="n">graph_task</span><span class="p">)</span>
-  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py&quot;</span>, line <span class="m">1463</span>, in <span class="n">_add_to_vector_store</span>
+  File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/mem0/memory/main.py&quot;</span>, line <span class="m">1158</span>, in <span class="n">_add_to_vector_store</span>
 <span class="w">    </span><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
   File <span class="nb">&quot;/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/asyncio/threads.py&quot;</span>, line <span class="m">25</span>, in <span class="n">to_thread</span>
 <span class="w">    </span><span class="k">return</span> <span class="k">await</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">func_call</span><span class="p">)</span>
@@ -441,7 +445,7 @@ to download the full example code.</p>
 <span class="w">    </span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/home/runner/work/agentscope/agentscope/src/agentscope/memory/_mem0_utils.py&quot;</span>, line <span class="m">161</span>, in <span class="n">generate_response</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;be5d4d55-134c-45eb-b309-b0c3e7ecc942&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
+<span class="gr">RuntimeError</span>: <span class="n">Error generating response using agentscope model: {&quot;status_code&quot;: 401, &quot;request_id&quot;: &quot;b6e12685-3f49-45a7-b3bd-d76b05a5f8b6&quot;, &quot;code&quot;: &quot;InvalidApiKey&quot;, &quot;message&quot;: &quot;No API-key provided.&quot;, &quot;output&quot;: null, &quot;usage&quot;: null}</span>
 </pre></div>
 </div>
 <section id="react">
@@ -791,7 +795,7 @@ to download the full example code.</p>
 <li><p><a class="reference internal" href="task_agent.html#agent"><span class="std std-ref">智能体</span></a> - ReAct 智能体</p></li>
 <li><p><a class="reference internal" href="task_tool.html#tool"><span class="std std-ref">工具</span></a> - 工具系统</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.639 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.409 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-task-long-term-memory-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/cf2bfcc46b2b3d58d3df8c98a6a13f87/task_long_term_memory.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">task_long_term_memory.ipynb</span></code></a></p>

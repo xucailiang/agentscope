@@ -5,9 +5,9 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="索引" href="#"><link rel="search" title="搜索" href="search.html">
         <link rel="prefetch" href="_static/logo.svg" as="image">
 
-    <link rel="shortcut icon" href="_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 --><title>索引 - AgentScope</title>
+    <link rel="shortcut icon" href="_static/logo.svg"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 --><title>索引 - AgentScope</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -893,6 +893,8 @@
 </li>
         <li><a href="api/agentscope.tool.html#agentscope.tool.Toolkit.call_tool_function">call_tool_function() （Toolkit 方法）</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.categories">categories（MetricBase 属性）</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricType.CATEGORY">CATEGORY（MetricType 属性）</a>
 </li>
         <li><a href="api/agentscope.model.html#agentscope.model.ChatModelBase">ChatModelBase（agentscope.model 中的类）</a>
@@ -1046,6 +1048,8 @@
         <li><a href="api/agentscope.rag.html#agentscope.rag.EntityDict.description">description（EntityDict 属性）</a>
 </li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.MCPToolFunction.description">description（MCPToolFunction 属性）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.description">description（MetricBase 属性）</a>
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.description">description（Plan 属性）</a>
 </li>
@@ -1245,10 +1249,10 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.ACEPhone.get_current_state">get_current_state() （ACEPhone 方法）</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.ImageReader.get_doc_id">get_doc_id() （ImageReader 方法）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.PDFReader.get_doc_id">get_doc_id() （PDFReader 方法）</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.ReaderBase.get_doc_id">get_doc_id() （ReaderBase 方法）</a>
@@ -1278,6 +1282,10 @@
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.get_solution_result">get_solution_result() （EvaluatorStorageBase 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_solution_result">get_solution_result() （FileEvaluatorStorage 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.get_solution_stats">get_solution_stats() （EvaluatorStorageBase 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.get_solution_stats">get_solution_stats() （FileEvaluatorStorage 方法）</a>
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.Msg.get_text_content">get_text_content() （Msg 方法）</a>
 </li>
@@ -1485,6 +1493,8 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput.meta">meta（SolutionOutput 属性）</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.metric_type">metric_type（MetricBase 属性）</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase">MetricBase（agentscope.evaluate 中的类）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricResult">MetricResult（agentscope.evaluate 中的类）</a>
@@ -1582,12 +1592,14 @@
 </li>
         <li><a href="api/agentscope.mcp.html#agentscope.mcp.MCPToolFunction.name">name（MCPToolFunction 属性）</a>
 </li>
-        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricResult.name">name（MetricResult 属性）</a>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricBase.name">name（MetricBase 属性）</a>
 </li>
-        <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.name">name（Plan 属性）</a>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.MetricResult.name">name（MetricResult 属性）</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/agentscope.plan.html#agentscope.plan.Plan.name">name（Plan 属性）</a>
+</li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.SubTask.name">name（SubTask 属性）</a>
 </li>
         <li><a href="api/agentscope.message.html#agentscope.message.ToolResultBlock.name">name（ToolResultBlock 属性）</a>
@@ -1878,6 +1890,14 @@
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_solution_result">save_solution_result() （FileEvaluatorStorage 方法）</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.save_solution_stats">save_solution_stats() （EvaluatorStorageBase 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_solution_stats">save_solution_stats() （FileEvaluatorStorage 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.save_task_meta">save_task_meta() （EvaluatorStorageBase 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.save_task_meta">save_task_meta() （FileEvaluatorStorage 方法）</a>
+</li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Document.score">score（Document 属性）</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.MilvusLiteStore.search">search() （MilvusLiteStore 方法）</a>
@@ -1929,6 +1949,8 @@
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.EvaluatorStorageBase.solution_result_exists">solution_result_exists() （EvaluatorStorageBase 方法）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.solution_result_exists">solution_result_exists() （FileEvaluatorStorage 方法）</a>
+</li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.SOLUTION_STATS_FILE_NAME">SOLUTION_STATS_FILE_NAME（FileEvaluatorStorage 属性）</a>
 </li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput">SolutionOutput（agentscope.evaluate 中的类）</a>
 </li>
@@ -1990,12 +2012,12 @@
 </li>
         <li><a href="api/agentscope.plan.html#agentscope.plan.SubTask">SubTask（agentscope.plan 中的类）</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.SolutionOutput.success">success（SolutionOutput 属性）</a>
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.Community.summary">summary（Community 属性）</a>, <a href="api/agentscope.rag.html#id16">[1]</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api/agentscope.rag.html#agentscope.rag.CommunityDict.summary">summary（CommunityDict 属性）</a>
 </li>
         <li><a href="api/agentscope.formatter.html#agentscope.formatter.AnthropicChatFormatter.support_multiagent">support_multiagent（AnthropicChatFormatter 属性）</a>
@@ -2148,6 +2170,8 @@
 </li>
         <li><a href="api/agentscope.rag.html#agentscope.rag.RelationshipDict.target">target（RelationshipDict 属性）</a>
 </li>
+        <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.FileEvaluatorStorage.TASK_META_FILE">TASK_META_FILE（FileEvaluatorStorage 属性）</a>
+</li>
         <li><a href="api/agentscope.evaluate.html#agentscope.evaluate.Task">Task（agentscope.evaluate 中的类）</a>
 </li>
         <li><a href="api/agentscope.agent.html#agentscope.agent.TerminalUserInput">TerminalUserInput（agentscope.agent 中的类）</a>
@@ -2200,10 +2224,10 @@
 </li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace">trace()（在 agentscope.tracing 模块中）</a>
 </li>
-        <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_embedding">trace_embedding()（在 agentscope.tracing 模块中）</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_embedding">trace_embedding()（在 agentscope.tracing 模块中）</a>
+</li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_format">trace_format()（在 agentscope.tracing 模块中）</a>
 </li>
         <li><a href="api/agentscope.tracing.html#agentscope.tracing.trace_llm">trace_llm()（在 agentscope.tracing 模块中）</a>
