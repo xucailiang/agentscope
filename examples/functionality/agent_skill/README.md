@@ -3,26 +3,52 @@
 [Agent Skill](https://claude.com/blog/skills) is an approach proposed by
 Anthropic to improve agent capabilities on specific tasks.
 
-In this example, we demonstrate how to integrate Agent Skills into an
-ReAct agent in AgentScope via the `toolkit.register_agent_skill` API.
+This directory contains two examples demonstrating different ways to use
+Agent Skills in AgentScope:
 
-Specifically, we prepare a demonstration skill that helps the agent to
-learn about the AgentScope framework itself in the `skill` directory.
-In `main.py`, we register this skill to the agent's toolkit, and ask it
-to answer questions about AgentScope.
+## Examples
+
+### 1. Manual Skill Registration (`main.py`)
+
+Demonstrates the traditional approach of manually registering individual
+skills using `toolkit.register_agent_skill()`. This example shows how to:
+- Register a specific skill directory
+- Use the skill in a ReAct agent
+- Answer questions about AgentScope using the skill
+
+### 2. Dynamic Skill Loading (`main_dynamic.py`)
+
+Demonstrates the new dynamic skill loading feature using directory monitoring.
+This example shows how to:
+- Monitor a directory for skills using `toolkit.monitor_agent_skills()`
+- Automatically discover all skills in subdirectories
+- View discovered skills and their metadata
+- Manually refresh skills with `toolkit.refresh_monitored_skills()`
+- Remove monitored directories with `toolkit.remove_monitored_directory()`
+
+The `skill` directory contains multiple demonstration skills:
+- **Analyzing AgentScope Library**: Helps agents learn about AgentScope
+- **Data Analysis**: Provides data analysis and visualization guidance
+- **Web Scraping**: Covers web scraping techniques
 
 ## Quick Start
 
-Install the latest version of AgentScope to run this example:
+Install the latest version of AgentScope to run these examples:
 
 ```bash
 pip install agentscope --upgrade
 ```
 
-Then, run the example with:
+### Run Manual Registration Example
 
 ```bash
 python main.py
+```
+
+### Run Dynamic Loading Example
+
+```bash
+python main_dynamic.py
 ```
 
 > Note:
@@ -31,3 +57,81 @@ python main.py
 > formatters are list in [our tutorial](https://doc.agentscope.io/tutorial/task_prompt.html#id1)
 > - For local models, ensure the model service (like Ollama) is running before starting the agent.
 
+
+## Key Differences
+
+### Manual Registration
+
+- Explicit control over which skills to load
+- Skills must be registered individually
+- Suitable for production with fixed skill sets
+
+### Dynamic Loading
+
+- Automatic discovery of all skills in a directory
+- Skills can be added/removed without code changes
+- Lazy loading with mtime-based caching for performance
+- Suitable for development and dynamic environments
+- Supports nested skill directories at any depth
+
+## Creating Your Own Skills
+
+To create a new skill:
+
+1. Create a directory under `skill/`
+2. Add a `SKILL.md` file with YAML frontmatter:
+
+```markdown
+---
+name: Your Skill Name
+description: Brief description of what this skill does
+---
+
+# Your Skill Name
+
+## Overview
+
+Detailed description...
+
+## Quick Start
+
+Instructions and examples...
+```
+
+3. The skill will be automatically discovered when using `monitor_agent_skills()`
+
+## Dynamic Skill Features
+
+The dynamic skill loading system provides several advanced features:
+
+### Automatic Discovery
+
+Skills are discovered recursively in monitored directories. Any subdirectory
+containing a `SKILL.md` file with proper frontmatter will be registered.
+
+### Lazy Loading
+
+Skills are only scanned when `get_agent_skill_prompt()` is called, minimizing
+filesystem operations during initialization.
+
+### Change Detection
+
+The system uses modification time (mtime) caching to efficiently detect:
+
+- New skills added to monitored directories
+- Modified skill definitions
+- Deleted skills
+
+### Manual Refresh
+
+Force a refresh of all monitored skills:
+
+```python
+stats = toolkit.refresh_monitored_skills(force=True)
+print(f"Added: {stats['added']}, Modified: {stats['modified']}, Removed: {stats['removed']}")
+```
+
+### Conflict Resolution
+
+If multiple skills have the same name, the first one discovered is kept,
+and a warning is logged for the conflicting skill.
