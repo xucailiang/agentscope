@@ -2,11 +2,43 @@
 """Agent skill manager for lazy-loading and monitoring skill directories."""
 
 import os
+import threading
+from functools import wraps
 from types import MappingProxyType
-from typing import Callable
+from typing import Callable, TypeVar
 
 from ._types import AgentSkill
 from .._logging import logger
+
+# Type variable for generic decorator
+_T = TypeVar("_T")
+
+
+def _thread_safe(func: Callable[..., _T]) -> Callable[..., _T]:
+    """Decorator to make methods thread-safe using instance lock.
+
+    This decorator ensures that the decorated method is executed
+    atomically by acquiring the instance's RLock before execution.
+
+    Args:
+        func: The method to be decorated.
+
+    Returns:
+        The wrapped method with thread-safety guarantees.
+    """
+
+    @wraps(func)
+    def wrapper(
+        self: "AgentSkillManager",
+        *args: object,
+        **kwargs: object,
+    ) -> _T:
+        # Access lock through public property to avoid protected-access
+        lock = getattr(self, "_lock")
+        with lock:
+            return func(self, *args, **kwargs)
+
+    return wrapper
 
 
 class AgentSkillManager:
@@ -17,10 +49,8 @@ class AgentSkillManager:
     2. Automatic discovery from monitored directories
 
     Features: lazy loading, mtime caching, automatic updates,
-    conflict resolution.
+    conflict resolution, thread-safe operations.
 
-    Thread Safety: NOT thread-safe. Use external synchronization
-    if needed.
     Performance: O(k) when unchanged, O(n) when changed
     (k=known skills, n=total dirs).
     """
@@ -38,6 +68,7 @@ class AgentSkillManager:
             agent_skill_template: Template for formatting individual
                 skills.
         """
+        self._lock = threading.RLock()
         self._skills: dict[str, AgentSkill] = {}
         self._monitored_dirs: set[str] = set()
         self._skill_dir_mtime_cache: dict[str, float] = {}
@@ -48,12 +79,14 @@ class AgentSkillManager:
     @property
     def skills(self) -> MappingProxyType[str, AgentSkill]:
         """Read-only view of registered skills."""
-        return MappingProxyType(self._skills)
+        with self._lock:
+            return MappingProxyType(self._skills)
 
     @property
     def monitored_dirs(self) -> frozenset[str]:
         """Read-only view of monitored directories."""
-        return frozenset(self._monitored_dirs)
+        with self._lock:
+            return frozenset(self._monitored_dirs)
 
     def _safe_path_operation(
         self,
@@ -77,6 +110,7 @@ class AgentSkillManager:
             logger.warning("%s '%s': %s", error_msg, path, e)
             return False
 
+    @_thread_safe
     def monitor_agent_skills(self, directory: str) -> None:
         """Register a directory to be monitored for agent skills.
 
@@ -109,6 +143,7 @@ class AgentSkillManager:
         self._monitored_dirs.add(directory)
         logger.info("Registered monitored directory: '%s'", directory)
 
+    @_thread_safe
     def remove_monitored_directory(self, directory: str) -> None:
         """Remove a monitored directory and all auto-discovered skills.
 
@@ -129,18 +164,12 @@ class AgentSkillManager:
 
         self._monitored_dirs.remove(directory)
 
-        # Remove all skills from this monitored directory
-        skills_to_remove = [
-            name
-            for name, skill in self._skills.items()
-            if skill.get("source") == "monitored"
-            and skill.get("monitored_root") == directory
-        ]
+        # Collect all skills from this monitored directory
+        skills_to_remove = self._get_monitored_skills(directory)
 
-        for name in skills_to_remove:
-            skill_dir = self._skills[name]["dir"]
-            del self._skills[name]
-            self._skill_dir_mtime_cache.pop(skill_dir, None)
+        # Batch remove all skills
+        for name, skill_dir in skills_to_remove:
+            self._remove_skill_internal(name, skill_dir)
             logger.info(
                 "Removed skill '%s' from monitored directory '%s'",
                 name,
@@ -224,6 +253,7 @@ class AgentSkillManager:
             ValueError: If directory invalid, SKILL.md missing/invalid,
                 or name conflicts.
         """
+        # Phase 1: I/O operations outside lock (no shared state access)
         skill_dir = os.path.abspath(os.path.normpath(skill_dir))
 
         # Validate directory
@@ -249,7 +279,7 @@ class AgentSkillManager:
                 "SKILL.md file at the top level.",
             )
 
-        # Parse SKILL.md
+        # Parse SKILL.md (I/O operation)
         skill = self._parse_skill_md(skill_dir)
         if skill is None:
             raise ValueError(
@@ -258,19 +288,21 @@ class AgentSkillManager:
             )
 
         name = skill["name"]
-
-        # Check for conflicts
-        if name in self._skills:
-            existing_dir = self._skills[name]["dir"]
-            raise ValueError(
-                f"An agent skill with name '{name}' is already registered "
-                f"from directory '{existing_dir}'.",
-            )
-
-        # Set source and add to skills
         skill["source"] = "manual"
         skill["monitored_root"] = None
-        self._skills[name] = skill
+
+        # Phase 2: Critical section - only modify shared state
+        with self._lock:
+            # Check for conflicts
+            if name in self._skills:
+                existing_dir = self._skills[name]["dir"]
+                raise ValueError(
+                    f"An agent skill with name '{name}' is already registered "
+                    f"from directory '{existing_dir}'.",
+                )
+
+            # Add to skills
+            self._skills[name] = skill
 
         logger.info(
             "Registered agent skill '%s' from directory '%s'.",
@@ -278,6 +310,42 @@ class AgentSkillManager:
             skill_dir,
         )
 
+    def _get_monitored_skills(
+        self,
+        monitored_root: str,
+    ) -> list[tuple[str, str]]:
+        """Get all skills from a monitored root directory.
+
+        Args:
+            monitored_root: The monitored root directory path.
+
+        Returns:
+            List of (skill_name, skill_dir) tuples.
+        """
+        return [
+            (name, skill["dir"])
+            for name, skill in self._skills.items()
+            if skill.get("source") == "monitored"
+            and skill.get("monitored_root") == monitored_root
+        ]
+
+    def _remove_skill_internal(
+        self,
+        name: str,
+        skill_dir: str | None = None,
+    ) -> None:
+        """Core skill removal logic without lock or logging.
+
+        Args:
+            name: Skill name to remove.
+            skill_dir: Optional skill directory (will be looked up if None).
+        """
+        if skill_dir is None:
+            skill_dir = self._skills[name]["dir"]
+        del self._skills[name]
+        self._skill_dir_mtime_cache.pop(skill_dir, None)
+
+    @_thread_safe
     def remove_agent_skill(self, name: str) -> None:
         """Remove an agent skill by name.
 
@@ -289,8 +357,7 @@ class AgentSkillManager:
             return
 
         skill_dir = self._skills[name]["dir"]
-        del self._skills[name]
-        self._skill_dir_mtime_cache.pop(skill_dir, None)
+        self._remove_skill_internal(name, skill_dir)
         logger.info("Removed skill '%s'", name)
 
     def _remove_skill_by_name(self, name: str) -> None:
@@ -299,39 +366,37 @@ class AgentSkillManager:
         Internal helper.
         """
         if name in self._skills:
-            skill_dir = self._skills[name]["dir"]
-            del self._skills[name]
-            self._skill_dir_mtime_cache.pop(skill_dir, None)
+            self._remove_skill_internal(name)
 
     def _remove_skill_by_dir(self, skill_dir: str) -> None:
         """Remove a skill by directory path (internal helper)."""
-        for name, skill in list(self._skills.items()):
-            if skill["dir"] == skill_dir:
-                del self._skills[name]
-                self._skill_dir_mtime_cache.pop(skill_dir, None)
-                logger.info(
-                    "Removed skill '%s' from directory '%s'",
-                    name,
-                    skill_dir,
-                )
-                break
+        # Find skill name by directory
+        skill_name = next(
+            (
+                name
+                for name, skill in self._skills.items()
+                if skill["dir"] == skill_dir
+            ),
+            None,
+        )
+        if skill_name:
+            self._remove_skill_internal(skill_name, skill_dir)
+            logger.info(
+                "Removed skill '%s' from directory '%s'",
+                skill_name,
+                skill_dir,
+            )
 
     def _remove_all_skills_from_dir(self, monitored_root: str) -> None:
         """Remove all skills from a monitored root directory.
 
         Internal helper.
         """
-        skills_to_remove = [
-            name
-            for name, skill in self._skills.items()
-            if skill.get("source") == "monitored"
-            and skill.get("monitored_root") == monitored_root
-        ]
+        skills_to_remove = self._get_monitored_skills(monitored_root)
 
-        for name in skills_to_remove:
-            skill_dir = self._skills[name]["dir"]
-            del self._skills[name]
-            self._skill_dir_mtime_cache.pop(skill_dir, None)
+        # Batch remove all skills
+        for name, skill_dir in skills_to_remove:
+            self._remove_skill_internal(name, skill_dir)
             logger.info(
                 "Removed skill '%s' from inaccessible directory '%s'",
                 name,
@@ -348,9 +413,17 @@ class AgentSkillManager:
             Combined prompt string for all skills, or None if no
             skills exist.
         """
-        for monitored_dir in list(self._monitored_dirs):
+        # Get snapshot of monitored directories
+        with self._lock:
+            monitored_dirs = list(self._monitored_dirs)
+
+        # Update skills (I/O operations outside main lock)
+        for monitored_dir in monitored_dirs:
             self._update_monitored_skills(monitored_dir)
-        return self._generate_prompt()
+
+        # Generate prompt with lock
+        with self._lock:
+            return self._generate_prompt()
 
     def _update_monitored_skills(self, monitored_dir: str) -> None:
         """Update skills from a monitored directory using two-phase.
@@ -359,6 +432,7 @@ class AgentSkillManager:
             unchanged.
         Slow path (O(n)): Full directory scan if root mtime changed.
         """
+        # Phase 1: Check directory accessibility (I/O outside lock)
         try:
             current_root_mtime = os.stat(monitored_dir).st_mtime
         except (OSError, FileNotFoundError) as e:
@@ -367,103 +441,155 @@ class AgentSkillManager:
                 monitored_dir,
                 e,
             )
-            self._remove_all_skills_from_dir(monitored_dir)
+            with self._lock:
+                self._remove_all_skills_from_dir(monitored_dir)
             return
 
-        cached_root_mtime = self._monitored_dir_last_scan_mtime.get(
-            monitored_dir,
-        )
+        # Phase 2: Check if update needed (quick lock)
+        with self._lock:
+            cached_root_mtime = self._monitored_dir_last_scan_mtime.get(
+                monitored_dir,
+            )
+            needs_full_scan = cached_root_mtime != current_root_mtime
 
-        if cached_root_mtime == current_root_mtime:
-            self._check_existing_skills(monitored_dir)
-        else:
+        # Phase 3: Perform update based on strategy
+        if needs_full_scan:
             self._full_rescan(monitored_dir)
-            self._monitored_dir_last_scan_mtime[
-                monitored_dir
-            ] = current_root_mtime
+            with self._lock:
+                self._monitored_dir_last_scan_mtime[
+                    monitored_dir
+                ] = current_root_mtime
+        else:
+            self._check_existing_skills(monitored_dir)
 
-    def _check_existing_skills(self, monitored_dir: str) -> None:
+    def _update_skill_cache_after_reparse(
+        self,
+        skill_dir: str,
+        current_mtime: float,
+    ) -> None:
+        """Update cache after reparsing a skill.
+
+        Args:
+            skill_dir: The skill directory path.
+            current_mtime: The current mtime of the skill directory.
+        """
+        with self._lock:
+            skill_still_exists = any(
+                s["dir"] == skill_dir for s in self._skills.values()
+            )
+            if skill_still_exists:
+                self._skill_dir_mtime_cache[skill_dir] = current_mtime
+            else:
+                self._skill_dir_mtime_cache.pop(skill_dir, None)
+
+    def _check_existing_skills(
+        self,
+        monitored_dir: str,
+    ) -> None:
         """Check only known skills without filesystem scan.
 
         Fast path O(k).
+
+        Args:
+            monitored_dir: Path to the monitored directory.
         """
-        for name, skill in list(self._skills.items()):
-            if (
-                skill.get("source") == "monitored"
-                and skill.get("monitored_root") == monitored_dir
-            ):
-                skill_dir = skill["dir"]
+        # Get snapshot of skills to check
+        with self._lock:
+            skills_to_check = self._get_monitored_skills(monitored_dir)
+            # Get cached mtimes in same lock acquisition
+            cached_mtimes = {
+                skill_dir: self._skill_dir_mtime_cache.get(skill_dir)
+                for _, skill_dir in skills_to_check
+            }
 
-                # Check if directory still exists
-                # Use a direct check instead of lambda to avoid closure issues
-                dir_exists = False
-                try:
-                    dir_exists = os.path.exists(skill_dir)
-                except OSError as e:
-                    logger.warning(
-                        "Error checking directory '%s': %s",
-                        skill_dir,
-                        e,
-                    )
+        # Collect skills to remove and skills to reparse (I/O outside lock)
+        skills_to_remove = []
+        skills_to_reparse = []
 
-                if not dir_exists:
+        for name, skill_dir in skills_to_check:
+            # Check if directory still exists
+            try:
+                current_mtime = os.stat(skill_dir).st_mtime
+            except (OSError, FileNotFoundError) as e:
+                skills_to_remove.append(
+                    (name, skill_dir, f"inaccessible: {e}"),
+                )
+                continue
+
+            # Check cache (already fetched)
+            cached_mtime = cached_mtimes.get(skill_dir)
+
+            if cached_mtime != current_mtime:
+                skills_to_reparse.append(
+                    (skill_dir, monitored_dir, name, current_mtime),
+                )
+
+        # Batch remove skills (single lock acquisition)
+        if skills_to_remove:
+            with self._lock:
+                for name, skill_dir, reason in skills_to_remove:
                     self._remove_skill_by_name(name)
-                    self._skill_dir_mtime_cache.pop(skill_dir, None)
-                    logger.info("Removed skill '%s' (directory deleted)", name)
-                    continue
+                    logger.info("Removed skill '%s' (%s)", name, reason)
 
-                # Check if skill directory modified
-                try:
-                    current_mtime = os.stat(skill_dir).st_mtime
-                except (OSError, FileNotFoundError) as e:
-                    self._remove_skill_by_name(name)
-                    self._skill_dir_mtime_cache.pop(skill_dir, None)
-                    logger.info(
-                        "Removed skill '%s' (directory inaccessible: %s)",
-                        name,
-                        e,
-                    )
-                    continue
+        # Reparse modified skills
+        for (
+            reparse_skill_dir,
+            reparse_monitored_dir,
+            old_name,
+            current_mtime,
+        ) in skills_to_reparse:
+            self._reparse_skill(
+                reparse_skill_dir,
+                reparse_monitored_dir,
+                old_name=old_name,
+            )
+            self._update_skill_cache_after_reparse(
+                reparse_skill_dir,
+                current_mtime,
+            )
 
-                cached_mtime = self._skill_dir_mtime_cache.get(skill_dir)
-
-                if cached_mtime != current_mtime:
-                    self._reparse_skill(
-                        skill_dir,
-                        monitored_dir,
-                        old_name=name,
-                    )
-                    skill_still_exists = any(
-                        s["dir"] == skill_dir for s in self._skills.values()
-                    )
-                    if skill_still_exists:
-                        self._skill_dir_mtime_cache[skill_dir] = current_mtime
-                    else:
-                        self._skill_dir_mtime_cache.pop(skill_dir, None)
-
-    def _full_rescan(self, monitored_dir: str) -> None:
+    def _full_rescan(
+        self,
+        monitored_dir: str,
+    ) -> None:
         """Full directory scan to detect new/deleted skills.
 
         Slow path O(n).
+
+        Args:
+            monitored_dir: Path to the monitored directory.
         """
+        # Phase 1: Scan filesystem (I/O outside lock)
         current_skill_dirs = self._scan_for_skill_dirs(monitored_dir)
         current_skill_dirs_set = set(current_skill_dirs)
 
-        # Find deleted skills
-        existing_skill_dirs = {
-            skill["dir"]
-            for skill in self._skills.values()
-            if skill.get("source") == "monitored"
-            and skill.get("monitored_root") == monitored_dir
-        }
+        # Phase 2: Find deleted skills and get cached mtimes (single lock)
+        with self._lock:
+            existing_skill_dirs = {
+                skill["dir"]
+                for skill in self._skills.values()
+                if skill.get("source") == "monitored"
+                and skill.get("monitored_root") == monitored_dir
+            }
+            # Get all cached mtimes in same lock acquisition
+            cached_mtimes = {
+                skill_dir: self._skill_dir_mtime_cache.get(skill_dir)
+                for skill_dir in current_skill_dirs
+            }
 
+        # Batch remove deleted skills (single lock acquisition)
         deleted_dirs = existing_skill_dirs - current_skill_dirs_set
-        for deleted_dir in deleted_dirs:
-            self._remove_skill_by_dir(deleted_dir)
-            self._skill_dir_mtime_cache.pop(deleted_dir, None)
+        if deleted_dirs:
+            with self._lock:
+                for deleted_dir in deleted_dirs:
+                    self._remove_skill_by_dir(deleted_dir)
 
-        # Process current skills (new or modified)
+        # Phase 3: Collect skills to process (I/O outside lock)
+        new_skills = []
+        modified_skills = []
+
         for skill_dir in current_skill_dirs:
+            # Get mtime (I/O)
             try:
                 current_mtime = os.stat(skill_dir).st_mtime
             except (OSError, FileNotFoundError):
@@ -473,22 +599,33 @@ class AgentSkillManager:
                 )
                 continue
 
-            cached_mtime = self._skill_dir_mtime_cache.get(skill_dir)
+            # Check cache (already fetched)
+            cached_mtime = cached_mtimes.get(skill_dir)
 
             if cached_mtime is None:
-                # New skill
-                self._parse_and_register_skill(skill_dir, monitored_dir)
-                self._skill_dir_mtime_cache[skill_dir] = current_mtime
+                new_skills.append((skill_dir, monitored_dir, current_mtime))
             elif cached_mtime != current_mtime:
-                # Modified skill
-                self._reparse_skill(skill_dir, monitored_dir)
-                skill_still_exists = any(
-                    s["dir"] == skill_dir for s in self._skills.values()
+                modified_skills.append(
+                    (skill_dir, monitored_dir, current_mtime),
                 )
-                if skill_still_exists:
-                    self._skill_dir_mtime_cache[skill_dir] = current_mtime
-                else:
-                    self._skill_dir_mtime_cache.pop(skill_dir, None)
+
+        # Process new skills
+        for new_skill_dir, new_monitored_dir, current_mtime in new_skills:
+            self._parse_and_register_skill(new_skill_dir, new_monitored_dir)
+            with self._lock:
+                self._skill_dir_mtime_cache[new_skill_dir] = current_mtime
+
+        # Process modified skills
+        for (
+            mod_skill_dir,
+            mod_monitored_dir,
+            current_mtime,
+        ) in modified_skills:
+            self._reparse_skill(mod_skill_dir, mod_monitored_dir)
+            self._update_skill_cache_after_reparse(
+                mod_skill_dir,
+                current_mtime,
+            )
 
     def _scan_for_skill_dirs(self, root_dir: str) -> list[str]:
         """Recursively scan for skill directories (containing SKILL.md)."""
@@ -515,6 +652,7 @@ class AgentSkillManager:
         monitored_root: str,
     ) -> None:
         """Parse and register a new skill from a directory."""
+        # Parse skill (I/O outside lock)
         skill = self._parse_skill_md(skill_dir)
         if skill is None:
             return
@@ -523,19 +661,22 @@ class AgentSkillManager:
         skill["monitored_root"] = monitored_root
         name = skill["name"]
 
-        # Check for conflicts (monitored skills log warning and skip)
-        if name in self._skills:
-            existing_dir = self._skills[name]["dir"]
-            logger.warning(
-                "Skill name conflict: '%s' from '%s' conflicts with "
-                "existing skill from '%s'. Keeping the existing one.",
-                name,
-                skill_dir,
-                existing_dir,
-            )
-            return
+        # Register skill (critical section)
+        with self._lock:
+            # Check for conflicts (monitored skills log warning and skip)
+            if name in self._skills:
+                existing_dir = self._skills[name]["dir"]
+                logger.warning(
+                    "Skill name conflict: '%s' from '%s' conflicts with "
+                    "existing skill from '%s'. Keeping the existing one.",
+                    name,
+                    skill_dir,
+                    existing_dir,
+                )
+                return
 
-        self._skills[name] = skill
+            self._skills[name] = skill
+
         logger.info("Discovered skill '%s' from '%s'", name, skill_dir)
 
     def _reparse_skill(
@@ -544,61 +685,70 @@ class AgentSkillManager:
         monitored_root: str,
         old_name: str | None = None,
     ) -> None:
-        """Re-parse a skill and handle name changes."""
-        # Check if SKILL.md exists
+        """Re-parse a skill and handle name changes.
+
+        Args:
+            skill_dir: Path to the skill directory.
+            monitored_root: Root directory being monitored.
+            old_name: Previous name of the skill (if known).
+        """
+        # Check if SKILL.md exists (I/O)
         skill_md_path = os.path.join(skill_dir, "SKILL.md")
         if not self._safe_path_operation(
             lambda: os.path.exists(skill_md_path),
             skill_md_path,
             "Error checking SKILL.md",
         ):
-            self._remove_skill_by_dir(skill_dir)
+            with self._lock:
+                self._remove_skill_by_dir(skill_dir)
             logger.info(
                 "Removed skill from '%s' (SKILL.md deleted)",
                 skill_dir,
             )
             return
 
-        # Parse new skill data
+        # Parse new skill data (I/O)
         new_skill = self._parse_skill_md(skill_dir)
         if new_skill is None:
-            self._remove_skill_by_dir(skill_dir)
+            with self._lock:
+                self._remove_skill_by_dir(skill_dir)
             return
 
         new_skill["source"] = "monitored"
         new_skill["monitored_root"] = monitored_root
         new_name = new_skill["name"]
 
-        # Find and remove old entry by directory path
-        old_entry_name = None
-        if (
-            old_name
-            and old_name in self._skills
-            and self._skills[old_name]["dir"] == skill_dir
-        ):
-            old_entry_name = old_name
-        else:
-            for name, skill in list(self._skills.items()):
-                if skill["dir"] == skill_dir:
-                    old_entry_name = name
-                    break
+        # Update skill registry (critical section)
+        with self._lock:
+            # Find old entry by directory path
+            old_entry_name = None
+            if (
+                old_name
+                and old_name in self._skills
+                and self._skills[old_name]["dir"] == skill_dir
+            ):
+                old_entry_name = old_name
+            else:
+                old_entry_name = next(
+                    (
+                        name
+                        for name, skill in self._skills.items()
+                        if skill["dir"] == skill_dir
+                    ),
+                    None,
+                )
 
-        # Remove old entry if name changed
-        if old_entry_name and old_entry_name != new_name:
-            del self._skills[old_entry_name]
-            logger.info(
-                "Skill name changed: '%s' -> '%s'",
-                old_entry_name,
-                new_name,
-            )
+            # Remove old entry if name changed
+            if old_entry_name and old_entry_name != new_name:
+                del self._skills[old_entry_name]
+                logger.info(
+                    "Skill name changed: '%s' -> '%s'",
+                    old_entry_name,
+                    new_name,
+                )
 
-        # Add/update entry (with conflict check)
-        if new_name not in self._skills:
-            self._skills[new_name] = new_skill
-            logger.info("Updated skill '%s' from '%s'", new_name, skill_dir)
-        else:
-            existing_dir = self._skills[new_name]["dir"]
-            if existing_dir == skill_dir:
+            # Add/update entry (with conflict check)
+            if new_name not in self._skills:
                 self._skills[new_name] = new_skill
                 logger.info(
                     "Updated skill '%s' from '%s'",
@@ -606,14 +756,24 @@ class AgentSkillManager:
                     skill_dir,
                 )
             else:
-                logger.warning(
-                    "Skill name conflict: '%s' from '%s' conflicts with "
-                    "existing skill from '%s'. Keeping the existing one.",
-                    new_name,
-                    skill_dir,
-                    existing_dir,
-                )
+                existing_dir = self._skills[new_name]["dir"]
+                if existing_dir == skill_dir:
+                    self._skills[new_name] = new_skill
+                    logger.info(
+                        "Updated skill '%s' from '%s'",
+                        new_name,
+                        skill_dir,
+                    )
+                else:
+                    logger.warning(
+                        "Skill name conflict: '%s' from '%s' conflicts with "
+                        "existing skill from '%s'. Keeping the existing one.",
+                        new_name,
+                        skill_dir,
+                        existing_dir,
+                    )
 
+    @_thread_safe
     def refresh_monitored_skills(
         self,
         force: bool = False,
@@ -630,11 +790,11 @@ class AgentSkillManager:
             Statistics dict: {"added": int, "modified": int,
                 "removed": int}
         """
-        # Track statistics
+        # Track statistics - capture before state
         skills_before = set(self._skills.keys())
         skill_dirs_before = {
-            skill["dir"]: name
-            for name, skill in self._skills.items()
+            skill["dir"]
+            for skill in self._skills.values()
             if skill.get("source") == "monitored"
         }
 
@@ -647,20 +807,21 @@ class AgentSkillManager:
         for monitored_dir in list(self._monitored_dirs):
             self._update_monitored_skills(monitored_dir)
 
-        # Calculate statistics
+        # Calculate statistics - capture after state
         skills_after = set(self._skills.keys())
         skill_dirs_after = {
-            skill["dir"]: name
-            for name, skill in self._skills.items()
+            skill["dir"]
+            for skill in self._skills.values()
             if skill.get("source") == "monitored"
         }
 
         added = len(skills_after - skills_before)
         removed = len(skills_before - skills_after)
-        common_dirs = set(skill_dirs_before.keys()) & set(
-            skill_dirs_after.keys(),
+        # Modified = directories that existed before and after
+        modified = len(skill_dirs_before & skill_dirs_after) - (
+            len(skills_before & skills_after)
         )
-        modified = max(0, len(common_dirs) - (len(skills_after) - added))
+        modified = max(0, modified)
 
         stats = {"added": added, "modified": modified, "removed": removed}
         logger.info(

@@ -131,6 +131,42 @@ stats = toolkit.refresh_monitored_skills(force=True)
 print(f"Added: {stats['added']}, Modified: {stats['modified']}, Removed: {stats['removed']}")
 ```
 
+### Removing Monitored Directories
+
+Remove a monitored directory and all its auto-discovered skills:
+
+```python
+# Remove all skills from a specific directory
+toolkit.remove_monitored_directory("./skill")
+
+# Manual skills (registered via register_agent_skill) are preserved
+# Only auto-discovered skills from the specified directory are removed
+```
+
+**Key behaviors:**
+- Removes the directory from the monitored list
+- Removes all skills where `source="monitored"` from that directory
+- Preserves manually registered skills
+- Cleans up internal caches for removed skills
+- Safe to call on non-monitored directories (logs warning)
+
+**Use cases:**
+- Switching between different skill sets
+- Temporarily disabling a group of skills
+- Managing multiple skill directories independently
+
+**Example with multiple directories:**
+
+```python
+# Monitor multiple directories
+toolkit.monitor_agent_skills("./core_skills")
+toolkit.monitor_agent_skills("./experimental_skills")
+
+# Later, remove only experimental skills
+toolkit.remove_monitored_directory("./experimental_skills")
+# Core skills remain available
+```
+
 ### Conflict Resolution
 
 If multiple skills have the same name, the first one discovered is kept,

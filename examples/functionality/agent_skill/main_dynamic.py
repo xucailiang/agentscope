@@ -94,13 +94,45 @@ async def main() -> None:
     )
     print()
 
-    # Show how to remove monitored directory
+    # Demonstrate removing monitored directory
     print("\033[1;33m=== Removing Monitored Directory ===\033[0m")
-    print("Note: This would remove all auto-discovered skills")
-    print("Command: toolkit.remove_monitored_directory('./skill')")
-    # Uncomment to actually remove:
+    print("Note: This removes all auto-discovered skills from the directory")
+    print("Manual skills (registered via register_agent_skill) are preserved")
+    print()
+
+    # Show skills before removal
+    print(f"Skills before removal: {len(toolkit.skills)}")
+    monitored_skills = [
+        name
+        for name, info in toolkit.skills.items()
+        if info.get("source") == "monitored"
+    ]
+    manual_skills = [
+        name
+        for name, info in toolkit.skills.items()
+        if info.get("source") == "manual"
+    ]
+    print(f"  - Monitored skills: {len(monitored_skills)}")
+    print(f"  - Manual skills: {len(manual_skills)}")
+    print()
+
+    # Uncomment to actually remove the monitored directory:
     # toolkit.remove_monitored_directory("./skill")
-    # print(f"Remaining skills: {len(toolkit.skills)}")
+    # print(f"Skills after removal: {len(toolkit.skills)}")
+    # print(f"  - All monitored skills from './skill' have been removed")
+    # print(f"  - Manual skills are preserved: {len(manual_skills)}")
+    # print()
+
+    # Example: Monitor multiple directories
+    print("\033[1;33m=== Multiple Directory Monitoring ===\033[0m")
+    print("You can monitor multiple directories simultaneously:")
+    print("  toolkit.monitor_agent_skills('./skill')")
+    print("  toolkit.monitor_agent_skills('./more_skills')")
+    print()
+    print("To remove a specific directory:")
+    print("  toolkit.remove_monitored_directory('./skill')")
+    print("  # Skills from './more_skills' remain available")
+    print()
 
 
 if __name__ == "__main__":
