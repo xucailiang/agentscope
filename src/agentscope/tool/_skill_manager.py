@@ -44,15 +44,9 @@ def _thread_safe(func: Callable[..., _T]) -> Callable[..., _T]:
 class AgentSkillManager:
     """Manager for agent skills with lazy-loading and monitoring.
 
-    Manages skills from two sources:
-    1. Manual registration via register_agent_skill()
-    2. Automatic discovery from monitored directories
-
-    Features: lazy loading, mtime caching, automatic updates,
-    conflict resolution, thread-safe operations.
-
-    Performance: O(k) when unchanged, O(n) when changed
-    (k=known skills, n=total dirs).
+    Manages skills from manual registration and monitored directories.
+    Features: lazy loading, mtime caching, automatic updates, thread-safe.
+    Performance: O(k) unchanged, O(n) changed (k=known, n=total).
     """
 
     def __init__(
@@ -63,10 +57,8 @@ class AgentSkillManager:
         """Initialize the AgentSkillManager.
 
         Args:
-            agent_skill_instruction: Instruction template for skill
-                prompt header.
-            agent_skill_template: Template for formatting individual
-                skills.
+            agent_skill_instruction: Template for skill prompt header.
+            agent_skill_template: Template for formatting skills.
         """
         self._lock = threading.RLock()
         self._skills: dict[str, AgentSkill] = {}
@@ -114,12 +106,10 @@ class AgentSkillManager:
     def monitor_agent_skills(self, directory: str) -> None:
         """Register a directory to be monitored for agent skills.
 
-        Skills are discovered lazily when get_agent_skill_prompt()
-        is called.
+        Skills are discovered lazily when get_agent_skill_prompt() is called.
 
         Args:
-            directory: Path to monitor (will be normalized to
-                absolute path).
+            directory: Path to monitor.
 
         Raises:
             ValueError: If directory doesn't exist or isn't accessible.
@@ -145,13 +135,12 @@ class AgentSkillManager:
 
     @_thread_safe
     def remove_monitored_directory(self, directory: str) -> None:
-        """Remove a monitored directory and all auto-discovered skills.
+        """Remove a monitored directory and its auto-discovered skills.
 
         Manually registered skills are NOT removed.
 
         Args:
-            directory: Path to remove (will be normalized for
-                matching).
+            directory: Path to remove.
         """
         directory = os.path.abspath(os.path.normpath(directory))
 
@@ -243,11 +232,10 @@ class AgentSkillManager:
     def register_agent_skill(self, skill_dir: str) -> None:
         """Register an agent skill from a directory.
 
-        Directory must contain SKILL.md with 'name' and 'description'
-        fields.
+        Directory must contain SKILL.md with 'name' and 'description' fields.
 
         Args:
-            skill_dir: Path to skill directory (will be normalized).
+            skill_dir: Path to skill directory.
 
         Raises:
             ValueError: If directory invalid, SKILL.md missing/invalid,
@@ -316,11 +304,7 @@ class AgentSkillManager:
     ) -> list[tuple[str, str]]:
         """Get all skills from a monitored root directory.
 
-        Args:
-            monitored_root: The monitored root directory path.
-
-        Returns:
-            List of (skill_name, skill_dir) tuples.
+        Returns list of (skill_name, skill_dir) tuples.
         """
         return [
             (name, skill["dir"])
@@ -334,12 +318,7 @@ class AgentSkillManager:
         name: str,
         skill_dir: str | None = None,
     ) -> None:
-        """Core skill removal logic without lock or logging.
-
-        Args:
-            name: Skill name to remove.
-            skill_dir: Optional skill directory (will be looked up if None).
-        """
+        """Core skill removal logic without lock or logging."""
         if skill_dir is None:
             skill_dir = self._skills[name]["dir"]
         del self._skills[name]
@@ -361,15 +340,12 @@ class AgentSkillManager:
         logger.info("Removed skill '%s'", name)
 
     def _remove_skill_by_name(self, name: str) -> None:
-        """Remove a skill by name without logging warnings.
-
-        Internal helper.
-        """
+        """Remove a skill by name without logging warnings."""
         if name in self._skills:
             self._remove_skill_internal(name)
 
     def _remove_skill_by_dir(self, skill_dir: str) -> None:
-        """Remove a skill by directory path (internal helper)."""
+        """Remove a skill by directory path."""
         # Find skill name by directory
         skill_name = next(
             (
@@ -388,10 +364,7 @@ class AgentSkillManager:
             )
 
     def _remove_all_skills_from_dir(self, monitored_root: str) -> None:
-        """Remove all skills from a monitored root directory.
-
-        Internal helper.
-        """
+        """Remove all skills from a monitored root directory."""
         skills_to_remove = self._get_monitored_skills(monitored_root)
 
         # Batch remove all skills
@@ -406,12 +379,10 @@ class AgentSkillManager:
     def get_agent_skill_prompt(self) -> str | None:
         """Get the prompt for all registered agent skills.
 
-        Triggers lazy loading: monitored directories are scanned
-        if needed.
+        Triggers lazy loading of monitored directories if needed.
 
         Returns:
-            Combined prompt string for all skills, or None if no
-            skills exist.
+            Combined prompt string, or None if no skills exist.
         """
         # Get snapshot of monitored directories
         with self._lock:
@@ -426,11 +397,10 @@ class AgentSkillManager:
             return self._generate_prompt()
 
     def _update_monitored_skills(self, monitored_dir: str) -> None:
-        """Update skills from a monitored directory using two-phase.
+        """Update skills from a monitored directory using two-phase approach.
 
-        Fast path (O(k)): Check only known skills if root mtime
-            unchanged.
-        Slow path (O(n)): Full directory scan if root mtime changed.
+        Fast path O(k): Check only known skills if root mtime unchanged.
+        Slow path O(n): Full directory scan if root mtime changed.
         """
         # Phase 1: Check directory accessibility (I/O outside lock)
         try:
@@ -467,12 +437,7 @@ class AgentSkillManager:
         skill_dir: str,
         current_mtime: float,
     ) -> None:
-        """Update cache after reparsing a skill.
-
-        Args:
-            skill_dir: The skill directory path.
-            current_mtime: The current mtime of the skill directory.
-        """
+        """Update cache after reparsing a skill."""
         with self._lock:
             skill_still_exists = any(
                 s["dir"] == skill_dir for s in self._skills.values()
@@ -486,13 +451,7 @@ class AgentSkillManager:
         self,
         monitored_dir: str,
     ) -> None:
-        """Check only known skills without filesystem scan.
-
-        Fast path O(k).
-
-        Args:
-            monitored_dir: Path to the monitored directory.
-        """
+        """Check only known skills without filesystem scan. Fast path O(k)."""
         # Get snapshot of skills to check
         with self._lock:
             skills_to_check = self._get_monitored_skills(monitored_dir)
@@ -552,13 +511,7 @@ class AgentSkillManager:
         self,
         monitored_dir: str,
     ) -> None:
-        """Full directory scan to detect new/deleted skills.
-
-        Slow path O(n).
-
-        Args:
-            monitored_dir: Path to the monitored directory.
-        """
+        """Full directory scan to detect new/deleted skills. Slow path O(n)."""
         # Phase 1: Scan filesystem (I/O outside lock)
         current_skill_dirs = self._scan_for_skill_dirs(monitored_dir)
         current_skill_dirs_set = set(current_skill_dirs)
@@ -780,15 +733,13 @@ class AgentSkillManager:
     ) -> dict[str, int]:
         """Manually trigger skill scanning and refresh.
 
-        Useful when mtime-based caching might be unreliable
-        (e.g., network filesystems).
+        Useful when mtime-based caching might be unreliable.
 
         Args:
             force: If True, clear all caches and force full rescan.
 
         Returns:
-            Statistics dict: {"added": int, "modified": int,
-                "removed": int}
+            Statistics dict: {"added": int, "modified": int, "removed": int}
         """
         # Track statistics - capture before state
         skills_before = set(self._skills.keys())
@@ -836,9 +787,7 @@ class AgentSkillManager:
     def _generate_prompt(self) -> str | None:
         """Generate the prompt for all registered agent skills.
 
-        Returns:
-            Combined prompt string for all skills, or None if no
-            skills exist.
+        Returns None if no skills exist.
         """
         if not self._skills:
             return None
